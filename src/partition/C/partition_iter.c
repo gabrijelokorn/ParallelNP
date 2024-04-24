@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
     readFile(argv, &arr, &size);
 
     if (debug)  {
-        printf("|> Number of elements: %d\n", size);
+        printf("|> # elements: %d\n", size);
 
         bool first = true;
         printf("|> Elements: [");
@@ -36,8 +36,10 @@ int main (int argc, char *argv[]) {
             }
             printf("%d", arr[i]);
         }
+        printf("]\n");
     }
-    printf("]\n");
+
+
 
     return 0;
 }

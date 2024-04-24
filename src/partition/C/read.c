@@ -3,15 +3,6 @@
 #include <string.h>
 
 void readFile (char *argv[], int **arr, int *size) {
-    // if (debug) {
-    //     // Pointer (value is the address of the array)
-    //     printf("size: %p\n", size);
-    //     // Address where the pointer is stored
-    //     printf("&size: %p\n", &size);
-    //     // Value of where the pointer size is pointing to
-    //     printf("*size: %d\n", *size);
-    // }
-
     // Open the file with test cases
     FILE *file = fopen(argv[1], "r");
     if (file == NULL) {
@@ -47,5 +38,6 @@ void readFile (char *argv[], int **arr, int *size) {
 
     // Close the file
     fclose(file);
+    // Free the allocated string
     free(line);
 }
