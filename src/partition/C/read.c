@@ -7,7 +7,7 @@ void readFile (char *argv[], int **arr, int *size) {
     FILE *file = fopen(argv[1], "r");
     if (file == NULL) {
         printf("Error: File %s not found\n", argv[1]);
-        return 1;
+        exit(1);
     }
 
     char* line = NULL;
