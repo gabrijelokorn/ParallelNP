@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
     else
         printf("Solution found\n");
 
-
     free(arr);
     return 0;
 }
