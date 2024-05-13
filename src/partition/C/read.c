@@ -6,8 +6,8 @@ void readFile (char *argv[], int **arr, int *size) {
     // Open the file with test cases
     FILE *file = fopen(argv[1], "r");
     if (file == NULL) {
-        printf("Error: File not found\n");
-        exit(1);
+        printf("Error: File %s not found\n", argv[1]);
+        return 1;
     }
 
     char* line = NULL;
@@ -17,7 +17,7 @@ void readFile (char *argv[], int **arr, int *size) {
     while (getline(&line, &line_length, file) != -1) {
         char *token = strtok(line, ",");
         while (token != NULL) {
-            (*size)++;
+            if (!atoi(token) == 0) (*size)++;
             token = strtok(NULL, ",");
         }
     }
@@ -31,7 +31,7 @@ void readFile (char *argv[], int **arr, int *size) {
     while (getline(&line, &line_length, file) != -1) {
         char *token = strtok(line, ",");
         while (token != NULL) {
-            (*arr)[i++] = atoi(token);
+            if (!atoi(token) == 0) (*arr)[i++] = atoi(token);
             token = strtok(NULL, ",");
         }
     }
