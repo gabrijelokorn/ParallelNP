@@ -1,12 +1,12 @@
 /**
  * @file partition_rec.c
  * @author your name (you@domain.com)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-04-24
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 
 #include <stdio.h>
@@ -19,19 +19,40 @@
 
 #define DEBUG 1
 
-bool partition_rec_helper (int *arr, int size, int index, int sum, int target) {
-    if (sum == target) return true;
-    if (sum > target || index >= size) return false;
+bool partition_rec(int *arr, int size, long long unsigned int index, int combinations)
+{
+    if (index >= combinations) return false;
 
-    return partition_rec_helper(arr, size, index + 1, sum + arr[index], target) ||
-           partition_rec_helper(arr, size, index + 1, sum, target);
-}
+    int array1[size];
+    int index1 = 0;
+    int array2[size];
+    int index2 = 0;
 
-bool partition_rec (int *arr, int size) {
-    int sum = set_sum(arr, size);
-    if (sum % 2 != 0) return false;
+    for (int j = 0; j < size; j++)
+    {
+        if (index & (1 << j))
+        {
+            array1[index1] = arr[j];
+            index1++;
+        }
+        else
+        {
+            array2[index2] = arr[j];
+            index2++;
+        }
+    }
 
-    return partition_rec_helper(arr, size, 0, 0, sum / 2);
+    if (set_sum(array1, index1) == set_sum(array2, index2))
+    {
+        printf("Array 1: ");
+        printArray(array1, index1);
+        printf("Array 2: ");
+        printArray(array2, index2);
+        return true;
+    }
+
+    partition_rec(arr, size, index + 1, combinations);
+    return false;
 }
 
 int main(int argc, char *argv[])
@@ -47,12 +68,11 @@ int main(int argc, char *argv[])
     int *arr = NULL;
     readFile(argv, &arr, &size);
 
-    if (DEBUG) printArray(arr, size);
+    if (DEBUG)
+        printArray(arr, size);
 
-    if (!partition_rec(arr, size))
-        printf("No partition found\n");
-    else
-        printf("Partition found\n");
+    if (partition_rec(arr, size, 0, (1 << (size - 1))))
+        printf("Solution not found\n");
 
     free(arr);
     return 0;

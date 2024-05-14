@@ -19,36 +19,39 @@
 
 #define DEBUG 1
 
-bool partition_iter (int *arr, int size) {
+bool partition_iter(int *arr, int size)
+{
     unsigned long long int index = 1 << (size - 1);
 
-    for (unsigned long long int i = 0; i < index; i++) {
+    for (unsigned long long int i = 0; i < index; i++)
+    {
         int array1[size];
         int index1 = 0;
         int array2[size];
         int index2 = 0;
 
-        for (int j = 0; j < size; j++) {
-            if (i & (1 << j)) {
+        for (int j = 0; j < size; j++)
+        {
+            if (i & (1 << j))
+            {
                 array1[index1] = arr[j];
                 index1++;
-            } else {
+            }
+            else
+            {
                 array2[index2] = arr[j];
                 index2++;
             }
         }
 
-
-        if (set_sum(array1, index1) == set_sum(array2, index2)) {
-            if (DEBUG) {
-                printf("Array 1: ");
-                printArray(array1, index1);
-                printf("Array 2: ");
-                printArray(array2, index2);
-            }
+        if (set_sum(array1, index1) == set_sum(array2, index2))
+        {
+            printf("Array 1: ");
+            printArray(array1, index1);
+            printf("Array 2: ");
+            printArray(array2, index2);
             return true;
         }
-
     }
 
     return false;
@@ -67,12 +70,11 @@ int main(int argc, char *argv[])
     int *arr = NULL;
     readFile(argv, &arr, &size);
 
-    if (DEBUG) printArray(arr, size);
+    if (DEBUG)
+        printArray(arr, size);
 
     if (!partition_iter(arr, size))
         printf("Solution not found\n");
-    else
-        printf("Solution found\n");
 
     free(arr);
     return 0;

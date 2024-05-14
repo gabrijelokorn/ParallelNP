@@ -43,7 +43,7 @@ Pri prvih dveh problemih bom rešitev poskusil implementirati rekurzivno kot tud
 
 03.04.2024 Sestanek po vajah za prevajalnike 11:10 - 11:40
 ---
-Pogovor sva začela s problemom, ki sva ga prejšnjikrat obdelala nekoliko manj podrobno - to je tretji problem oziroma problem simuliranja premikanja delcev, ki drug drugega bodisi privlačijo in odbijajo.
+Pogovor sva začela s problemom, ki sva ga prejšnjikrat obdelala nekoliko manj podrobno - to je tretji problem oziroma problem simuliranja premikanja delcev, ki drug drugega bodisi privlačijo ali odbijajo.
 Podrobnejši opis implementacije:
 
 - Vozlišča problema bomo generirali naključno. Za generiranje vozlišč lahko načeloma uporabimo psevdonaključne algoritme, vendar bi bilo dobro, da pazim, da niti, ki uporabljajo enak algoritem za naključne koordinate (si ga delijo) prejmejo različna (dejansko naključna) števila.
