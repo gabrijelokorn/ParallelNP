@@ -17,7 +17,7 @@
 #include "array.h"
 #include "set.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 bool partition_iter(int *arr, int size)
 {
@@ -52,8 +52,8 @@ bool partition_iter(int *arr, int size)
                 printArray(array1, index1);
                 printf("Array 2: ");
                 printArray(array2, index2);
-                return true;
             }
+            return true;
         }
     }
 
@@ -77,7 +77,9 @@ int main(int argc, char *argv[])
         printArray(arr, size);
 
     if (!partition_iter(arr, size))
-        printf("Solution not found\n");
+        printf("[%s]: solution not found\n", argv[0]);
+    else 
+        printf("[%s]: solution found\n", argv[0]);
 
     free(arr);
     return 0;

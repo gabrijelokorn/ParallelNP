@@ -17,17 +17,15 @@
 #include "array.h"
 #include "set.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 bool partition_rec(int *arr, int size, int index, int sum1, int sum2)
 {
-    if (index > size) return false;
+    if (index > size)
+        return false;
 
     if (sum1 == sum2)
-    {
-        printf("Solution found\n");
         return true;
-    }
 
     return partition_rec(arr, size, index + 1, sum1 + arr[index], sum2 - arr[index]) ||
            partition_rec(arr, size, index + 1, sum1, sum2);
@@ -50,7 +48,9 @@ int main(int argc, char *argv[])
         printArray(arr, size);
 
     if (!partition_rec(arr, size, 0, 0, set_sum(arr, size)))
-        printf("Solution not found\n");
+        printf("[%s]: solution not found\n", argv[0]);
+    else
+        printf("[%s]: solution found\n", argv[0]);
 
     free(arr);
     return 0;
