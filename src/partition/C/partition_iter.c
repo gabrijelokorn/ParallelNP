@@ -12,12 +12,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdint.h>
 
 #include "read.h"
 #include "array.h"
 #include "set.h"
 
-#define DEBUG 0
+bool DEBUG = 0;
 
 bool partition_iter(int *arr, int size)
 {
@@ -69,6 +71,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    for (uint8_t i = 0; i < argc; i++)
+    {
+        if (strcmp(argv[i], "-d") == 0)
+            DEBUG = 1;
+    }
+
     int size = 0;
     int *arr = NULL;
     readFile(argv, &arr, &size);
@@ -78,7 +86,7 @@ int main(int argc, char *argv[])
 
     if (!partition_iter(arr, size))
         printf("[%s]: solution not found\n", argv[0]);
-    else 
+    else
         printf("[%s]: solution found\n", argv[0]);
 
     free(arr);

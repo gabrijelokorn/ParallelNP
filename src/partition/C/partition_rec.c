@@ -12,12 +12,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
+#include <stdint.h>
 
 #include "read.h"
 #include "array.h"
 #include "set.h"
 
-#define DEBUG 0
+bool DEBUG = 0;
 
 bool partition_rec(int *arr, int size, int index, int sum1, int sum2)
 {
@@ -27,8 +29,10 @@ bool partition_rec(int *arr, int size, int index, int sum1, int sum2)
     if (sum1 == sum2)
         return true;
 
-    return partition_rec(arr, size, index + 1, sum1 + arr[index], sum2 - arr[index]) ||
-           partition_rec(arr, size, index + 1, sum1, sum2);
+    bool include = partition_rec(arr, size, index + 1, sum1 + arr[index], sum2 - arr[index]);
+    bool exclude = partition_rec(arr, size, index + 1, sum1, sum2);
+
+    return include || exclude;
 }
 
 int main(int argc, char *argv[])
@@ -38,6 +42,12 @@ int main(int argc, char *argv[])
     {
         printf("Usage: %s <number1> <number2> ... <numberN>\n", argv[0]);
         return 1;
+    }
+
+    for (uint8_t i = 0; i < argc; i++)
+    {
+        if (strcmp(argv[i], "-d") == 0)
+            DEBUG = 1;
     }
 
     int size = 0;
