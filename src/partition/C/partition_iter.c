@@ -46,11 +46,14 @@ bool partition_iter(int *arr, int size)
 
         if (set_sum(array1, index1) == set_sum(array2, index2))
         {
-            printf("Array 1: ");
-            printArray(array1, index1);
-            printf("Array 2: ");
-            printArray(array2, index2);
-            return true;
+            if (DEBUG)
+            {
+                printf("Array 1: ");
+                printArray(array1, index1);
+                printf("Array 2: ");
+                printArray(array2, index2);
+                return true;
+            }
         }
     }
 

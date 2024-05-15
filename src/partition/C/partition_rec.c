@@ -19,40 +19,18 @@
 
 #define DEBUG 1
 
-bool partition_rec(int *arr, int size, long long unsigned int index, int combinations)
+bool partition_rec(int *arr, int size, int index, int sum1, int sum2)
 {
-    if (index >= combinations) return false;
+    if (index > size) return false;
 
-    int array1[size];
-    int index1 = 0;
-    int array2[size];
-    int index2 = 0;
-
-    for (int j = 0; j < size; j++)
+    if (sum1 == sum2)
     {
-        if (index & (1 << j))
-        {
-            array1[index1] = arr[j];
-            index1++;
-        }
-        else
-        {
-            array2[index2] = arr[j];
-            index2++;
-        }
-    }
-
-    if (set_sum(array1, index1) == set_sum(array2, index2))
-    {
-        printf("Array 1: ");
-        printArray(array1, index1);
-        printf("Array 2: ");
-        printArray(array2, index2);
+        printf("Solution found\n");
         return true;
     }
 
-    partition_rec(arr, size, index + 1, combinations);
-    return false;
+    return partition_rec(arr, size, index + 1, sum1 + arr[index], sum2 - arr[index]) ||
+           partition_rec(arr, size, index + 1, sum1, sum2);
 }
 
 int main(int argc, char *argv[])
@@ -71,7 +49,7 @@ int main(int argc, char *argv[])
     if (DEBUG)
         printArray(arr, size);
 
-    if (partition_rec(arr, size, 0, (1 << (size - 1))))
+    if (!partition_rec(arr, size, 0, 0, set_sum(arr, size)))
         printf("Solution not found\n");
 
     free(arr);
