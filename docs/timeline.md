@@ -52,7 +52,23 @@ Podrobnejši opis implementacije:
 - V kolikor ne bo pretežko, enačbe algoritma predrugačimo tako, da bo delovalo v tridimenzionalnem prostoru, **vendar najprej implementiramo v dvodimenzionalnem prostoru**
 - Korak pri izvajanju algoritma naj bo dolg (časovno), kolikor je velikost rezultante sil, ki delujejo na ta delec. Torej, ne simuliramo delvanje sil na časovno enoto, pač pa diskretno glede na seštevek sil v podanem koraku.
 
-
 Za vse tri rešitve je predlagal, naj najprej implementiramo zaporedni program, tako da bomo problem razumeli in šele nato nadaljujem na vzporedne rešitve.  
 Implementacija vseh treh rešitev naj omogoča, da bo uporabnik izvajal program s poljuno veliko (s parametri določeno) številom niti (**strojnih!**).  
 Na STUDISU moram izpolniti obrazec za prijavo diplomske naloge, kjer označim mentorja in napišem (nekončen) naslov diplomske naloge. Ta naslov lahko spreminjava vse do prijave teme oziroma zagovora (tam nekje). Prijaviti moram do 15.4.2024. Opis naloge bo tudi spisal on: kakor sem razumel v angleščini in slovenščini - kakor vem je to tistij nekaj vrstic, ki se prikaže na spletni strani FRI-ja. Točnega naslova, ki ga je omenil se ne spomnim, nekaj v smislu: "Primerjava vzporedenja problemov v C, Julia in Golang." V bistvu niti približno tako, vem le, da je bilo o primerjavi in vzporedenju, nekaj tudi o jedrih.
+
+17.07.2024; 09:00
+---
+- Kako naj primerjam jezike med seboj?
+    
+    Primejati moram konstrukte, podatkovne strukture ostalo orodje, tudi knjižnice, ki mi jih ponujajo jeziki (vse v obe smeri).
+
+- Ali naj je narobe, če se algoritmi v različnih implementacijah razlikujejo?
+    
+    Ne, tako je tudi prav.
+
+- Kakšen naj bi bil zaključek / ugotovitev diplomske naloge?
+
+    Dobra ugotovitev za bralca bi bila na primer, da mu predlagam v kakšne namene je bolje uporabiti en ali drug jezik.
+
+.07.2024; ura
+---
