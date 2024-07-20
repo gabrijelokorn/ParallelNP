@@ -56,3 +56,10 @@ Podrobnejši opis implementacije:
 Za vse tri rešitve je predlagal, naj najprej implementiramo zaporedni program, tako da bomo problem razumeli in šele nato nadaljujem na vzporedne rešitve.  
 Implementacija vseh treh rešitev naj omogoča, da bo uporabnik izvajal program s poljuno veliko (s parametri določeno) številom niti (**strojnih!**).  
 Na STUDISU moram izpolniti obrazec za prijavo diplomske naloge, kjer označim mentorja in napišem (nekončen) naslov diplomske naloge. Ta naslov lahko spreminjava vse do prijave teme oziroma zagovora (tam nekje). Prijaviti moram do 15.4.2024. Opis naloge bo tudi spisal on: kakor sem razumel v angleščini in slovenščini - kakor vem je to tistij nekaj vrstic, ki se prikaže na spletni strani FRI-ja. Točnega naslova, ki ga je omenil se ne spomnim, nekaj v smislu: "Primerjava vzporedenja problemov v C, Julia in Golang." V bistvu niti približno tako, vem le, da je bilo o primerjavi in vzporedenju, nekaj tudi o jedrih.
+
+16.07.2024 - 9:00
+---
+- Zanima me kako naj bi med seboj primerjal jezike in kakšni naj bi bili kriteriji za primerjavo.
+- Ko implementiram rešitve v različnih programskih jezikih, ali je nujno, da so si med seboj vse rešitve postopkovno ekvivalentne.
+- Za partitioning problem naj bi implementiral tako rekurzivno kot iterativno rešitev. Tam rešitev mora biti enaka - kako naj torej primerjam.
+- 
