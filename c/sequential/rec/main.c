@@ -15,9 +15,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "read.h"
-#include "array.h"
-#include "set.h"
+#include "../lib/read.h"
+#include "../lib/array.h"
+#include "../lib/set.h"
 
 bool DEBUG = 0;
 

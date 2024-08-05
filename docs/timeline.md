@@ -70,5 +70,5 @@ Na STUDISU moram izpolniti obrazec za prijavo diplomske naloge, kjer označim me
 
     Dobra ugotovitev za bralca bi bila na primer, da mu predlagam v kakšne namene je bolje uporabiti en ali drug jezik.
 
-.07.2024; ura
+.08.2024; ura
 ---
