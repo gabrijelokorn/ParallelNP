@@ -19,8 +19,6 @@
 #include "../lib/array.h"
 #include "../lib/set.h"
 
-bool DEBUG = 0;
-
 bool partition_iter(int *arr, int size)
 {
     unsigned long long int index = 1 << (size - 1);
@@ -48,13 +46,6 @@ bool partition_iter(int *arr, int size)
 
         if (set_sum(array1, index1) == set_sum(array2, index2))
         {
-            if (DEBUG)
-            {
-                printf("Array 1: ");
-                printArray(array1, index1);
-                printf("Array 2: ");
-                printArray(array2, index2);
-            }
             return true;
         }
     }
@@ -67,22 +58,13 @@ int main(int argc, char *argv[])
     // At least one argument expected
     if (argc < 2)
     {
-        printf("Usage: %s <file>\n", argv[0]);
+        printf("[%s:] Internal error - try: %s <file>\n", argv[0], argv[0]);
         return 1;
-    }
-
-    for (uint8_t i = 0; i < argc; i++)
-    {
-        if (strcmp(argv[i], "-d") == 0)
-            DEBUG = 1;
     }
 
     int size = 0;
     int *arr = NULL;
     readFile(argv, &arr, &size);
-
-    if (DEBUG)
-        printArray(arr, size);
 
     if (!partition_iter(arr, size))
         printf("[%s]: solution not found\n", argv[0]);
