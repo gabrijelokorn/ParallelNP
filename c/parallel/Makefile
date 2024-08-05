@@ -1,15 +1,17 @@
-CC = gcc
-TARGET = main.out
-SOURCES = main.c ../lib/read.c ../lib/array.c ../lib/set.c
-OBJECTS = $(SOURCES:.c=.o)
+.PHONY: all clean big_partition small_partitions fructerman_reingold
 
-all: $(TARGET)
+all: big_partition small_partitions fructerman_reingold
 
-$(TARGET): $(OBJECTS)
-	$(CC) -o $(TARGET) $(OBJECTS)
+big_partition:
+	$(MAKE) -C big_partition
 
-%.o: %.c
-	$(CC) -c $< -o $@
+small_partitions:
+	$(MAKE) -C small_partitions
+
+fructerman_reingold:	
+	$(MAKE) -C fructerman_reingold
 
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	$(MAKE) -C big_partition clean
+	$(MAKE) -C small_partitions clean
+	$(MAKE) -C fructerman_reingold clean

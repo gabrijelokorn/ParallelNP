@@ -15,9 +15,11 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "../lib/read.h"
-#include "../lib/array.h"
-#include "../lib/set.h"
+#include "../../lib/read.h"
+#include "../../lib/array.h"
+#include "../../lib/set.h"
+
+#define NAME "Iterative big_partition"
 
 bool partition_iter(int *arr, int size)
 {
@@ -58,7 +60,7 @@ int main(int argc, char *argv[])
     // At least one argument expected
     if (argc < 2)
     {
-        printf("[%s:] Internal error - try: %s <file>\n", argv[0], argv[0]);
+        printf("[%s:] Internal error - try: %s <file>\n", NAME, argv[0]);
         return 1;
     }
 
@@ -67,9 +69,9 @@ int main(int argc, char *argv[])
     readFile(argv, &arr, &size);
 
     if (!partition_iter(arr, size))
-        printf("[%s]: solution not found\n", argv[0]);
+        printf("[%s]: solution not found\n", NAME);
     else
-        printf("[%s]: solution found\n", argv[0]);
+        printf("[%s]: solution found\n", NAME);
 
     free(arr);
     return 0;
