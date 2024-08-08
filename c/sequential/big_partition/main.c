@@ -1,5 +1,5 @@
 /**
- * @file partition_iter.c
+ * @file main.c
  * @author Gabrijel Okorn (gabrijel.okorn@gmail.com)
  * @brief
  * @version 0.1
@@ -16,12 +16,13 @@
 #include <stdint.h>
 
 #include "../../lib/read.h"
+#include "../../lib/write.h"
 #include "../../lib/array.h"
 #include "../../lib/set.h"
 
-#define NAME "Iterative big_partition"
+#define NAME "Sequential C - Big Partition"
 
-bool partition_iter(int *arr, int size)
+bool partition(int *arr, int size)
 {
     unsigned long long int index = 1 << (size - 1);
 
@@ -57,10 +58,10 @@ bool partition_iter(int *arr, int size)
 
 int main(int argc, char *argv[])
 {
-    // At least one argument expected
-    if (argc < 2)
+    // At least two arguments expected - input file name and output file name
+    if (argc < 3)
     {
-        printf("[%s:] Internal error - try: %s <file>\n", NAME, argv[0]);
+        printf("[%s:] Internal error - try: %s <input file> <output file>\n", NAME, argv[0]);
         return 1;
     }
 
@@ -68,11 +69,10 @@ int main(int argc, char *argv[])
     int *arr = NULL;
     readFile(argv, &arr, &size);
 
-    if (!partition_iter(arr, size))
-        printf("[%s]: solution not found\n", NAME);
+    if (partition(arr, size))
+        writeString(argv[2], "w", "YES\n");
     else
-        printf("[%s]: solution found\n", NAME);
+        writeString(argv[2], "w", "NO\n");
 
-    free(arr);
     return 0;
 }

@@ -59,7 +59,7 @@ void readFile(char *argv[], int **arr, int *size)
     FILE *file = fopen(argv[1], "r");
     if (file == NULL)
     {
-        printf("Error: File %s not found\n", argv[1]);
+        printf("[reac.c]: File %s not found\n", argv[1]);
         exit(1);
     }
 
@@ -67,7 +67,7 @@ void readFile(char *argv[], int **arr, int *size)
     *arr = (int *)malloc(*size * sizeof(int));
     if (*arr == NULL)
     {
-        printf("Error: Memory allocation failed\n");
+        printf("[read.c]: Memory allocation failed\n");
         exit(1);
     }
     

@@ -1,2 +1,6 @@
+# Ignore all the compiled files
 **/*.out
 **/*.o
+
+# Ignore the result files
+**/output*.csv
