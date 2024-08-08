@@ -2,7 +2,8 @@
 
 CC = gcc
 TARGET = main.out
-SOURCES = main.c ../../lib/read.c ../../lib/array.c ../../lib/set.c
+SOURCES = main.c ../../lib/read.c ../../lib/array.c ../../lib/set.c ../../lib/write.c
+OUTPUTS = output*.csv
 OBJECTS = $(SOURCES:.c=.o)
 
 all: compile test
@@ -21,11 +22,12 @@ $(TARGET): $(OBJECTS)
 
 # --- TEST --- #
 test: $(TARGET)
-	@echo "C language with sequential program on small_partitions"
 	@for case in ../../../tests/small_partitions/*.txt; do \
-		time ./$(TARGET) $$case; \
+		out=output$$(basename $$case .txt).csv; \
+		./$(TARGET) $$case $$out; \
 	done
 # --- ---- --- #
 
+
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	rm -f $(TARGET) $(OBJECTS) $(OUTPUTS)

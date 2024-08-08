@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "read.h"
 
 void readNumbers(FILE *file, int *arr, int size)
 {
@@ -27,31 +25,31 @@ void readNumbers(FILE *file, int *arr, int size)
     return;
 }
 
-int countNumbers(FILE *file)
-{
-    fseek(file, 0, SEEK_SET);
-    int size = 0;
-    char *line = NULL;
-    size_t line_length = 0;
+// int countNumbers(FILE *file)
+// {
+//     fseek(file, 0, SEEK_SET);
+//     int size = 0;
+//     char *line = NULL;
+//     size_t line_length = 0;
 
-    // Count elements seperated by the delimiter ','
-    while (getline(&line, &line_length, file) != -1)
-    {
-        char *token = strtok(line, ",");
-        while (token != NULL)
-        {
-            int num = atoi(token);
-            if (!num == 0)
-                (size)++;
-            token = strtok(NULL, ",");
-        }
-    }
+//     // Count elements seperated by the delimiter ','
+//     while (getline(&line, &line_length, file) != -1)
+//     {
+//         char *token = strtok(line, ",");
+//         while (token != NULL)
+//         {
+//             int num = atoi(token);
+//             if (!num == 0)
+//                 (size)++;
+//             token = strtok(NULL, ",");
+//         }
+//     }
 
-    // Free the allocated string
-    free(line);
+//     // Free the allocated string
+//     free(line);
 
-    return size;
-}
+//     return size;
+// }
 
 void readFile(char *argv[], int **arr, int *size)
 {
@@ -59,7 +57,7 @@ void readFile(char *argv[], int **arr, int *size)
     FILE *file = fopen(argv[1], "r");
     if (file == NULL)
     {
-        printf("[reac.c]: File %s not found\n", argv[1]);
+        printf("[read.c]: File %s not found\n", argv[1]);
         exit(1);
     }
 
@@ -76,5 +74,66 @@ void readFile(char *argv[], int **arr, int *size)
     // Close the file
     fclose(file);
 
+    return;
+}
+
+int countNumbers (FILE *file) {
+    int size = 0;
+    fseek(file, 0, SEEK_SET);
+
+    char *line = NULL;
+    size_t line_length = 0;
+
+    // Count elements seperated by the delimiter ','
+    while (getline(&line, &line_length, file) != -1)
+    {
+        char *token = strtok(line, ",");
+        while (token != NULL)
+        {
+            int num = atoi(token);
+            if (!num == 0)
+                size++;
+            token = strtok(NULL, ",");
+        }
+    }
+
+    // Free the allocated string
+    free(line);
+    return size;
+}
+
+int countLines (FILE *file) {
+    int lines = 0;
+    fseek(file, 0, SEEK_SET);
+    char *line = NULL;
+    size_t line_length = 0;
+
+    // Count elements seperated by the delimiter ','
+    while (getline(&line, &line_length, file) != -1)
+    {
+        lines++;
+    }
+
+    // Free the allocated string
+    free(line);
+
+    return lines;
+}
+
+void read2d(char* argv[], int*** arr, int** size) {
+    FILE* file = fopen(argv[1], "r");
+
+    int lines = countLines(file);
+    *size = (int *)malloc(lines * sizeof(int));
+    *arr = (int **)malloc(lines * sizeof(int*));
+
+    fseek(file, 0, SEEK_SET);
+    for (int i = 0; i < lines; i++) {
+        (*size)[i] = countNumbers(file);
+        (*arr)[i] = (int *)malloc((*size)[i] * sizeof(int));
+        countNumbers(file);
+    }
+
+    fclose(file);
     return;
 }

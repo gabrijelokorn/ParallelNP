@@ -3,6 +3,7 @@
 CC = gcc
 TARGET = main.out
 SOURCES = main.c ../../lib/read.c ../../lib/array.c ../../lib/set.c ../../lib/write.c
+OUTPUTS = output*.csv
 OBJECTS = $(SOURCES:.c=.o)
 
 all: compile test
@@ -29,4 +30,4 @@ test: $(TARGET)
 
 
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	rm -f $(TARGET) $(OBJECTS) $(OUTPUTS)
