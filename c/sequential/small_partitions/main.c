@@ -67,11 +67,19 @@ int main(int argc, char *argv[])
 
     int** arr;
     int* size;
-    read2d(argv, &arr, &size);
+    int lines = 0;
+    read2d(argv, &arr, &size, &lines);
 
-    for (int i = 0; i < *size; i++)
-        printArray(arr[i], size[i]);
-        
+    writeString(argv[2], "w", ""); 
+    for (int i = 0; i < lines; i++) {
+        if (partition(arr[i], size[i])) {
+            writeString(argv[2], "a", "YES\n"); 
+        } else {
+            writeString(argv[2], "a", "NO\n");
+        }
+    }
 
+    free(arr);
+    free(size);
     return 0;
 }

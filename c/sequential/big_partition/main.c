@@ -67,12 +67,13 @@ int main(int argc, char *argv[])
 
     int size = 0;
     int *arr = NULL;
-    readFile(argv, &arr, &size);
+    read1d(argv, &arr, &size);
 
     if (partition(arr, size))
         writeString(argv[2], "w", "YES\n");
     else
         writeString(argv[2], "w", "NO\n");
 
+    free(arr);
     return 0;
 }
