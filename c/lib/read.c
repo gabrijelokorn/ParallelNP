@@ -115,3 +115,22 @@ void read2d(char *argv[], int ***arr, int **size, int* lines)
     fclose(file);
     return;
 }
+
+int countCoordinateLines(FILE *file)
+{
+    int lines = 0;
+    fseek(file, 0, SEEK_SET);
+    char *line = NULL;
+    size_t line_length = 0;
+
+    // Count elements seperated by the delimiter ','
+    while (getline(&line, &line_length, file) != -1)
+    {
+        lines++;
+    }
+
+    // Free the allocated string
+    free(line);
+
+    return lines;
+}

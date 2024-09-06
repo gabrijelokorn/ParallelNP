@@ -15,6 +15,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    int n;
+    
+    int K;
+    int vertices;
+
     #ifdef VERBOSE
         writeString(argv[2], "w", "");
         writeString(argv[2], "a", "YES\n");
