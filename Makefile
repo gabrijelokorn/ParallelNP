@@ -1,28 +1,31 @@
 # Compile the sequential and parallel versions 
 # of the program in all languages.
 
-.PHONY: all clean compile test c julia golang
+.PHONY: all clean compile run c julia golang
 
-all: compile test
+all: compile run
+
+# Default value for VERBOSE is empty
+VERBOSE ?= 1
 
 compile:
-	$(MAKE) -C c compile
-#	$(MAKE) -C golang compile
-#	$(MAKE) -C julia compile
+	$(MAKE) -C c compile VERBOSE=$(VERBOSE)
+#	$(MAKE) -C golang compile VERBOSE=$(VERBOSE)
+#	$(MAKE) -C julia compile VERBOSE=$(VERBOSE)
 
-test:
-	$(MAKE) -C c test
-#	$(MAKE) -C golang test
-#	$(MAKE) -C julia test
+run:
+	$(MAKE) -C c run VERBOSE=$(VERBOSE)
+#	$(MAKE) -C golang run VERBOSE=$(VERBOSE)
+#	$(MAKE) -C julia run VERBOSE=$(VERBOSE)
 
 c:
-	$(MAKE) -C c
+	$(MAKE) -C c VERBOSE=$(VERBOSE)
 
 julia:
-	$(MAKE) -C julia
+	$(MAKE) -C julia VERBOSE=$(VERBOSE)
 
 golang:
-	$(MAKE) -C golang
+	$(MAKE) -C golang VERBOSE=$(VERBOSE)
 
 clean:
 	$(MAKE) -C c clean

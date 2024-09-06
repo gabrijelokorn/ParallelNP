@@ -15,12 +15,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "../../lib/read.h"
-#include "../../lib/write.h"
-#include "../../lib/array.h"
-#include "../../lib/set.h"
+#include "../../lib/parallelNP.h"
 
-#define NAME "Sequential C - Big Partition"
+#define NAME "C > sequential > small_partitions"
 
 bool partition(int *arr, int size)
 {
@@ -65,19 +62,26 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int** arr;
-    int* size;
+    int **arr;
+    int *size;
     int lines = 0;
     read2d(argv, &arr, &size, &lines);
 
-    writeString(argv[2], "w", ""); 
-    for (int i = 0; i < lines; i++) {
-        if (partition(arr[i], size[i])) {
-            writeString(argv[2], "a", "YES\n"); 
-        } else {
+#ifdef VERBOSE
+    writeString(argv[2], "w", "");
+    for (int i = 0; i < lines; i++)
+    {
+        if (partition(arr[i], size[i]))
+            writeString(argv[2], "a", "YES\n");
+        else
             writeString(argv[2], "a", "NO\n");
-        }
     }
+#endif
+
+#ifndef VERBOSE
+    for (int i = 0; i < lines; i++)
+        partition(arr[i], size[i]);
+#endif
 
     free(arr);
     free(size);

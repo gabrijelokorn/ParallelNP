@@ -17,14 +17,14 @@ endif
 compile: $(TARGET)
 
 $(TARGET):
-	@echo "compile: C > sequential > big_partition"
+	@echo "compile: C > sequential > Kamada-Kawai"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
 # --- ------ --- #
 
 # --- run --- #
 run: $(TARGET)
-	@echo "run: C > sequential > big_partition"
-	@for case in ../../../tests/big_partition/*.txt; do \
+	@echo "run: C > sequential > Kamada-Kawai"
+	@for case in ../../../tests/Kamada-Kawai/*.txt; do \
 		out=output$$(basename $$case .txt).csv; \
 		./$(TARGET) $$case $$out; \
 	done

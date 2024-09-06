@@ -1,27 +1,30 @@
-.PHONY: all clean compile test
+.PHONY: all clean compile run
 
-all: compile test
+all: compile run 
+
+# Default value for VERBOSE is empty
+VERBOSE ?= 1
 
 compile:
-	$(MAKE) -C sequential/big_partition compile
-	$(MAKE) -C sequential/small_partitions compile
-#	$(MAKE) -C sequential/fructerman_reingold compile
-#	$(MAKE) -C parallel/big_partition compile
-#	$(MAKE) -C parallel/small_partitions compile
-#	$(MAKE) -C parallel/fructerman_reingold compile
+	$(MAKE) -C sequential/big_partition compile VERBOSE=$(VERBOSE)
+	$(MAKE) -C sequential/small_partitions compile VERBOSE=$(VERBOSE)
+	$(MAKE) -C sequential/Kamada-Kawai compile VERBOSE=$(VERBOSE)
+#	$(MAKE) -C parallel/big_partition compile VERBOSE=$(VERBOSE)
+#	$(MAKE) -C parallel/small_partitions compile VERBOSE=$(VERBOSE)
+#	$(MAKE) -C parallel/Kamada-Kawai compile VERBOSE=$(VERBOSE)
 
-test:
-	$(MAKE) -C sequential/big_partition test
-	$(MAKE) -C sequential/small_partitions test
-#	$(MAKE) -C sequential/fructerman_reingold test
-#	$(MAKE) -C parallel/big_partition test
-#	$(MAKE) -C parallel/small_partitions test
-#	$(MAKE) -C parallel/fructerman_reingold test
+run:
+	$(MAKE) -C sequential/big_partition run VERBOSE=$(VERBOSE)
+	$(MAKE) -C sequential/small_partitions run VERBOSE=$(VERBOSE)
+	$(MAKE) -C sequential/Kamada-Kawai run VERBOSE=$(VERBOSE)
+#	$(MAKE) -C parallel/big_partition run VERBOSE=$(VERBOSE)
+#	$(MAKE) -C parallel/small_partitions run VERBOSE=$(VERBOSE)
+#	$(MAKE) -C parallel/Kamada-Kawai run VERBOSE=$(VERBOSE)
 
 clean:
 	$(MAKE) -C sequential/big_partition clean
 	$(MAKE) -C sequential/small_partitions clean
-#	$(MAKE) -C sequential/fructerman_reingold clean
+	$(MAKE) -C sequential/Kamada-Kawai clean
 #	$(MAKE) -C parallel/big_partition clean
 #	$(MAKE) -C parallel/small_partitions clean
-#	$(MAKE) -C parallel/fructerman_reingold clean
+#	$(MAKE) -C parallel/Kamada-Kawai clean

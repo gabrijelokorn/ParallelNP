@@ -15,12 +15,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "../../lib/read.h"
-#include "../../lib/write.h"
-#include "../../lib/array.h"
-#include "../../lib/set.h"
+#include "../../lib/parallelNP.h"
 
-#define NAME "Sequential C - Big Partition"
+#define NAME "C > sequential > big_partition"
 
 bool partition(int *arr, int size)
 {
@@ -69,10 +66,16 @@ int main(int argc, char *argv[])
     int *arr = NULL;
     read1d(argv, &arr, &size);
 
+#ifdef VERBOSE
     if (partition(arr, size))
         writeString(argv[2], "w", "YES\n");
     else
         writeString(argv[2], "w", "NO\n");
+#endif
+
+#ifndef VERBOSE
+    partition(arr, size);
+#endif
 
     free(arr);
     return 0;
