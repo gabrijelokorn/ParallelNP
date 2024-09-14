@@ -4,3 +4,6 @@
 
 # Ignore the result files
 **/output*.csv
+**/output*.avi
+**/coords*.csv
+**/edges*.csv

@@ -3,7 +3,7 @@
 CC = gcc
 TARGET = main.out
 SOURCES = main.c ../../lib/read.c ../../lib/array.c ../../lib/set.c ../../lib/write.c
-OUTPUTS = output*.csv
+OUTPUTS = output*.csv output*.avi
 
 all: compile run
 
@@ -25,8 +25,11 @@ $(TARGET):
 run: $(TARGET)
 	@echo "run: C > sequential > Kamada-Kawai"
 	@for case in ../../../tests/Kamada-Kawai/*.txt; do \
-		out=output$$(basename $$case .txt).csv; \
-		./$(TARGET) $$case $$out; \
+		outCoords=coords$$(basename $$case .txt).csv; \
+		outEdges=edges$$(basename $$case .txt).csv; \
+		outVideo=output$$(basename $$case .txt).avi; \
+		./$(TARGET) $$case $$outCoords $$outEdges; \
+		matlab -nodisplay -nosplash -nodesktop -r "addpath('../../../'); KamadaKawai('$$outCoords', '$$outEdges', '$$outVideo'); exit;" | tail -n +11; \
 	done
 # --- ---- --- #
 
