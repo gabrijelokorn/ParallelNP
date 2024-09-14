@@ -20,5 +20,11 @@ int main(int argc, char *argv[])
     int K;
     int vertices;
 
+#ifdef VERBOSE
+#endif
+
+#ifndef VERBOSE
+#endif
+
     return 0;
 }

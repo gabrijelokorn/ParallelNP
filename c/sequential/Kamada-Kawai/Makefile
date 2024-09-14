@@ -29,7 +29,9 @@ run: $(TARGET)
 		outEdges=edges$$(basename $$case .txt).csv; \
 		outVideo=output$$(basename $$case .txt).avi; \
 		./$(TARGET) $$case $$outCoords $$outEdges; \
-		matlab -nodisplay -nosplash -nodesktop -r "addpath('../../../'); KamadaKawai('$$outCoords', '$$outEdges', '$$outVideo'); exit;" | tail -n +11; \
+		if [ "$(VERBOSE)" = "1" ]; then \
+			matlab -nodisplay -nosplash -nodesktop -r "addpath('../../../'); KamadaKawai('$$outCoords', '$$outEdges', '$$outVideo'); exit;" | tail -n +11; \
+		fi; \
 	done
 # --- ---- --- #
 
