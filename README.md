@@ -17,7 +17,27 @@ Uporabili bomo hkrati več majhnih množic, na katerih bomo izvedli ta algoritem
 
 ### 3. Kamada-Kawai algoritem
 ---
-Algoritem je opisan v [documentu](./docs/document.pdf).
+Algoritem je opisan v [documentu](./docs/document.pdf). V datotekah z rezultati so prikazani rezultati izvajanja v sledečem formatu:
+```
+3 - število točk
+
+1,1 - vozlišče A v prvem koraku
+2,1 
+3,1
+
+1,2
+2,2
+3,2
+
+1,3
+2,3 - vozlišče B v tretjem koraku
+3,3
+
+1,4
+2,4
+3,4 - vozlišče C v četrtem koraku
+```
+To je primer s tremi točkami, ki se je izvede v štirih korakih. "Stanja" (v kolikih korakih je bil algoritem izveden) so med seboj ločena s praznimi vrsticami.
 
 ## Uporaba
 Programje lahko prevedemo in zaganjamo z uporabo Makefile datoteke v korenskem direktoriju z ukazom `make`.

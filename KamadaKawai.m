@@ -1,15 +1,20 @@
-function KamadaKawai(vertexFile, edgeFile, productionFile)
+function KamadaKawai(pointsFile, vertexFile, edgeFile, productionFile)
+
+%%% %%% READ FILES %%% %%%
+% Read number of points 
+    points = readmatrix(pointsFile);
+% Points shall be number not array
+    points = points(1);
+
 % Read data of points into matrix "coordinates"
     coordinates = readmatrix(vertexFile)';
 % Get matrix metadata
-    [rows, columns, slices] = size(coordinates);
+    [rows, columns] = size(coordinates);
     
 % Calculate matrix properties 
-    points = coordinates(1, 1);
-    coordinates(:,1) = [];   
-    states = (columns - 1) / points;
+    states = columns / points;
    
-% Create a new 3-dimensional matrix representing STATE,POINTS and TIME
+% Create a new 3-dimensional matrix representing STATE, POINTS and TIME
     coordinates = reshape(coordinates, 2, points, states);
 
 % Read data of edges into matrix "edges"
