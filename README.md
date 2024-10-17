@@ -74,3 +74,7 @@ Izpisane čase izvajanja najdemo v TODO .... \
 ## Delovanje programja
 - vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.txt`.
 - Programi so napisani tako, da se izvaja le potrebni del kode, kadar je izključena možnost `VERBOSE`. To pa zato, da dobimo kar se da zanesljive meritve časa.
+
+
+## TODO
+Update documentation!

@@ -1,42 +1,48 @@
 .PHONY: all clean compile run
+all: compile run
+
 
 CC = gcc
 TARGET = main.out
 SOURCES = main.c ../../lib/read.c ../../lib/array.c ../../lib/set.c ../../lib/write.c
-# Later add csvs to clean, when they will be automatic
-OUTPUTS = output*.csv output*.avi
+OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
 
-all: compile run
 
-VERBOSE ?= 1
 CFLAGS = 
+VERBOSE ?= 1
 ifeq ($(VERBOSE),1)
 	CFLAGS += -DVERBOSE
 endif
 
-# --- COMPILE --- #
+
+
+### --- COMPILE --- ###
 compile: $(TARGET)
 
 $(TARGET):
 	@echo "compile: C > sequential > Kamada-Kawai"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
-# --- ------ --- #
+### --- ------ --- ###
 
-# --- run --- #
+
+
+### --- RUN --- ###
 run: $(TARGET)
 	@echo "run: C > sequential > Kamada-Kawai"
-	@for case in ../../../tests/Kamada-Kawai/*.txt; do \
-		inPoints=points$$(basename $$case .txt).csv; \
-		inCoords=coords$$(basename $$case .txt).csv; \
-		inEdges=edges$$(basename $$case .txt).csv; \
-		outVideo=output$$(basename $$case .txt).avi; \
-		./$(TARGET) $$case $$inPoints $$inCoords $$inEdges; \
-		if [ "$(VERBOSE)" = "1" ]; then \
-			matlab -nodisplay -nosplash -nodesktop -r "addpath('../../../'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
-		fi; \
+	@for case in ../../../tests/Kamada-Kawai/*.coords.txt; do \
+		coords_input=$$case.coords.txt; \
+		edges_input=$$case.edges.txt; \
+		outPoints=points$$(basename $$case .txt).csv; \
+		outCoords=coords$$(basename $$case .txt).csv; \
+		outEdges=edges$$(basename $$case .txt).csv; \
+		./$(TARGET) $$coords_input $$edges_input $$outPoints $$outCoords $$outEdges; \
 	done
-# --- ---- --- #
+		
+### --- ---- --- ###
 
 
+
+### --- CLEAN --- ###
 clean:
 	rm -f $(TARGET) $(OBJECTS) $(OUTPUTS)
+### --- ----- --- ###
