@@ -5,7 +5,7 @@ all: compile run
 CC = gcc
 TARGET = main.out
 SOURCES = main.c ../../lib/set.c ../../lib/write.c ../../lib/fileSize.c ../../lib/json2array.c ../../lib/types.h ../../lib/writeJson.c
-OUTPUTS = output*.csv
+OUTPUTS = output*.json
 
 
 VERBOSE ?= 1
