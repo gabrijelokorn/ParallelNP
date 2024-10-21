@@ -58,25 +58,75 @@ int main(int argc, char *argv[])
     // At least two arguments expected - input file name and output file name
     if (argc < 3)
     {
-        printf("[%s:] Internal error - try: %s <input file> <output file>\n", NAME, argv[0]);
+        fprintf(stderr, "[%s:] Internal error - try: %s <input file> <output file>\n", NAME, argv[0]);
         return 1;
     }
 
-    int size = 0;
-    int *arr = NULL;
-    read1d(argv, &arr, &size);
+    // 1. Open the test file
+    FILE *inputFile = fopen(argv[1], "r");
+    if (inputFile == NULL)
+    {
+        fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[1]);
+        return 1;
+    }
 
-#ifdef VERBOSE
-    if (partition(arr, size))
-        writeString(argv[2], "w", "YES\n");
-    else
-        writeString(argv[2], "w", "NO\n");
+    // 2. Determine file size
+    fseek(inputFile, 0, SEEK_END);
+    int size = getFileSize(inputFile);
+    rewind(inputFile);
+
+    // 3. Allocate memory for the file
+    char *buffer = (char *)malloc((size + 1) * sizeof(char));
+    if (buffer == NULL)
+    {
+        fprintf(stderr, "[%s:] Error allocating memory for file %s\n", NAME, argv[1]);
+        fclose(inputFile);
+        return 1;
+    }
+
+    // 4. Read the file into a buffer
+    fread(buffer, size, 1, inputFile);
+    // Null terminate the buffer
+    buffer[size] = '\0';
+
+    // 5. Parse the buffer into json and
+    // 6. Convert json into an array (of arrays) of integers
+    dimensions *d = dims(buffer);
+    int **arr = json2array(buffer, d);
+
+    json_object *jarray = json_object_new_array();
+
+    // 7.a Perform the partitioning
+#ifndef VERBOSE
+    for (int i = 0; i < d->rows; i++)
+        partition(arr[i], d->cols[i]);
 #endif
 
-#ifndef VERBOSE
-    partition(arr, size);
+    // 7.b Write the results to the output file
+#ifdef VERBOSE
+    FILE *outFile = fopen(argv[2], "w");
+    if (outFile == NULL)
+    {
+        fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[2]);
+        return 1;
+    }
+    writeString(outFile, "");
+
+    for (int i = 0; i < d->rows; i++)
+    {
+        int result = partition(arr[i], d->cols[i]);
+        json_object *jbool = json_object_new_boolean(result);
+        json_object_array_add(jarray, jbool);
+    }
+
+    writeJson(outFile, jarray);
+    json_object_put(jarray);
+    fclose(outFile);
 #endif
 
     free(arr);
+    fclose(inputFile);
+    free(buffer);
+
     return 0;
 }

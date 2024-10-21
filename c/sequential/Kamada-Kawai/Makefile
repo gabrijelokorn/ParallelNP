@@ -4,7 +4,7 @@ all: compile run
 
 CC = gcc
 TARGET = main.out
-SOURCES = main.c ../../lib/read.c ../../lib/array.c ../../lib/set.c ../../lib/write.c
+SOURCES = main.c
 OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
 
 
@@ -37,8 +37,7 @@ run: $(TARGET)
 		outEdges=edges$$(basename $$case .txt).csv; \
 		./$(TARGET) $$coords_input $$edges_input $$outPoints $$outCoords $$outEdges; \
 	done
-		
-### --- ---- --- ###
+### --- --- --- ###
 
 
 

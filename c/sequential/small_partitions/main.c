@@ -62,28 +62,66 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int **arr;
-    int *size;
-    int lines = 0;
-    read2d(argv, &arr, &size, &lines);
-
-#ifdef VERBOSE
-    writeString(argv[2], "w", "");
-    for (int i = 0; i < lines; i++)
+    // 1. Open the test file
+    FILE *inputFile = fopen(argv[1], "r");
+    if (inputFile == NULL)
     {
-        if (partition(arr[i], size[i]))
-            writeString(argv[2], "a", "YES\n");
-        else
-            writeString(argv[2], "a", "NO\n");
+        printf("File open failed\n");
+        return 1;
     }
+
+    // 2. Determine file size
+    fseek(inputFile, 0, SEEK_END);
+    int size = getFileSize(inputFile);
+    rewind(inputFile);
+
+    // 3. Allocate memory for the file
+    char *buffer = (char *)malloc((size + 1) * sizeof(char));
+    if (buffer == NULL)
+    {
+        printf("Memory allocation failed\n");
+        fclose(inputFile);
+        return 1;
+    }
+
+    // 4. Read the file into a buffer
+    fread(buffer, size, 1, inputFile);
+    // Null terminate the buffer
+    buffer[size] = '\0';
+
+    // 5. Parse the buffer into json and
+    // 6. Convert json into an array (of arrays) of integers
+    dimensions *d = dims(buffer);
+    int **arr = json2array(buffer, d);
+
+    json_object *jarray = json_object_new_array();
+
+    // 7.a Perform the partitioning
+#ifndef VERBOSE
+    for (int i = 0; i < d->rows; i++)
+        partition(arr[i], d->cols[i]);
 #endif
 
-#ifndef VERBOSE
-    for (int i = 0; i < lines; i++)
-        partition(arr[i], size[i]);
+    // 7.b Write the results to the output file
+#ifdef VERBOSE
+    FILE *outFile = fopen(argv[2], "w");
+    writeString(outFile, "");
+
+    for (int i = 0; i < d->rows; i++)
+    {
+        int result = partition(arr[i], d->cols[i]);
+        json_object *jbool = json_object_new_boolean(result);
+        json_object_array_add(jarray, jbool);
+    }
+
+    writeJson(outFile, jarray);
+    json_object_put(jarray);
+    fclose(outFile);
 #endif
 
     free(arr);
-    free(size);
+    fclose(inputFile);
+    free(buffer);
+
     return 0;
 }

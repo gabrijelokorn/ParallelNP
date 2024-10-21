@@ -4,12 +4,12 @@ all: compile run
 
 CC = gcc
 TARGET = main.out
-SOURCES = main.c ../../lib/read.c ../../lib/array.c ../../lib/set.c ../../lib/write.c
+SOURCES = main.c ../../lib/set.c ../../lib/write.c ../../lib/fileSize.c ../../lib/json2array.c ../../lib/types.h ../../lib/writeJson.c
 OUTPUTS = output*.csv
 
 
 VERBOSE ?= 1
-CFLAGS = 
+CFLAGS = -ljson-c
 ifeq ($(VERBOSE),1)
 	CFLAGS += -DVERBOSE
 endif
@@ -29,8 +29,8 @@ $(TARGET):
 ### --- RUN --- ###
 run: $(TARGET)
 	@echo "run: C > sequential > big_partition"
-	@for case in ../../../tests/big_partition/*.txt; do \
-		out=output$$(basename $$case .txt).csv; \
+	@for case in ../../../tests/big_partition/*.json; do \
+		out=output$$(basename $$case .json).json; \
 		./$(TARGET) $$case $$out; \
 	done
 ### --- ------ --- ###
