@@ -55,10 +55,13 @@ bool partition(int *arr, int size)
 
 int main(int argc, char *argv[])
 {
-    // At least two arguments expected - input file name and output file name
+    // At least two arguments expected:
+    // 1. Program name
+    // 2. Test input file name
+    // 3. Output file name
     if (argc < 3)
     {
-        fprintf(stderr, "[%s:] Internal error - try: %s <input file> <output file>\n", NAME, argv[0]);
+        fprintf(stderr, "%s )-: Internal error - try: %s <input file> <output file>\n", NAME, argv[0]);
         return 1;
     }
 
@@ -66,20 +69,20 @@ int main(int argc, char *argv[])
     FILE *inputFile = fopen(argv[1], "r");
     if (inputFile == NULL)
     {
-        fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[1]);
+        fprintf(stderr, "%s )-: Error opening file %s\n", NAME, argv[1]);
         return 1;
     }
 
     // 2. Determine file size
-    fseek(inputFile, 0, SEEK_END);
-    int size = getFileSize(inputFile);
-    rewind(inputFile);
+    fseek(inputFile, 0, SEEK_END);      // Seek to the end of the file
+    int size = getFileSize(inputFile);  // Get the current file pointer
+    rewind(inputFile);                  // Rewind the file pointer to the beginning
 
     // 3. Allocate memory for the file
     char *buffer = (char *)malloc((size + 1) * sizeof(char));
     if (buffer == NULL)
     {
-        fprintf(stderr, "[%s:] Error allocating memory for file %s\n", NAME, argv[1]);
+        fprintf(stderr, "%s )-: Error allocating memory\n", NAME);
         fclose(inputFile);
         return 1;
     }
@@ -92,7 +95,7 @@ int main(int argc, char *argv[])
     // 5. Parse the buffer into json and
     // 6. Convert json into an array (of arrays) of integers
     dimensions *d = dims(buffer);
-    int **arr = json2array(buffer, d);
+    int **arr = json2partitions(buffer, d);
 
     json_object *jarray = json_object_new_array();
 
@@ -119,7 +122,7 @@ int main(int argc, char *argv[])
         json_object_array_add(jarray, jbool);
     }
 
-    writeJson(outFile, jarray);
+    writeJsonObject(outFile, jarray);
     json_object_put(jarray);
     fclose(outFile);
 #endif

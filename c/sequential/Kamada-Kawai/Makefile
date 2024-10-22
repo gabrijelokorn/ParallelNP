@@ -4,16 +4,15 @@ all: compile run
 
 CC = gcc
 TARGET = main.out
-SOURCES = main.c
+SOURCES = main.c ../../lib/json2coords.c ../../lib/json2edges.c ../../lib/write.c ../../lib/writeJson.c 
 OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
 
 
-CFLAGS = 
 VERBOSE ?= 1
+CFLAGS = -ljson-c
 ifeq ($(VERBOSE),1)
 	CFLAGS += -DVERBOSE
 endif
-
 
 
 ### --- COMPILE --- ###
@@ -29,13 +28,11 @@ $(TARGET):
 ### --- RUN --- ###
 run: $(TARGET)
 	@echo "run: C > sequential > Kamada-Kawai"
-	@for case in ../../../tests/Kamada-Kawai/*.coords.txt; do \
-		coords_input=$$case.coords.txt; \
-		edges_input=$$case.edges.txt; \
-		outPoints=points$$(basename $$case .txt).csv; \
-		outCoords=coords$$(basename $$case .txt).csv; \
-		outEdges=edges$$(basename $$case .txt).csv; \
-		./$(TARGET) $$coords_input $$edges_input $$outPoints $$outCoords $$outEdges; \
+	@for case in ../../../tests/Kamada-Kawai/*.json; do \
+		outPoints=points$$(basename $$case .json).csv; \
+		outCoords=coords$$(basename $$case .json).csv; \
+		outEdges=edges$$(basename $$case .json).csv; \
+		./$(TARGET) $$case $$outPoints $$outCoords $$outEdges; \
 	done
 ### --- --- --- ###
 

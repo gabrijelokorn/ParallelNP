@@ -4,6 +4,7 @@
 #include <json-c/json.h>
 #include <stdio.h>
 
-void writeJson(FILE *fp, json_object *jobj);
+void writeJsonObject(FILE *fp, json_object *jobj);
+void writeJsonArray(FILE *fp, json_object *jobj);
 
 #endif

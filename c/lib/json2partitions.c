@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "json2array.h"
+#include "json2partitions.h"
 
 dimensions *dims (char *buffer) {
     dimensions *d = (dimensions *)malloc(sizeof(dimensions));
@@ -47,7 +47,7 @@ dimensions *dims (char *buffer) {
 
 
 
-int **json2array (char *buffer, dimensions *d) {
+int **json2partitions (char *buffer, dimensions *d) {
     struct json_object *parsed_json, *array, *item;
     struct json_object_iterator it;
     struct json_object_iterator itEnd;

@@ -1,6 +1,6 @@
-#ifndef JSON2ARRAY_H
+#ifndef JSON2PARTITIONS_H
 
-#define JSON2ARRAY_H
+#define JSON2PARTITIONS_H
 
 #include <stdlib.h>
 #include <json-c/json.h>
@@ -8,6 +8,6 @@
 #include "./types.h"
 
 dimensions *dims(char *buffer);
-int **json2array(char *buffer, dimensions *d);
+int **json2partitions(char *buffer, dimensions *d);
 
 #endif

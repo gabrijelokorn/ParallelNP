@@ -8,28 +8,33 @@
 
 int main(int argc, char *argv[])
 {
-    // At least two arguments expected - input file name and output file name
-    if (argc < 6)
+    // At least 5 arguments expected:
+    // 1. Program name
+    // 2. Test input file
+    // 3. Output file - number of vertices
+    // 4. Output file - coordinates of the vertices
+    // 5. Output file - edges between the vertices
+    if (argc < 5)
     {
-        printf("[%s:] Internal error - try: %s <coordinates_input.txt> <edges_input.txt> <points.txt> <coordinates.txt> <edges.txt> \n", NAME, argv[0]);
+        fprintf(stderr, "%s )-: Unexpected arguments. Try %s <input file> <points.csv> <coords.csv> <edges.csv>\n", NAME, argv[0]);
         return 1;
     }
 
     int n;
-    
     int K;
     int vertices;
-
-#ifdef VERBOSE  
-    // Print results into 3 different files
-    // 1. points.txt - coordinates of the vertices
-    // 2. edges.txt - edges between the vertices
-    // 3. distances.txt - distances between the vertices
-#endif
 
 #ifndef VERBOSE
 
 #endif
+
+#ifdef VERBOSE  
+    // Print results into 3 different files
+    // 1. points.csv - coordinates of the vertices
+    // 2. edges.csv - edges between the vertices
+    // 3. distances.csv - distances between the vertices
+#endif
+
 
     return 0;
 }

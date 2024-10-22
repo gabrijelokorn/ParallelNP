@@ -4,7 +4,7 @@
 #include "./write.h"
 #include "./set.h"
 #include "./fileSize.h"
-#include "./json2array.h"
+#include "./json2partitions.h"
 #include "./writeJson.h"
 #include "./types.h"
 
