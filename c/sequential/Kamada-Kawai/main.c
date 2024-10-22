@@ -21,20 +21,36 @@ int main(int argc, char *argv[])
     }
 
     int n;
-    int K;
-    int vertices;
+    double k;
+    int **vertices;
+    int **edges;
+
+    // 1. Read the input file
+    FILE *inputFile = fopen(argv[1], "r");
+    if (inputFile == NULL)
+    {
+        fprintf(stderr, "%s )-: Unable to open file %s\n", NAME, argv[1]);
+        return 1;
+    }
+
+    char *buffer = readFile(inputFile);
+
+    printf("%s\n", buffer);
+
+    // 2. Parse the input file into json object
+    // read coordinates, edges, and number of vertices and constant k each into seperate variables also read number of edges!
+
 
 #ifndef VERBOSE
 
 #endif
 
-#ifdef VERBOSE  
+#ifdef VERBOSE
     // Print results into 3 different files
     // 1. points.csv - coordinates of the vertices
     // 2. edges.csv - edges between the vertices
     // 3. distances.csv - distances between the vertices
 #endif
-
 
     return 0;
 }

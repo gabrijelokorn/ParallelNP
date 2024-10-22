@@ -65,47 +65,30 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // 1. Open the test file
+    // 1. Read the input file
     FILE *inputFile = fopen(argv[1], "r");
     if (inputFile == NULL)
     {
-        fprintf(stderr, "%s )-: Error opening file %s\n", NAME, argv[1]);
+        fprintf(stderr, "%s )-: Unable to open file %s\n", NAME, argv[1]);
         return 1;
     }
 
-    // 2. Determine file size
-    fseek(inputFile, 0, SEEK_END);      // Seek to the end of the file
-    int size = getFileSize(inputFile);  // Get the current file pointer
-    rewind(inputFile);                  // Rewind the file pointer to the beginning
+    char *buffer = readFile(inputFile);
 
-    // 3. Allocate memory for the file
-    char *buffer = (char *)malloc((size + 1) * sizeof(char));
-    if (buffer == NULL)
-    {
-        fprintf(stderr, "%s )-: Error allocating memory\n", NAME);
-        fclose(inputFile);
-        return 1;
-    }
-
-    // 4. Read the file into a buffer
-    fread(buffer, size, 1, inputFile);
-    // Null terminate the buffer
-    buffer[size] = '\0';
-
-    // 5. Parse the buffer into json and
-    // 6. Convert json into an array (of arrays) of integers
+    // 2. Parse the buffer into json and
+    // 3. Convert json into an array (of arrays) of integers
     dimensions *d = dims(buffer);
     int **arr = json2partitions(buffer, d);
 
     json_object *jarray = json_object_new_array();
 
-    // 7.a Perform the partitioning
+    // 4.a Perform the partitioning
 #ifndef VERBOSE
     for (int i = 0; i < d->rows; i++)
         partition(arr[i], d->cols[i]);
 #endif
 
-    // 7.b Write the results to the output file
+    // 4.b Write the results to the output file
 #ifdef VERBOSE
     FILE *outFile = fopen(argv[2], "w");
     if (outFile == NULL)
