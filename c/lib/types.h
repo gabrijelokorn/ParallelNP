@@ -1,16 +1,20 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-typedef struct dimensions {
+typedef struct dimensions
+{
     int quantity;
     int rows;
     int *cols;
 } dimensions;
 
-typedef struct KamadaKawai {
-    int **coordinates;
-    int **edges;
-    int k;
+typedef struct KamadaKawai
+{
+    int n; // number of vertices
+    int **coordinates; // coordinates of the vertices
+    int m; // number of edges
+    int **edges; // edges between the vertices
+    double k; // constant k
 } KamadaKawai;
 
 #endif
