@@ -10,5 +10,6 @@
 #include "./json2partitions.h"
 #include "./json2coords.h"
 #include "./json2edges.h"
+#include "./json2KamadaKawai.h"
 
 #endif 

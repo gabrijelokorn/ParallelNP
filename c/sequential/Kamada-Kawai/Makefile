@@ -4,7 +4,8 @@ all: compile run
 
 CC = gcc
 TARGET = main.out
-SOURCES = main.c ../../lib/json2coords.c ../../lib/json2edges.c ../../lib/write.c ../../lib/writeJson.c ../../lib/fileSize.c ../../lib/readFile.c
+SOURCES = main.c ../../lib/json2coords.c ../../lib/json2edges.c ../../lib/write.c ../../lib/writeJson.c ../../lib/fileSize.c ../../lib/readFile.c \
+../../lib/json2KamadaKawai.c
 OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
 
 

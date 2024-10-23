@@ -7,4 +7,10 @@ typedef struct dimensions {
     int *cols;
 } dimensions;
 
+typedef struct KamadaKawai {
+    int **coordinates;
+    int **edges;
+    int k;
+} KamadaKawai;
+
 #endif

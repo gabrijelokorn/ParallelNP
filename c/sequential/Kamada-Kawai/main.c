@@ -34,10 +34,11 @@ int main(int argc, char *argv[])
     }
 
     char *buffer = readFile(inputFile);
-
     printf("%s\n", buffer);
 
     // 2. Parse the input file into json object
+    KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
+
     // read coordinates, edges, and number of vertices and constant k each into seperate variables also read number of edges!
 
 
