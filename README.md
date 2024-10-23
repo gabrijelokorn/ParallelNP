@@ -12,11 +12,16 @@ V tem dokumentu se bomo spoznali s tremi NP-polnimi problemi. To so Partition pr
 Partition problem spada v teorijo števil in računalniških znanosti, kjer je cilj ugotoviti, če za dano množico pozitivnih števil S, obstajata taki podmnožici _S1_ in _S2_, da so seštevki števil množice _S1_ in množice _S2_ enaki.
 Uporabili bomo eno samo množico, na kateri bomo izvedli ta algoritem.
 
-Primer testne datoteke `01.json`:
+Primer testne datoteke `tests/big_partition/<xy>.json`:
 ```json
 {
     "1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1]
 }
+```
+
+Primer rešitve `c/big_partition/output<xy>.json`:
+```json
+[ true ]
 ```
 
 ### 2. Small partitions
@@ -24,7 +29,7 @@ Primer testne datoteke `01.json`:
 Partition problem spada v teorijo števil in računalniških znanosti, kjer je cilj ugotoviti, če za dano množico pozitivnih števil S, obstajata taki podmnožici _S1_ in _S2_, da so seštevki števil množice _S1_ in množice _S2_ enaki.
 Uporabili bomo hkrati več majhnih množic, na katerih bomo izvedli ta algoritem.
 
-Primer testne datoteke `01.json`:
+Primer testne datoteke `/tests/small_partitions/<xy>.json`:
 ```json
 {
     "1": [1, 2, 3, 4, 5],
@@ -33,10 +38,51 @@ Primer testne datoteke `01.json`:
     "4": [6, 7, 8, 9, 10]
 }
 ```
+Primer rešitve `c/small_partitions/output<xy>.json`:
+```json
+[ false, false, true, false ]
+```
 
 ### 3. Kamada-Kawai algoritem
 ---
-Algoritem je opisan v [znanstvenem članku](./docs/document.pdf). V datotekah z rezultati so prikazani rezultati izvajanja v sledečem formatu:
+Algoritem je opisan v [znanstvenem članku](./docs/document.pdf).
+
+Primer testne datoteke `/tests/kamada_kawai/<xy>.json`:
+```json
+{
+    "coords": [
+        {
+            "x": 1,
+            "y": 1
+        },
+        {
+            "x": 1,
+            "y": 2
+        },
+        {
+            "x": 3,
+            "y": 1
+        }
+    ],
+    "edges": [
+        {
+            "source": 0,
+            "target": 1
+        },
+        {
+            "source": 1,
+            "target": 2
+        },
+        {
+            "source": 2,
+            "target": 0
+        }
+    ],
+    "k": 1.5
+}
+```
+
+V sledečih datotekah so prikazani rezultati izvajanja:
 
 `points<xy>.csv`
 ```
@@ -92,11 +138,15 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 
 Ob izvajanju oziroma testiranju se izpišejo rezultati ali pa časi izvajanja programov.\
 Rezultate vsakega izmed programov najdemo v direktoriju, kjer se nahaja program, v datoteki z imenom `output.txt`.\
-Izpisane čase izvajanja najdemo v TODO .... \
+
+TODO: kje najdemo časovne meritve?
 
 ## Delovanje programja
-- vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.txt`.
-- Z izbiro VERBOSE=0, se izpišejo le rezultati, brez dodatnih informacij, s čimer dosežemo bolj zanesljive rezultate meritev časa.
+- Programi v vseh jezikih in obeh pristopih berejo iste testne datoteke.
+- Testne datoteke so shranjene v direktorijih `tests/big_partition`, `tests/small_partitions` in `tests/kamada_kawai`.
+- Z izbiro VERBOSE=0 se bodo programi izvajali, ne da bi izpisovali rezultate. Na ta način dosežemo natančnejše časovne meritve.
+- Vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.txt` / `output<xy>.json`.
+- Z izbiro `make test` se rezultati izvajanja preverijo med seboj in izpišejo v berljivi `html` obliki.
 
 ## TODO
 Update documentation!
