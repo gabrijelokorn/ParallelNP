@@ -18,6 +18,7 @@
 #include "../../lib/parallelNP.h"
 
 #define NAME "C > sequential > big_partition"
+uint8_t verbose = 0;
 
 bool partition(int *arr, int size)
 {
@@ -59,10 +60,19 @@ int main(int argc, char *argv[])
     // 1. Program name
     // 2. Test input file name
     // 3. Output file name
+    // 4. (Optional) Verbose flag
     if (argc < 3)
     {
         fprintf(stderr, "%s )-: Internal error - try: %s <input file> <output file>\n", NAME, argv[0]);
         return 1;
+    }
+
+    for (uint8_t i = 0; i < argc; i++)
+    {
+        if (strcmp(argv[i], "--verbose") == 0)
+        {
+            verbose = 1;
+        }
     }
 
     // 1. Read the input file
@@ -83,13 +93,14 @@ int main(int argc, char *argv[])
     json_object *jarray = json_object_new_array();
 
     // 4.a Perform the partitioning
-#ifndef VERBOSE
-    for (int i = 0; i < d->rows; i++)
+if(!verbose) {
+
+ for (int i = 0; i < d->rows; i++)
         partition(arr[i], d->cols[i]);
-#endif
+}   
 
     // 4.b Write the results to the output file
-#ifdef VERBOSE
+if (verbose) {
     FILE *outFile = fopen(argv[2], "w");
     if (outFile == NULL)
     {
@@ -108,7 +119,7 @@ int main(int argc, char *argv[])
     writeJsonObject(outFile, jarray);
     json_object_put(jarray);
     fclose(outFile);
-#endif
+}
 
     free(arr);
     fclose(inputFile);

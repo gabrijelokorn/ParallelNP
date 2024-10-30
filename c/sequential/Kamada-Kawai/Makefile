@@ -8,12 +8,7 @@ SOURCES = main.c ../../lib/json2coords.c ../../lib/json2edges.c ../../lib/write.
 ../../lib/json2KamadaKawai.c
 OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
 
-
-VERBOSE ?= 1
 CFLAGS = -ljson-c
-ifeq ($(VERBOSE),1)
-	CFLAGS += -DVERBOSE
-endif
 
 
 ### --- COMPILE --- ###
@@ -34,6 +29,19 @@ run: $(TARGET)
 		outCoords=coords$$(basename $$case .json).csv; \
 		outEdges=edges$$(basename $$case .json).csv; \
 		./$(TARGET) $$case $$outPoints $$outCoords $$outEdges; \
+	done
+### --- --- --- ###
+
+
+
+### --- TEST --- ###
+test: $(TARGET)
+	@echo "test: C > sequential > Kamada-Kawai"
+	@for case in ../../../tests/Kamada-Kawai/*.json; do \
+		outPoints=points$$(basename $$case .json).csv; \
+		outCoords=coords$$(basename $$case .json).csv; \
+		outEdges=edges$$(basename $$case .json).csv; \
+		./$(TARGET) $$case $$outPoints $$outCoords $$outEdges --verbose; \
 	done
 ### --- --- --- ###
 

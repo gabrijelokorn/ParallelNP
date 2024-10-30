@@ -1,5 +1,5 @@
 .PHONY: all clean compile run
-all: compile run
+all: compile run test
 
 
 CC = gcc
@@ -7,13 +7,7 @@ TARGET = main.out
 SOURCES = main.c ../../lib/set.c ../../lib/write.c ../../lib/fileSize.c ../../lib/json2partitions.c ../../lib/types.h ../../lib/writeJson.c ../../lib/readFile.c
 OUTPUTS = output*.json
 
-
-VERBOSE ?= 1
 CFLAGS = -ljson-c
-ifeq ($(VERBOSE),1)
-	CFLAGS += -DVERBOSE
-endif
-
 
 
 ### --- COMPILE --- ###
@@ -33,7 +27,18 @@ run: $(TARGET)
 		out=output$$(basename $$case .json).json; \
 		./$(TARGET) $$case $$out; \
 	done
-### --- ------ --- ###
+### --- --- --- ###
+
+
+
+### --- TEST --- ###
+test: $(TARGET)
+	@echo "test: C > sequential > big_partition"
+	@for case in ../../../tests/big_partition/*.json; do \
+		out=output$$(basename $$case .json).json; \
+		./$(TARGET) $$case $$out --verbose; \
+	done
+### --- ---- --- ###
 
 
 

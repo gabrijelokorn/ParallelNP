@@ -121,7 +121,7 @@ Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v 
 
 Zaganjanje samo `make` je enako kot:
 ```make
-make compile run test VERBOSE=1
+make compile run test
 ```
 
 Na voljo pa imamo tudi nekaj drugih možnosti:
@@ -134,7 +134,6 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 | `make julia` | _Prevede, zažene in testira programe napisane v jeziku Julia._ |
 | `make go` | _Prevede, zažene in testira programe napisane v jeziku Golang._ |
 | `make clean` | _Izbriše vse izvedljive datoteke._ |
-| `make VERBOSE=0` | _Izklopi izpisovanje rezultatov._ |
 
 Ob izvajanju oziroma testiranju se izpišejo rezultati ali pa časi izvajanja programov.\
 Rezultate vsakega izmed programov najdemo v direktoriju, kjer se nahaja program, v datoteki z imenom `output.txt`.\
@@ -144,7 +143,6 @@ TODO: kje najdemo časovne meritve?
 ## Delovanje programja
 - Programi v vseh jezikih in obeh pristopih berejo iste testne datoteke.
 - Testne datoteke so shranjene v direktorijih `tests/big_partition`, `tests/small_partitions` in `tests/kamada_kawai`.
-- Z izbiro VERBOSE=0 se bodo programi izvajali, ne da bi izpisovali rezultate. Na ta način dosežemo natančnejše časovne meritve.
 - Vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.txt` / `output<xy>.json`.
 - Z izbiro `make test` se rezultati izvajanja preverijo med seboj in izpišejo v berljivi `html` obliki.
 

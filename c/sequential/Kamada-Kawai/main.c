@@ -5,6 +5,7 @@
 #include "../../lib/parallelNP.h"
 
 #define NAME "C > sequential > Kamada-Kawai"
+uint8_t verbose = 0;
 
 int main(int argc, char *argv[])
 {
@@ -14,10 +15,19 @@ int main(int argc, char *argv[])
     // 3. Output file - number of vertices
     // 4. Output file - coordinates of the vertices
     // 5. Output file - edges between the vertices
+    // 6. (Optional) Verbose flag
     if (argc < 5)
     {
         fprintf(stderr, "%s )-: Unexpected arguments. Try %s <input file> <points.csv> <coords.csv> <edges.csv>\n", NAME, argv[0]);
         return 1;
+    }
+
+    for (uint8_t i = 0; i < argc; i++)
+    {
+        if (strcmp(argv[i], "--verbose") == 0)
+        {
+            verbose = 1;
+        }
     }
 
     int n;
@@ -38,18 +48,17 @@ int main(int argc, char *argv[])
     // 2. Parse the input file into json object
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
 
+    if (!verbose)
+    {
+    }
 
+    if (verbose)
+    {
 
-#ifndef VERBOSE
-
-#endif
-
-#ifdef VERBOSE
-    // Print results into 3 different files
-    // 1. points.csv - coordinates of the vertices
-    // 2. edges.csv - edges between the vertices
-    // 3. distances.csv - distances between the vertices
-#endif
-
+        // Print results into 3 different files
+        // 1. points.csv - coordinates of the vertices
+        // 2. edges.csv - edges between the vertices
+        // 3. distances.csv - distances between the vertices
+    }
     return 0;
 }
