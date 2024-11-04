@@ -36,7 +36,7 @@ run: run_c run_julia run_golang
 ### --- TEST --- ###
 test_c:
 	$(MAKE) -C c test
-	node ./index.js
+	node ./views/report.js
 test_julia:
 	$(MAKE) -C julia test
 test_golang:

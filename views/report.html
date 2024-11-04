@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Results</title>
+</head>
+
+<body>
+    <h1>Results</h1>
+    <div id="results"></div>
+
+    <h2>Big Partition</h2>
+    <div id="big_partition"></div>
+
+    <h2>Small Partitions</h2>
+    <div id="small_partitions"></div>
+
+    <h2>Kamada Kawai Alogrithm</h2>
+    <div id="kamada_kawai"></div>
+
+    <script src="results.js"></script>
+    <script>
+        // Function to display data
+        window.onload = function displayData() {
+            const displayDiv = document.getElementById('big_partition');
+            displayDiv.innerHTML = `
+                <p>Name: ${results.big_partition["01"].c.sequential}</p>
+                <p>Project: ${results.big_partition["01"].c.sequential}</p>
+                <p>Language: ${results.big_partition["01"].c.sequential}</p>
+                <p>Framework: ${results.big_partition["01"].c.sequential}</p>
+            `;
+        };
+    </script>
+</body>
+
+</html>

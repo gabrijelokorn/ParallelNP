@@ -9,3 +9,6 @@
 **/edges*.csv
 **/points*.csv
 **/output*.json
+
+# node_modules
+node_modules/
