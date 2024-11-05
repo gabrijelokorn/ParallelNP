@@ -1,0 +1,17 @@
+body {
+    background-color: #404039;
+}
+
+table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 1rem;
+}
+
+hr {
+    border: 1px solid blue;
+}
+
+h2 {
+    color: aquamarine
+}

@@ -9,6 +9,7 @@
 **/edges*.csv
 **/points*.csv
 **/output*.json
+**/results.js
 
 # node_modules
 node_modules/

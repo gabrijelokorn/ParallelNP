@@ -4,18 +4,22 @@
 <head>
     <meta charset="utf-8">
     <title>Results</title>
+    <link rel="stylesheet" href="report.css">
 </head>
 
 <body>
     <h1>Results</h1>
     <div id="results"></div>
-
+    
+    <hr />
     <h2>Big Partition</h2>
     <div id="big_partition"></div>
-
+    
+    <hr />
     <h2>Small Partitions</h2>
     <div id="small_partitions"></div>
-
+    
+    <hr />
     <h2>Kamada Kawai Alogrithm</h2>
     <div id="kamada_kawai"></div>
 
@@ -23,13 +27,116 @@
     <script>
         // Function to display data
         window.onload = function displayData() {
-            const displayDiv = document.getElementById('big_partition');
-            displayDiv.innerHTML = `
-                <p>Name: ${results.big_partition["01"].c.sequential}</p>
-                <p>Project: ${results.big_partition["01"].c.sequential}</p>
-                <p>Language: ${results.big_partition["01"].c.sequential}</p>
-                <p>Framework: ${results.big_partition["01"].c.sequential}</p>
-            `;
+            const big_partition_div = document.getElementById('big_partition');
+            const small_partitions_div = document.getElementById('small_partitions');
+            const kamada_kawai_div = document.getElementById('kamada_kawai');
+
+            for (let b in results.big_partition) {
+                const test = document.createElement('div');
+                test.innerHTML = `<h3>${b}</h3>`;
+                
+                const test_table = document.createElement('table');
+                test_table.innerHTML = `
+                    <tr>
+                        <th>Language</th>
+                        <th>Type</th>
+                    </tr>
+                `;
+
+                for (let r in results.big_partition[b]) {
+
+                    for (let type in results.big_partition[b][r]) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${r}</td>
+                            <td>${type}</td>
+                        `;
+
+                        if (results.big_partition[b][r][type]) {
+                            row.style.backgroundColor = 'green';
+                        } else {
+                            row.style.backgroundColor = 'red';
+                        }
+                        test_table.appendChild(row);
+                    }
+                }
+                
+                test.appendChild(test_table);
+                
+                big_partition_div.appendChild(test);
+            }
+
+            for (let s in results.small_partitions) {
+                const test = document.createElement('div');
+                test.innerHTML = `<h3>${s}</h3>`;
+                
+                const test_table = document.createElement('table');
+                test_table.innerHTML = `
+                    <tr>
+                        <th>Language</th>
+                        <th>Type</th>
+                    </tr>
+                `;
+
+                for (let r in results.small_partitions[s]) {
+
+                    for (let type in results.small_partitions[s][r]) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${r}</td>
+                            <td>${type}</td>
+                        `;
+
+                        if (results.small_partitions[s][r][type]) {
+                            row.style.backgroundColor = 'green';
+                        } else {
+                            row.style.backgroundColor = 'red';
+                        }
+                        test_table.appendChild(row);
+                    }
+                }
+                
+                test.appendChild(test_table);
+                
+                small_partitions_div.appendChild(test);
+            }
+
+            for (let k in results.Kamada_Kawai) {
+                const test = document.createElement('div');
+                test.innerHTML = `<h3>${k}</h3>`;
+                
+                const test_table = document.createElement('table');
+                test_table.innerHTML = `
+                    <tr>
+                        <th>Language</th>
+                        <th>Type</th>
+                    </tr>
+                `;
+
+                for (let r in results.Kamada_Kawai[k]) {
+
+                    for (let type in results.Kamada_Kawai[k][r]) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${r}</td>
+                            <td>${type}</td>
+                        `;
+
+                        if (results.Kamada_Kawai[k][r][type]) {
+                            row.style.backgroundColor = 'green';
+                        } else {
+                            row.style.backgroundColor = 'red';
+                        }
+                        test_table.appendChild(row);
+                    }
+                }
+                
+                test.appendChild(test_table);
+                
+                kamada_kawai_div.appendChild(test);
+            }
+
+
         };
     </script>
 </body>
