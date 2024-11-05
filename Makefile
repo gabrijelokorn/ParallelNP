@@ -6,7 +6,7 @@
 #################################################
 
 .PHONY: all clean compile test run c julia golang
-all: compile run test
+all: compile run test check
 
 
 ### --- COMPILE --- ###
@@ -33,23 +33,6 @@ run: run_c run_julia run_golang
 
 
 
-### --- TEST --- ###
-test_c:
-	$(MAKE) -C c test
-	node ./views/report.js
-test_julia:
-	$(MAKE) -C julia test
-	node ./views/report.js
-test_golang:
-	$(MAKE) -C golang test
-	node ./views/report.js
-
-test: test_c test_julia test_golang
-	node ./views/report.js
-### --- ### --- ### --- ###
-
-
-
 ### --- Kamada Kawai --- ###
 kamada_kawai:
 	@for case in tests/Kamada_Kawai/*.json; do \
@@ -60,6 +43,28 @@ kamada_kawai:
 		echo "Generating video $$outVideo"; \
 		matlab -nodisplay -nosplash -nodesktop -r "addpath('views/'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
 	done
+### --- ### --- ### --- ###
+
+
+
+### --- TEST --- ###
+test_c:
+	$(MAKE) -C c test
+test_julia:
+	$(MAKE) -C julia test
+test_golang:
+	$(MAKE) -C golang test
+
+test: test_c test_julia test_golang kamada_kawai
+### --- ### --- ### --- ###
+
+
+
+### --- COMPARE --- ###
+check:
+	@node views/check.js
+	@xdg-open views/check.html\
+
 ### --- ### --- ### --- ###
 
 

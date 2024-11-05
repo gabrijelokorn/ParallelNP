@@ -59,13 +59,8 @@ int main(int argc, char *argv[])
     // At least two arguments expected:
     // 1. Program name
     // 2. Test input file name
-    // 3. Output file name
+    // 3. Output file name (results / timings)
     // 4. (Optional) Verbose flag
-    if (argc < 3)
-    {
-        fprintf(stderr, "%s )-: Internal error - try: %s <input file> <output file>\n", NAME, argv[0]);
-        return 1;
-    }
 
     for (uint8_t i = 0; i < argc; i++)
     {
@@ -90,36 +85,39 @@ int main(int argc, char *argv[])
     dimensions *d = dims(buffer);
     int **arr = json2partitions(buffer, d);
 
-    json_object *jarray = json_object_new_array();
 
     // 4.a Perform the partitioning
-if(!verbose) {
+    if (!verbose)
+    {
 
- for (int i = 0; i < d->rows; i++)
-        partition(arr[i], d->cols[i]);
-}   
+        for (int i = 0; i < d->rows; i++)
+            partition(arr[i], d->cols[i]);
+    }
 
     // 4.b Write the results to the output file
-if (verbose) {
-    FILE *outFile = fopen(argv[2], "w");
-    if (outFile == NULL)
+    if (verbose)
     {
-        fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[2]);
-        return 1;
-    }
-    writeString(outFile, "");
+        json_object *jarray = json_object_new_array();
 
-    for (int i = 0; i < d->rows; i++)
-    {
-        int result = partition(arr[i], d->cols[i]);
-        json_object *jbool = json_object_new_boolean(result);
-        json_object_array_add(jarray, jbool);
-    }
+        FILE *outFile = fopen(argv[2], "w");
+        if (outFile == NULL)
+        {
+            fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[2]);
+            return 1;
+        }
+        writeString(outFile, "");
 
-    writeJsonObject(outFile, jarray);
-    json_object_put(jarray);
-    fclose(outFile);
-}
+        for (int i = 0; i < d->rows; i++)
+        {
+            int result = partition(arr[i], d->cols[i]);
+            json_object *jbool = json_object_new_boolean(result);
+            json_object_array_add(jarray, jbool);
+        }
+
+        writeJsonObject(outFile, jarray);
+        json_object_put(jarray);
+        fclose(outFile);
+    }
 
     free(arr);
     fclose(inputFile);

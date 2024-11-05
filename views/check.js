@@ -4,7 +4,6 @@ const {parse} = require('csv-parse');
 
 const languages = ["c", "julia", "golang"];
 const programType = ["sequential", "parallel"];
-// const programType = ["sequential"];
 const algorithms = ["big_partition", "small_partitions", "Kamada_Kawai"];
 
 const results = {
@@ -171,7 +170,7 @@ async function test() {
     await compare(big_partitionTests, small_partitionsTests, Kamada_KawaiTests);
 
     const output = `const results = ${JSON.stringify(results)};`;
-    fs.writeFile('views/results.js', output);
+    fs.writeFile('views/checks.js', output);
 }
 
 test();

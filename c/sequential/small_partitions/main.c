@@ -59,13 +59,8 @@ int main(int argc, char *argv[])
     // At least two arguments expected:
     // 1. Program name
     // 2. Test input file name
-    // 3. Output file name
+    // 3. Output file name (results / timings)
     // 4. (Optional) Verbose flag
-    if (argc < 3)
-    {
-        fprintf(stderr, "%s )-: Unexpected arguments. Try %s <input file> <output file>\n", NAME, argv[0]);
-        return 1;
-    }
 
     for (uint8_t i = 0; i < argc; i++)
     {
@@ -100,9 +95,15 @@ int main(int argc, char *argv[])
     // 4.b Write the results to the output file
     if (verbose)
     {
-        FILE *outFile = fopen(argv[2], "w");
-        writeString(outFile, "");
         json_object *jarray = json_object_new_array();
+        
+        FILE *outFile = fopen(argv[2], "w");
+        if (outFile == NULL)
+        {
+            fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[2]);
+            return 1;
+        }
+        writeString(outFile, "");
 
         for (int i = 0; i < d->rows; i++)
         {

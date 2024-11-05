@@ -7,20 +7,31 @@
 #define NAME "C > sequential > Kamada-Kawai"
 uint8_t verbose = 0;
 
+void KamadaKawaiToString (KamadaKawai *kk) {
+    printf("Kamada-Kawai:\n");
+    printf("n: %d\n", kk->n);
+    printf("m: %d\n", kk->m);
+    printf("k: %f\n", kk->k);
+
+    printf("edges:\n");
+    for (int i = 0; i < kk->m; i++) {
+        printf("%d: [%d,%d]\n", i, kk->edges[i][0], kk->edges[i][1]);
+    }
+
+    printf("coords:\n");
+    for (int i = 0; i < kk->n; i++) {
+        printf("%d: [%d,%d]\n", i, kk->coordinates[i][0], kk->coordinates[i][1]);
+    }
+
+}
+
 int main(int argc, char *argv[])
 {
-    // At least 5 arguments expected:
+    // At least 3 arguments expected:
     // 1. Program name
     // 2. Test input file
-    // 3. Output file - number of vertices
-    // 4. Output file - coordinates of the vertices
-    // 5. Output file - edges between the vertices
+    // (3-5). Output file(s) - (number of vertices, coordinates of the vertices, edges between the vertices) / timings
     // 6. (Optional) Verbose flag
-    if (argc < 5)
-    {
-        fprintf(stderr, "%s )-: Unexpected arguments. Try %s <input file> <points.csv> <coords.csv> <edges.csv>\n", NAME, argv[0]);
-        return 1;
-    }
 
     for (uint8_t i = 0; i < argc; i++)
     {
@@ -54,7 +65,7 @@ int main(int argc, char *argv[])
 
     if (verbose)
     {
-
+        KamadaKawaiToString(kamadaKawai);
         // Print results into 3 different files
         // 1. points.csv - coordinates of the vertices
         // 2. edges.csv - edges between the vertices

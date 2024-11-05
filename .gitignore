@@ -10,6 +10,7 @@
 **/points*.csv
 **/output*.json
 **/results.js
+**/comparison.js
 
 # node_modules
 node_modules/

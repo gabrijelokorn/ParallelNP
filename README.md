@@ -134,7 +134,7 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 | `make julia` | _Prevede, zažene in testira programe napisane v jeziku Julia._ |
 | `make go` | _Prevede, zažene in testira programe napisane v jeziku Golang._ |
 | `make clean` | _Izbriše vse izvedljive datoteke._ |
-| `make kamada_kawai| _Generira videe za Kamada-Kawai algoritem._ |`
+| `make kamada_kawai` | _Generira videe za Kamada-Kawai algoritem._ |`
 
 Ob izvajanju oziroma testiranju se izpišejo rezultati ali pa časi izvajanja programov.\
 Rezultate vsakega izmed programov najdemo v direktoriju, kjer se nahaja program, v datoteki z imenom `output.txt`.\
