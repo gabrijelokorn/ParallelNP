@@ -1,6 +1,6 @@
-.PHONY: all clean compile run
+.PHONY: all clean compile measure
 
-all: compile run test
+all: compile measure result
 
 compile:
 	$(MAKE) -C sequential/big_partition compile
@@ -10,21 +10,21 @@ compile:
 #	$(MAKE) -C parallel/small_partitions compile
 #	$(MAKE) -C parallel/Kamada_Kawai compile
 
-run:
-	$(MAKE) -C sequential/big_partition run
-	$(MAKE) -C sequential/small_partitions run
-	$(MAKE) -C sequential/Kamada_Kawai run
-#	$(MAKE) -C parallel/big_partition run
-#	$(MAKE) -C parallel/small_partitions run
-#	$(MAKE) -C parallel/Kamada_Kawai run
+measure:
+	$(MAKE) -C sequential/big_partition measure
+	$(MAKE) -C sequential/small_partitions measure
+	$(MAKE) -C sequential/Kamada_Kawai measure
+#	$(MAKE) -C parallel/big_partition measure
+#	$(MAKE) -C parallel/small_partitions measure
+#	$(MAKE) -C parallel/Kamada_Kawai measure
 
-test:
-	$(MAKE) -C sequential/big_partition test
-	$(MAKE) -C sequential/small_partitions test
-	$(MAKE) -C sequential/Kamada_Kawai test
-#	$(MAKE) -C parallel/big_partition test
-#	$(MAKE) -C parallel/small_partitions test
-#	$(MAKE) -C parallel/Kamada_Kawai test
+result:
+	$(MAKE) -C sequential/big_partition result
+	$(MAKE) -C sequential/small_partitions result
+	$(MAKE) -C sequential/Kamada_Kawai result
+#	$(MAKE) -C parallel/big_partition result
+#	$(MAKE) -C parallel/small_partitions result
+#	$(MAKE) -C parallel/Kamada_Kawai result
 
 clean:
 	$(MAKE) -C sequential/big_partition clean

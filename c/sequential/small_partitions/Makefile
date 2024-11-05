@@ -1,5 +1,5 @@
-.PHONY: all clean compile run
-all: compile run test
+.PHONY: all clean compile measure result
+all: compile measure result
 
 
 CC = gcc
@@ -20,9 +20,9 @@ $(TARGET):
 
 
 
-### --- RUN --- ###
-run: $(TARGET) compile
-	@echo "run: C > sequential > small_partitions"
+### --- MEASURE --- ###
+measure: $(TARGET) compile
+	@echo "measure: C > sequential > small_partitions"
 	@for case in ../../../tests/small_partitions/*.json; do \
 		out=output$$(basename $$case .json).json; \
 		./$(TARGET) $$case $$out; \
@@ -31,9 +31,9 @@ run: $(TARGET) compile
 
 
 
-### --- TEST --- ###
-test: $(TARGET) compile
-	@echo "test: C > sequential > small_partitions"
+### --- RESULT --- ###
+result: $(TARGET) compile
+	@echo "result: C > sequential > small_partitions"
 	@for case in ../../../tests/small_partitions/*.json; do \
 		out=output$$(basename $$case .json).json; \
 		./$(TARGET) $$case $$out --verbose; \

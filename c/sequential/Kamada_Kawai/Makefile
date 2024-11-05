@@ -1,5 +1,5 @@
-.PHONY: all clean compile run
-all: compile run
+.PHONY: all clean compile measure result
+all: compile measure result
 
 
 CC = gcc
@@ -21,9 +21,9 @@ $(TARGET):
 
 
 
-### --- RUN --- ###
-run: $(TARGET)
-	@echo "run: C > sequential > Kamada_Kawai"
+### --- MEASURE --- ###
+measure: $(TARGET)
+	@echo "measure: C > sequential > Kamada_Kawai"
 	@for case in ../../../tests/Kamada_Kawai/*.json; do \
 		outPoints=points$$(basename $$case .json).csv; \
 		outCoords=coords$$(basename $$case .json).csv; \
@@ -34,9 +34,9 @@ run: $(TARGET)
 
 
 
-### --- TEST --- ###
-test: $(TARGET)
-	@echo "test: C > sequential > Kamada_Kawai"
+### --- RESULT --- ###
+result: $(TARGET)
+	@echo "result: C > sequential > Kamada_Kawai"
 	@for case in ../../../tests/Kamada_Kawai/*.json; do \
 		outPoints=points$$(basename $$case .json).csv; \
 		outCoords=coords$$(basename $$case .json).csv; \

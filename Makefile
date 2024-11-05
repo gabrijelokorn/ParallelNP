@@ -1,12 +1,12 @@
 ############# ParalelNP Entry Point #############
 # This Makefile is the entry point for the ParalelNP project.
 # It is used to to automate the process of
-# compiling, running and testing the program in all 
+# compiling, measuring and resulting the program in all 
 # 3 languages (C, Julia, Golang).
 #################################################
 
-.PHONY: all clean compile test run c julia golang
-all: compile run test check
+.PHONY: all clean compile result measure c julia golang
+all: compile measure result check
 
 
 ### --- COMPILE --- ###
@@ -21,14 +21,14 @@ compile: compile_c compile_julia compile_golang
 
 
 
-### --- RUN --- ###
-run_c:
-	$(MAKE) -C c run
-run_julia:
-	$(MAKE) -C julia run
-run_golang:
-	$(MAKE) -C golang run
-run: run_c run_julia run_golang
+### --- MEASURE --- ###
+measure_c:
+	$(MAKE) -C c measure
+measure_julia:
+	$(MAKE) -C julia measure
+measure_golang:
+	$(MAKE) -C golang measure
+measure: measure_c measure_julia measure_golang
 ### --- ### --- ### --- ###
 
 
@@ -47,15 +47,15 @@ kamada_kawai:
 
 
 
-### --- TEST --- ###
-test_c:
-	$(MAKE) -C c test
-test_julia:
-	$(MAKE) -C julia test
-test_golang:
-	$(MAKE) -C golang test
+### --- RESULT --- ###
+result_c:
+	$(MAKE) -C c result
+result_julia:
+	$(MAKE) -C julia result
+result_golang:
+	$(MAKE) -C golang result
 
-test: test_c test_julia test_golang kamada_kawai
+result: result_c result_julia result_golang kamada_kawai
 ### --- ### --- ### --- ###
 
 
@@ -69,10 +69,10 @@ check:
 
 
 
-### --- ### Compile Run Test in seperate languages ### --- ###
-c: compile_c run_c test_c
-julia: compile_julia run_julia test_julia
-golang: compile_golang run_golang test_golang
+### --- ### Compile measure result in seperate languages ### --- ###
+c: compile_c measure_c result_c
+julia: compile_julia measure_julia result_julia
+golang: compile_golang measure_golang result_golang
 ### --- ### --- ### --- ### --- ### --- ### --- ###
 
 

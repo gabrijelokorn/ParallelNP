@@ -1,11 +1,11 @@
 # ParallelNP
 
-V tem dokumentu se bomo spoznali s tremi NP-polnimi problemi. To so Partition problem na eni veliki množici, Partition problem na veliko malih množicah in Kamada-Kawai algoritem. Reševali jih bomo v treh različnih programskih jezikih. To so C, Julia in Golang. Za vsakega izmed jezikov pa bomo rešitev izpeljali tako v zaporednem kot tudi v vzporednem programu.
+V tem dokumentu se bomo spoznali s tremi NP-polnimi problemi. To so Partition problem na eni veliki množici, Partition problem na veliko malih množicah in Kamada-Kawai algoritem. Reševali jih bomo v treh različnih programskih jezikih. To so C, Julia in Golang. Za vsakega izmed jezikov pa bomo rešitev implementirali tako v zaporednem kot tudi v vzporednem programu.
 
 
 
 ## Predstavitev problemov
-
+V vseh prihodnjih podanih primerih bo `<xy>` predstavljal številko primera.
 
 ### 1. Big partition
 ---
@@ -114,37 +114,36 @@ V sledečih datotekah so prikazani rezultati izvajanja:
 2,3
 ```
 
-To je primer s tremi točkami, ki se je izvede v štirih korakih. "Stanja" (v kolikih korakih je bil algoritem izveden) so med seboj ločena s praznimi vrsticami.
+To je primer s tremi točkami, ki se je izvedel v štirih korakih. "Stanja" (v kolikih korakih je bil algoritem izveden) so med seboj ločena s praznimi vrsticami.
 
 ## Uporaba
 Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v korenskem direktoriju z ukazom `make`.
 
 Zaganjanje samo `make` je enako kot:
 ```make
-make compile run test
+make compile measure result check
 ```
 
 Na voljo pa imamo tudi nekaj drugih možnosti:
 | Ukaz | Efekt |
 | --- | --- |
 | `make compile` | _Prevede vse programe v vseh jezikih._ |
-| `make run` | _Zažene vse programe v vseh jezikih._ |
-| `make test` | _Testira vse programe v vseh jezikih._ |
+| `make measure` | _Zagon vseh programov pri čemer se meri čas._ |
+| `make result` | _Zagon vseh programov pri čemer se izpišejo rezultati izvajanja._ |
 | `make c` | _Prevede, zažene in testira programe napisane v jeziku C._ |
 | `make julia` | _Prevede, zažene in testira programe napisane v jeziku Julia._ |
 | `make go` | _Prevede, zažene in testira programe napisane v jeziku Golang._ |
 | `make clean` | _Izbriše vse izvedljive datoteke._ |
-| `make kamada_kawai` | _Generira videe za Kamada-Kawai algoritem._ |`
+| `make kamada_kawai` | _Generira videe za Kamada-Kawai algoritem._ |
+| `make check` | _Preveri izide izvajanja programov._ |
 
-Ob izvajanju oziroma testiranju se izpišejo rezultati ali pa časi izvajanja programov.\
-Rezultate vsakega izmed programov najdemo v direktoriju, kjer se nahaja program, v datoteki z imenom `output.txt`.\
-
-TODO: kje najdemo časovne meritve?
+Ob izvajanju oziroma testiranju se izpišejo rezultati (`make result`) ali pa časi (`make measure`) izvajanja programov.
 
 ## Delovanje programja
-- Programi v vseh jezikih in obeh pristopih berejo iste testne datoteke.
+- Programi v vseh jezikih in obeh pristopih (zaporedno in vzporedno) berejo iste testne datoteke.
 - Testne datoteke so shranjene v direktorijih `tests/big_partition`, `tests/small_partitions` in `tests/kamada_kawai`.
-- Vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.csv` / `output<xy>.json`.
-- Z izbiro `make test` se rezultati izvajanja preverijo na podlagi rešitev v `tests/<algoritem>/solutions`.
-- Po izvedbi `make test` lahko rezultate preverimo v datoteki `views/results.html`.
+- Vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.csv` / `output<xy>.json`, kadar zaženemo `make result`.
+- Z izbiro `make check` se rezultati izvajanja preverijo na podlagi rešitev v `tests/<algoritem>/solutions`.
+- Po izvedbi `make check` lahko rezultate vidimo v datoteki `views/check.html`.
 - V `views` najdemo tudi ostale izide izvajanja - videe, ki prikazujejo izvajanje Kamada-Kawai algoritma.
+- Z izbiro `make measure` se izvedejo vsi programi, pri čemer se meri tudi čas izvajanja.
