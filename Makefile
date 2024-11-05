@@ -45,6 +45,7 @@ test_golang:
 	node ./views/report.js
 
 test: test_c test_julia test_golang
+	node ./views/report.js
 ### --- ### --- ### --- ###
 
 
@@ -59,10 +60,6 @@ kamada_kawai:
 		echo "Generating video $$outVideo"; \
 		matlab -nodisplay -nosplash -nodesktop -r "addpath('views/'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
 	done
-
-
-
-#		./$(TARGET) $$case $$outPoints $$outCoords $$outEdges --verbose; \
 ### --- ### --- ### --- ###
 
 
@@ -81,12 +78,3 @@ clean:
 #	$(MAKE) -C golang clean
 #	$(MAKE) -C julia clean
 ### --- ### --- ### --- ### --- ### --- ### --- ###
-
-
-
-
-
-
-# This used to be to create a video of the algorithm!
-# outVideo=output$$(basename $$case .txt).avi; \
-# 			matlab -nodisplay -nosplash -nodesktop -r "addpath('../../../'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
