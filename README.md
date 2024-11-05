@@ -134,6 +134,7 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 | `make julia` | _Prevede, zažene in testira programe napisane v jeziku Julia._ |
 | `make go` | _Prevede, zažene in testira programe napisane v jeziku Golang._ |
 | `make clean` | _Izbriše vse izvedljive datoteke._ |
+| `make kamada_kawai| _Generira videe za Kamada-Kawai algoritem._ |`
 
 Ob izvajanju oziroma testiranju se izpišejo rezultati ali pa časi izvajanja programov.\
 Rezultate vsakega izmed programov najdemo v direktoriju, kjer se nahaja program, v datoteki z imenom `output.txt`.\
@@ -143,8 +144,7 @@ TODO: kje najdemo časovne meritve?
 ## Delovanje programja
 - Programi v vseh jezikih in obeh pristopih berejo iste testne datoteke.
 - Testne datoteke so shranjene v direktorijih `tests/big_partition`, `tests/small_partitions` in `tests/kamada_kawai`.
-- Vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.txt` / `output<xy>.json`.
-- Z izbiro `make test` se rezultati izvajanja preverijo med seboj in izpišejo v berljivi `html` obliki.
-
-## TODO
-Update documentation!
+- Vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.csv` / `output<xy>.json`.
+- Z izbiro `make test` se rezultati izvajanja preverijo na podlagi rešitev v `tests/<algoritem>/solutions`.
+- Po izvedbi `make test` lahko rezultate preverimo v datoteki `views/results.html`.
+- V `views` najdemo tudi ostale izide izvajanja - videe, ki prikazujejo izvajanje Kamada-Kawai algoritma.
