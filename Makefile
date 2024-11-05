@@ -39,11 +39,30 @@ test_c:
 	node ./views/report.js
 test_julia:
 	$(MAKE) -C julia test
+	node ./views/report.js
 test_golang:
 	$(MAKE) -C golang test
+	node ./views/report.js
+
 test: test_c test_julia test_golang
-#	node ./index.js
-#	Run one instance of kamada kawai to get video
+### --- ### --- ### --- ###
+
+
+
+### --- Kamada Kawai --- ###
+kamada_kawai:
+	@for case in tests/Kamada_Kawai/*.json; do \
+		inPoints=c/sequential/Kamada_Kawai/points$$(basename $$case .json).csv; \
+		inCoords=c/sequential/Kamada_Kawai/coords$$(basename $$case .json).csv; \
+		inEdges=c/sequential/Kamada_Kawai/edges$$(basename $$case .json).csv; \
+		outVideo=views/output$$(basename $$case .json).avi; \
+		echo "Generating video $$outVideo"; \
+		matlab -nodisplay -nosplash -nodesktop -r "addpath('views/'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
+	done
+
+
+
+#		./$(TARGET) $$case $$outPoints $$outCoords $$outEdges --verbose; \
 ### --- ### --- ### --- ###
 
 

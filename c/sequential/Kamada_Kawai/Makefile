@@ -15,7 +15,7 @@ CFLAGS = -ljson-c
 compile: $(TARGET)
 
 $(TARGET):
-	@echo "compile: C > sequential > Kamada-Kawai"
+	@echo "compile: C > sequential > Kamada_Kawai"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
 ### --- ------ --- ###
 
@@ -23,8 +23,8 @@ $(TARGET):
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@echo "run: C > sequential > Kamada-Kawai"
-	@for case in ../../../tests/Kamada-Kawai/*.json; do \
+	@echo "run: C > sequential > Kamada_Kawai"
+	@for case in ../../../tests/Kamada_Kawai/*.json; do \
 		outPoints=points$$(basename $$case .json).csv; \
 		outCoords=coords$$(basename $$case .json).csv; \
 		outEdges=edges$$(basename $$case .json).csv; \
@@ -36,8 +36,8 @@ run: $(TARGET)
 
 ### --- TEST --- ###
 test: $(TARGET)
-	@echo "test: C > sequential > Kamada-Kawai"
-	@for case in ../../../tests/Kamada-Kawai/*.json; do \
+	@echo "test: C > sequential > Kamada_Kawai"
+	@for case in ../../../tests/Kamada_Kawai/*.json; do \
 		outPoints=points$$(basename $$case .json).csv; \
 		outCoords=coords$$(basename $$case .json).csv; \
 		outEdges=edges$$(basename $$case .json).csv; \

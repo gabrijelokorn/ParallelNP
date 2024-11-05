@@ -1,1 +1,1 @@
-const results = {"big_partition":{"01":{"c":{"sequential":true},"julia":{"sequential":true,"parallel":true},"golang":{"sequential":false}}},"small_partitions":{"01":{"c":{"sequential":true},"julia":{},"golang":{}}},"Kamada_Kawai":{}};
+const results = {"big_partition":{"01":{"c":{"sequential":true},"julia":{"sequential":true,"parallel":true},"golang":{"sequential":false}}},"small_partitions":{"01":{"c":{"sequential":true},"julia":{},"golang":{}}},"Kamada_Kawai":{"01":{"c":{"sequential":true},"julia":{},"golang":{}}}};

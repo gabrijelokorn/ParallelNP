@@ -1,10 +1,11 @@
 const fs = require('fs').promises;
 const { constants } = require('fs');
+const {parse} = require('csv-parse');
 
 const languages = ["c", "julia", "golang"];
 const programType = ["sequential", "parallel"];
 // const programType = ["sequential"];
-const algorithms = ["big_partition", "small_partitions", "Kamada-Kawai"];
+const algorithms = ["big_partition", "small_partitions", "Kamada_Kawai"];
 
 const results = {
     big_partition: {},
@@ -23,10 +24,10 @@ async function readJson(filename) {
 async function readCsv(filename) {
     return fs.readFile(filename, 'utf8')
         .then(data => {
-            return csvParse(data, { columns: true, skip_empty_lines: true });
+            return data;
         })
         .catch(err => {
-            return false;
+            console.log("Error reading csv", err);
         });
 }
 
@@ -49,7 +50,7 @@ async function compareFiles(file1, file2) {
             return JSON.stringify(data1) === JSON.stringify(data2);
         }
     } catch (err) {
-        return ("INTERNAL ERROR: ", err);
+        console.error("Error comparing files", err);
     }
 
 }
@@ -101,6 +102,7 @@ async function compare(big_partitionTests, small_partitionsTests, Kamada_KawaiTe
                 }
             }
         }
+
         if (a === "small_partitions") {
 
             // Iterate over all tests for the algorithm
@@ -130,16 +132,30 @@ async function compare(big_partitionTests, small_partitionsTests, Kamada_KawaiTe
                 }
             }
         }
-        if (a === "Kamada-Kawai") {
+
+        if (a === "Kamada_Kawai") {
             for (let test of Kamada_KawaiTests) {
-                const arrayP = [];
-                const arrayC = [];
-                const arrayE = [];
-                for (let l of languages) {
-                    for (let p of programType) {
-                        arrayP.push(`${l}/${p}/${a}/points${test}.csv`);
-                        arrayC.push(`${l}/${p}/${a}/coords${test}.csv`);
-                        arrayE.push(`${l}/${p}/${a}/edges${test}.csv`);
+                if (await fileExists(`tests/${a}/solutions/coords${test}.csv`)) {
+
+                    // Create an array to store the paths of the output files that match the solution
+                    results[a][test] = {};
+
+                    // Iterate over all languages
+                    for (let l of languages) {
+                        results[a][test][l] = {};
+                        // Iterate over all program types
+                        for (let p of programType) {
+
+                            const filename = `${l}/${p}/${a}/coords${test}.csv`;
+
+                            if (await fileExists(filename)) {
+                                if (await (compareFiles(filename, `tests/${a}/solutions/coords${test}.csv`))) {
+                                    results[a][test][l][p] = true;
+                                } else {
+                                    results[a][test][l][p] = false;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -150,7 +166,7 @@ async function compare(big_partitionTests, small_partitionsTests, Kamada_KawaiTe
 async function test() {
     const big_partitionTests = await readTests("big_partition");
     const small_partitionsTests = await readTests("small_partitions");
-    const Kamada_KawaiTests = await readTests("Kamada-Kawai");
+    const Kamada_KawaiTests = await readTests("Kamada_Kawai");
 
     await compare(big_partitionTests, small_partitionsTests, Kamada_KawaiTests);
 
