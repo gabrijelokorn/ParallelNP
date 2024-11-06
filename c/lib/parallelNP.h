@@ -12,5 +12,7 @@
 #include "./json2coords.h"
 #include "./json2edges.h"
 #include "./json2KamadaKawai.h"
+#include "./KK.h"
+#include "./writeCSV.h"
 
 #endif 

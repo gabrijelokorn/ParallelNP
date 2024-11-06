@@ -5,7 +5,7 @@ all: compile measure result
 CC = gcc
 TARGET = main.out
 SOURCES = main.c ../../lib/json2coords.c ../../lib/json2edges.c ../../lib/write.c ../../lib/writeJson.c ../../lib/fileSize.c ../../lib/readFile.c \
-../../lib/json2KamadaKawai.c
+../../lib/json2KamadaKawai.c ../../lib/writeCSV.c ../../lib/KK.c
 OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
 
 CFLAGS = -ljson-c

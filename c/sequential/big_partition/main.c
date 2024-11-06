@@ -57,10 +57,10 @@ bool partition(int *arr, int size)
 int main(int argc, char *argv[])
 {
     // At least two arguments expected:
-    // 1. Program name
-    // 2. Test input file name
-    // 3. Output file name (results / timings)
-    // 4. (Optional) Verbose flag
+    // 1) Program name
+    // 2) Test input file name
+    // 3) Output file name (results / timings)
+    // 4) (Optional) Verbose flag
 
     for (uint8_t i = 0; i < argc; i++)
     {
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    // 1. Read the input file
+    // 1) Read the input file
     FILE *inputFile = fopen(argv[1], "r");
     if (inputFile == NULL)
     {
@@ -80,13 +80,13 @@ int main(int argc, char *argv[])
 
     char *buffer = readFile(inputFile);
 
-    // 2. Parse the buffer into json and
-    // 3. Convert json into an array (of arrays) of integers
+    // 2) Parse the buffer into json and
+    // 3) Convert json into an array (of arrays) of integers
     dimensions *d = dims(buffer);
     int **arr = json2partitions(buffer, d);
 
 
-    // 4.a Perform the partitioning
+    // A.1) Perform the partitioning
     if (!verbose)
     {
 
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
             partition(arr[i], d->cols[i]);
     }
 
-    // 4.b Write the results to the output file
+    // B.1) Write the results to the output file
     if (verbose)
     {
         json_object *jarray = json_object_new_array();

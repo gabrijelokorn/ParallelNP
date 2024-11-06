@@ -60,20 +60,19 @@ result: result_c result_julia result_golang kamada_kawai
 
 
 
-### --- COMPARE --- ###
-check:
-	@node views/check.js
-	@xdg-open views/check.html\
-
-### --- ### --- ### --- ###
-
-
-
 ### --- ### Compile measure result in seperate languages ### --- ###
 c: compile_c measure_c result_c
 julia: compile_julia measure_julia result_julia
 golang: compile_golang measure_golang result_golang
 ### --- ### --- ### --- ### --- ### --- ### --- ###
+
+
+
+### --- CHECK --- ###
+check:
+	@node views/check.js
+	@xdg-open views/check.html
+### --- ### --- ### --- ###
 
 
 

@@ -22,7 +22,16 @@ void KamadaKawaiToString (KamadaKawai *kk) {
     for (int i = 0; i < kk->n; i++) {
         printf("%d: [%d,%d]\n", i, kk->coordinates[i][0], kk->coordinates[i][1]);
     }
+}
 
+void dToString (int **d, int n) {
+    printf("d:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%d ", d[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 int main(int argc, char *argv[])
@@ -46,7 +55,7 @@ int main(int argc, char *argv[])
     int **vertices;
     int **edges;
 
-    // 1. Read the input file
+    // 1) Read the input file
     FILE *inputFile = fopen(argv[1], "r");
     if (inputFile == NULL)
     {
@@ -56,20 +65,45 @@ int main(int argc, char *argv[])
 
     char *buffer = readFile(inputFile);
 
-    // 2. Parse the input file into json object
+    // 2) Parse the input file into json object
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
+
+    // 3) Calculate the distances between the vertices - Floyd Warshall
+    int **d = d_ij(kamadaKawai->edges, kamadaKawai->n, kamadaKawai->m);
 
     if (!verbose)
     {
+
     }
 
     if (verbose)
     {
         KamadaKawaiToString(kamadaKawai);
-        // Print results into 3 different files
-        // 1. points.csv - coordinates of the vertices
-        // 2. edges.csv - edges between the vertices
-        // 3. distances.csv - distances between the vertices
+
+        // B.1) points.csv - coordinates of the vertices
+        FILE *outFilePoints = fopen(argv[2], "w");
+        if (outFilePoints == NULL)
+        {
+            fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[2]);
+            return 1;
+        }
+        writeString(outFilePoints, "");
+        writePoints(outFilePoints, kamadaKawai->n);
+        fclose(outFilePoints);
+
+        // B.2) edges.csv - edges between the vertices
+        FILE *outFileEdges = fopen(argv[4], "w");
+        if (outFileEdges == NULL)
+        {
+            fprintf(stderr, "[%s:] Error opening file %s\n", NAME, argv[2]);
+            return 1;
+        }
+        writeString(outFileEdges, "");
+        writeEdges(outFileEdges, kamadaKawai->edges, kamadaKawai->m);
+        fclose(outFileEdges);
+
+        dToString(d, kamadaKawai->n);
+        
     }
     return 0;
 }
