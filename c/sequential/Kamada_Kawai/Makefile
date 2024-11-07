@@ -41,9 +41,10 @@ result: $(TARGET)
 		outPoints=points$$(basename $$case .json).csv; \
 		outCoords=coords$$(basename $$case .json).csv; \
 		outEdges=edges$$(basename $$case .json).csv; \
-		./$(TARGET) $$case $$outPoints $$outCoords $$outEdges --verbose; \
+		./$(TARGET) -o $$case -v -s -p $$outPoints -c $$outCoords -e $$outEdges; \
 	done
 ### --- --- --- ###
+# 		./$(TARGET) $$case $$outPoints $$outCoords $$outEdges --verbose; \
 
 
 
