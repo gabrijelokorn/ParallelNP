@@ -5,8 +5,8 @@
 # 3 languages (C, Julia, Golang).
 #################################################
 
-.PHONY: all clean compile result measure c julia golang
-all: compile measure result check
+.PHONY: all clean compile run c julia golang check
+all: compile run check
 
 
 ### --- COMPILE --- ###
@@ -21,15 +21,23 @@ compile: compile_c compile_julia compile_golang
 
 
 
-### --- MEASURE --- ###
-measure_c:
-	$(MAKE) -C c measure
-measure_julia:
-	$(MAKE) -C julia measure
-measure_golang:
-	$(MAKE) -C golang measure
-measure: measure_c measure_julia measure_golang
+### --- RUN --- ###
+run_c:
+	$(MAKE) -C c run
+run_julia:
+	$(MAKE) -C julia run
+run_golang:
+	$(MAKE) -C golang run
+run: run_c run_julia run_golang
 ### --- ### --- ### --- ###
+
+
+
+### --- ### LANGUAGES ### --- ###
+c: compile_c run_c
+julia: compile_julia run_julia
+golang: compile_golang run_golang
+### --- ### ######### ### --- ###
 
 
 
@@ -44,28 +52,6 @@ kamada_kawai:
 		matlab -nodisplay -nosplash -nodesktop -r "addpath('views/'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
 	done
 ### --- ### --- ### --- ###
-
-
-
-### --- RESULT --- ###
-result_c:
-	$(MAKE) -C c result
-result_julia:
-	$(MAKE) -C julia result
-result_golang:
-	$(MAKE) -C golang result
-
-result: result_c result_julia result_golang kamada_kawai
-### --- ### --- ### --- ###
-
-
-
-### --- ### Compile measure result in seperate languages ### --- ###
-# c: compile_c measure_c result_c
-c: compile_c result_c
-julia: compile_julia measure_julia result_julia
-golang: compile_golang measure_golang result_golang
-### --- ### --- ### --- ### --- ### --- ### --- ###
 
 
 
