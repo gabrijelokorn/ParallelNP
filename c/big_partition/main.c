@@ -43,13 +43,13 @@ void print(char *file, bool result) {
 int main(int argc, char *argv[])
 {
     bool verbose = false;
+    char *test;
     char *outS;
     char *outP;
-    char *test;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":t:vsx:y:")) != -1)
+    while ((opt = getopt(argc, argv, ":t:vx:y:")) != -1)
     {
         switch (opt)
         {
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, ">->->\n");
         fprintf(stderr, "[WARNING - Unrecognized Arguments] Try:\n");
-        fprintf(stderr, "%s [-v] [-s] -t <test> -x <sequential> -y <parallel>\n", argv[0]);
+        fprintf(stderr, "%s [-v] -t <test> -x <sequential> -y <parallel>\n", argv[0]);
         fprintf(stderr, "<-<-<\n");
         return 1;
     }

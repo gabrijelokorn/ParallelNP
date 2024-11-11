@@ -1,5 +1,13 @@
+* {
+    color: #ffffff;
+}
+
 body {
-    background-color: #404039;
+    background-color: #2a2a31;
+}
+
+i, i b {
+    color: #f97777
 }
 
 table {
@@ -9,9 +17,39 @@ table {
 }
 
 hr {
-    border: 1px solid blue;
+    border: 1px solid rgb(0, 0, 0);
 }
 
 h2 {
-    color: aquamarine
+    color: rgb(255, 127, 127)
+}
+
+.lang {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.s, .p {
+    width: 100%;
+}
+
+.algos {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.algo {
+    width: 100%;
+}
+
+.correct {
+    background-color: green;
+}
+
+.incorrect {
+    background-color: red;
 }

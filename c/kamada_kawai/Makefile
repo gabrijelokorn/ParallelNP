@@ -24,14 +24,10 @@ $(TARGET):
 ### --- RUN --- ###
 run: $(TARGET)
 	@echo "run: C > Kamada_Kawai"
-	@for case in ../../tests/Kamada_Kawai/*.json; do \
-		outPointss=points$$(basename $$case .json)s.csv; \
-		outCoordss=coords$$(basename $$case .json)s.csv; \
-		outEdgess=edges$$(basename $$case .json)s.csv; \
-		outPointsp=points$$(basename $$case .json)p.csv; \
-		outCoordsp=coords$$(basename $$case .json)p.csv; \
-		outEdgesp=edges$$(basename $$case .json)p.csv; \
-		./$(TARGET) -t $$case -x $$outPointss -y $$outCoordss -z $$outEdgess -a $$outPointsp -b $$outCoordsp -c $$outEdgesp; \
+	@for case in ../../tests/kamada_kawai/*.json; do \
+		outCoordss=s$$(basename $$case .json)s.csv; \
+		outCoordsp=p$$(basename $$case .json)p.csv; \
+		./$(TARGET) -v -t $$case -v -x $$sequential -y $$parallel; \
 	done
 ### --- --- --- ###
 

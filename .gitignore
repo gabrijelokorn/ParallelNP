@@ -5,14 +5,16 @@
 # Ignore the result files
 **/output*.csv
 **/output*.avi
-**/coords*.csv
-**/edges*.csv
-**/points*.csv
+**/*coords*.csv
+**/*edges*.csv
+**/*points*.csv
 **/output*.json
 **/results.js
 **/comparison.js
 **/p*.json
 **/s*.json
+**/s*.csv
+**/s*.csv
 
 # node_modules
 node_modules/

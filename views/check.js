@@ -1,15 +1,48 @@
 const fs = require('fs').promises;
 const { constants } = require('fs');
-const {parse} = require('csv-parse');
+const { parse } = require('csv-parse');
 
 const languages = ["c", "julia", "golang"];
-const programType = ["sequential", "parallel"];
-const algorithms = ["big_partition", "small_partitions", "Kamada_Kawai"];
+const programTypes = ["s", "p"];
 
-const results = {
-    big_partition: {},
-    small_partitions: {},
-    Kamada_Kawai: {},
+const result = {
+    c: {
+        s: {
+
+            big_partition: {},
+            small_partitions: {},
+            kamada_kawai: {}
+        },
+        p: {
+            big_partition: {},
+            small_partitions: {},
+            kamada_kawai: {}
+        }
+    },
+    julia: {
+        s: {
+            big_partition: {},
+            small_partitions: {},
+            kamada_kawai: {}
+        },
+        p: {
+            big_partition: {},
+            small_partitions: {},
+            kamada_kawai: {}
+        }
+    },
+    golang: {
+        s: {
+            big_partition: {},
+            small_partitions: {},
+            kamada_kawai: {}
+        },
+        p: {
+            big_partition: {},
+            small_partitions: {},
+            kamada_kawai: {}
+        }
+    }
 };
 
 async function readJson(filename) {
@@ -69,107 +102,64 @@ function readTests(algorithm) {
         });
 }
 
-async function compare(big_partitionTests, small_partitionsTests, Kamada_KawaiTests) {
-    // Iterate over all algorithms
-    for (let a of algorithms) {
-        if (a === "big_partition") {
+async function compare(l, t, a, n, filename, solutionFilename) {
+    if (! await fileExists(filename) || ! await fileExists(solutionFilename)) return;
 
-            // Iterate over all tests for the algorithm
+    if (await compareFiles(filename, solutionFilename)) result[l][t][a][n] = true;
+    else result[l][t][a][n] = false;
+}
+
+async function iterate(big_partitionTests, small_partitionsTests, kamada_kawaiTests) {
+    // Iterate over all languages
+    for (let l of languages) {
+        // For both program types
+        for (let t of programTypes) {
+            // Iterate over all algorithms
+
+            // big_partition
             for (let test of big_partitionTests) {
-                // Check if the solution file exists
-                if (await fileExists(`tests/${a}/solutions/${test}.json`)) {
+                const a = "big_partition";
 
-                    // Create an array to store the paths of the output files that match the solution
-                    results[a][test] = {};
+                const solutionFilename = `tests/${a}/solutions/${test}.json`;
+                const filename = `${l}/${a}/${t}${test}.json`;
 
-                    // Iterate over all languages
-                    for (let l of languages) {
-                        results[a][test][l] = {};
-                        // Iterate over all program types
-                        for (let p of programType) {
-
-                            const filename = `${l}/${p}/${a}/output${test}.json`;
-                            if (await fileExists(filename)) {
-                                if (await (compareFiles(filename, `tests/${a}/solutions/${test}.json`))) {
-                                    results[a][test][l][p] = true;
-                                } else {
-                                    results[a][test][l][p] = false;
-                                }
-                            }
-                        }
-                    }
-                }
+                await compare(l, t, a, test, filename, solutionFilename);
             }
-        }
 
-        if (a === "small_partitions") {
-
-            // Iterate over all tests for the algorithm
+            // small_partitions
             for (let test of small_partitionsTests) {
-                // Check if the solution file exists
-                if (await fileExists(`tests/${a}/solutions/${test}.json`)) {
+                const a = "small_partitions";
 
-                    // Create an array to store the paths of the output files that match the solution
-                    results[a][test] = {};
+                const solutionFilename = `tests/${a}/solutions/${test}.json`;
+                const filename = `${l}/${a}/${t}${test}.json`;
 
-                    // Iterate over all languages
-                    for (let l of languages) {
-                        results[a][test][l] = {};
-                        // Iterate over all program types
-                        for (let p of programType) {
-
-                            const filename = `${l}/${p}/${a}/output${test}.json`;
-                            if (await fileExists(filename)) {
-                                if (await (compareFiles(filename, `tests/${a}/solutions/${test}.json`))) {
-                                    results[a][test][l][p] = true;
-                                } else {
-                                    results[a][test][l][p] = false;
-                                }
-                            }
-                        }
-                    }
-                }
+                await compare(l, t, a, test, filename, solutionFilename);
             }
-        }
 
-        if (a === "Kamada_Kawai") {
-            for (let test of Kamada_KawaiTests) {
-                if (await fileExists(`tests/${a}/solutions/coords${test}.csv`)) {
+            // kamada_kawai
+            for (let test of kamada_kawaiTests) {
+                const a = "kamada_kawai";
 
-                    // Create an array to store the paths of the output files that match the solution
-                    results[a][test] = {};
+                const solutionFilename = `tests/${a}/solutions/coords${test}.csv`;
+                const filename = `${l}/${a}/${t}${test}.csv`;
 
-                    // Iterate over all languages
-                    for (let l of languages) {
-                        results[a][test][l] = {};
-                        // Iterate over all program types
-                        for (let p of programType) {
-
-                            const filename = `${l}/${p}/${a}/coords${test}.csv`;
-
-                            if (await fileExists(filename)) {
-                                if (await (compareFiles(filename, `tests/${a}/solutions/coords${test}.csv`))) {
-                                    results[a][test][l][p] = true;
-                                } else {
-                                    results[a][test][l][p] = false;
-                                }
-                            }
-                        }
-                    }
-                }
+                await compare(l, t, a, test, filename, solutionFilename);
             }
         }
     }
+
+    console.log(result);
 }
+
 
 async function test() {
     const big_partitionTests = await readTests("big_partition");
     const small_partitionsTests = await readTests("small_partitions");
-    const Kamada_KawaiTests = await readTests("Kamada_Kawai");
+    const kamada_kawaiTests = await readTests("kamada_kawai");
 
-    await compare(big_partitionTests, small_partitionsTests, Kamada_KawaiTests);
+    await iterate(big_partitionTests, small_partitionsTests, kamada_kawaiTests);
 
-    const output = `const results = ${JSON.stringify(results)};`;
+    const output = `const results = ${JSON.stringify(result)};`;
     fs.writeFile('views/checks.js', output);
 }
 

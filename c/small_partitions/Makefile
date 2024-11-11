@@ -26,7 +26,7 @@ run: $(TARGET) compile
 	@for case in ../../tests/small_partitions/*.json; do \
 		outs=s$$(basename $$case .json).json; \
 		outp=p$$(basename $$case .json).json; \
-		./$(TARGET) -t $$case -x $$outs -y $$outp; \
+		./$(TARGET) -v -t $$case -x $$outs -y $$outp; \
 	done
 ### --- --- --- ###
 

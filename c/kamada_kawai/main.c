@@ -6,7 +6,7 @@
 
 #include "../lib/parallelNP.h"
 
-#define NAME "C > sequential > Kamada-Kawai"
+#define NAME "C > Kamada-Kawai"
 
 void KamadaKawaiToString(KamadaKawai *kk)
 {
@@ -70,18 +70,13 @@ void k_ijToString(double **k_ij, int n)
 int main(int argc, char *argv[])
 {
     bool verbose = false;
-    bool sequential = false;
-    char *outPointsS;
-    char *outPointsP;
-    char *outEdgesS;
-    char *outEdgesP;
-    char *outCoordsS;
-    char *outCoordsP;
     char *test;
+    char *outS;
+    char *outP;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":x:y:z:a:b:c:")) != -1)
+    while ((opt = getopt(argc, argv, ":t:x:y:z:a:b:c:v")) != -1)
     {
         switch (opt)
         {
@@ -91,29 +86,13 @@ int main(int argc, char *argv[])
         case 'v':
             verbose = true;
             break;
-        case 's':
-            sequential = true;
-            break;
         case 'x':
-            outPointsS = optarg;
+            outS = optarg;
             break;
         case 'y':
-            outEdgesS = optarg;
-            break;
-        case 'z':
-            outCoordsS = optarg;
-            break;
-        case 'a':
-            outPointsP = optarg;
-            break;
-        case 'b':
-            outEdgesP = optarg;
-            break;
-        case 'c':
-            outCoordsP = optarg;
+            outP = optarg;
             break;
         case ':':
-            help = true;
         case '?':
             help = true;
             break;
@@ -126,7 +105,7 @@ int main(int argc, char *argv[])
     {
         fprintf(stderr, ">->->\n");
         fprintf(stderr, "[WARNING - Unrecognized Arguments] Try:\n");
-        fprintf(stderr, "%s [-v] [-s] -p <outPoints> -e <outEdges> -c <outCoords> -o <test>\n", argv[0]);
+        fprintf(stderr, "%s [-v] -t <test> -x <sequential> -y <parallel>\n", argv[0]);
         fprintf(stderr, "<-<-<\n");
         return 1;
     }
@@ -164,7 +143,7 @@ int main(int argc, char *argv[])
     // 7) Calculate the k_ij - spring constants between the vertices
     double **k_ij = k_ij_fun(d_ij, kamadaKawai->n, kamadaKawai->k);
 
-    // KamadaKawaiToString(kamadaKawai);
+    KamadaKawaiToString(kamadaKawai);
 
     return 0;
 }

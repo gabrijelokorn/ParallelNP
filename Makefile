@@ -41,24 +41,24 @@ golang: compile_golang run_golang
 
 
 
-### --- Kamada Kawai --- ###
-kamada_kawai:
-	@for case in tests/Kamada_Kawai/*.json; do \
-		inPoints=c/sequential/Kamada_Kawai/points$$(basename $$case .json).csv; \
-		inCoords=c/sequential/Kamada_Kawai/coords$$(basename $$case .json).csv; \
-		inEdges=c/sequential/Kamada_Kawai/edges$$(basename $$case .json).csv; \
-		outVideo=views/output$$(basename $$case .json).avi; \
-		echo "Generating video $$outVideo"; \
-		matlab -nodisplay -nosplash -nodesktop -r "addpath('views/'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
-	done
-### --- ### --- ### --- ###
-
-
-
 ### --- CHECK --- ###
 check:
 	@node views/check.js
 	@xdg-open views/check.html
+### --- ### --- ### --- ###
+
+
+
+### --- Kamada Kawai --- ###
+kamada_kawai:
+	@for case in tests/kamada_kawai/*.json; do \
+		inPoints=tests/kamada_kawai/solutions/points$$(basename $$case .json).csv; \
+		inCoords=tests/kamada_kawai/solutions/coords$$(basename $$case .json).csv; \
+		inEdges=tests/kamada_kawai/solutions/edges$$(basename $$case .json).csv; \
+		outVideo=views/output$$(basename $$case .json).avi; \
+		echo "Generating video $$outVideo"; \
+		matlab -nodisplay -nosplash -nodesktop -r "addpath('views/'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
+	done
 ### --- ### --- ### --- ###
 
 
