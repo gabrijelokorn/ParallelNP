@@ -11,6 +11,8 @@
 **/output*.json
 **/results.js
 **/comparison.js
+**/p*.json
+**/s*.json
 
 # node_modules
 node_modules/

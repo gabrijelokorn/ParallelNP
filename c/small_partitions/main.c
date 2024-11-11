@@ -19,11 +19,11 @@
 
 #define NAME "C > small_partitions"
 
-void print(char *file, bool *result)
+void print(char *file, bool *result, int size)
 {
     json_object *jarray = json_object_new_array();
 
-    for (int i = 0; i < sizeof(result); i++)
+    for (int i = 0; i < size; i++)
     {
         json_object *jbool = json_object_new_boolean(result[i]);
         json_object_array_add(jarray, jbool);
@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
     }
 
     // 5) Print the results
-    print(outS, resultS);
-    print(outP, resultP);
+    print(outS, resultS, d->rows);
+    print(outP, resultP, d->rows);
 
     fclose(inputFile);
     free(arr);
