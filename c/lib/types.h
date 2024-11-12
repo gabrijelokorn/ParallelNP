@@ -11,10 +11,16 @@ typedef struct dimensions
 typedef struct KamadaKawai
 {
     int n; // number of vertices
-    int **coordinates; // coordinates of the vertices
+    double **coordinates; // coordinates of the vertices
     int m; // number of edges
     int **edges; // edges between the vertices
     double k; // constant k
 } KamadaKawai;
+
+typedef struct Vertices
+{
+    Vertices *next;
+    double **coordinates;
+} Vertices;
 
 #endif

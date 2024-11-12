@@ -1,15 +1,15 @@
 #include "json2KamadaKawai.h"
 
-int **getCoordinates (json_object *coords, int n)
+double **getCoordinates (json_object *coords, int n)
 {
     // Allocate memory for the coordinates
-    int **coordinates = malloc(n * sizeof(int *));
+    double **coordinates = malloc(n * sizeof(double *));
     
     // Loop through the coords array
     for (int i = 0; i < n; i++)
     {
         // Allocate memory for the i-th element of the coordinates
-        coordinates[i] = malloc(2 * sizeof(int));
+        coordinates[i] = malloc(2 * sizeof(double));
 
         // Get the i-th element of the coords array
         struct json_object *coord = json_object_array_get_idx(coords, i);
@@ -19,8 +19,8 @@ int **getCoordinates (json_object *coords, int n)
         json_object_object_get_ex(coord, "y", &y);
 
         // Get the x and y values of the i-th element of the coords array
-        coordinates[i][0] = json_object_get_int(x);
-        coordinates[i][1] = json_object_get_int(y);   
+        coordinates[i][0] = json_object_get_double(x);
+        coordinates[i][1] = json_object_get_double(y);   
     }
     
     return coordinates;

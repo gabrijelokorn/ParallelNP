@@ -24,7 +24,7 @@ void KamadaKawaiToString(KamadaKawai *kk)
     printf("coords:\n");
     for (int i = 0; i < kk->n; i++)
     {
-        printf("%d: [%d,%d]\n", i, kk->coordinates[i][0], kk->coordinates[i][1]);
+        printf("%d: [%f,%f]\n", i, kk->coordinates[i][0], kk->coordinates[i][1]);
     }
 }
 
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     // 3) Calculate the d_ij - distances between the vertices - Floyd Warshall
     int **d_ij = d_ij_fun(kamadaKawai->edges, kamadaKawai->n, kamadaKawai->m);
 
-    // 4) Calculate the L_0
+    // 4) Calculate the L_0 - length of a side of a display square area
     double L_0 = 5;
 
     // 5) Calculate the L: L = L_0 / max(d_ij)
@@ -144,6 +144,15 @@ int main(int argc, char *argv[])
     double **k_ij = k_ij_fun(d_ij, kamadaKawai->n, kamadaKawai->k);
 
     KamadaKawaiToString(kamadaKawai);
+
+    // A) Sequential
+
+
+    // B) Parallel
+
+
+    // 8) Write the output files
+
 
     return 0;
 }
