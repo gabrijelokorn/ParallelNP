@@ -1,11 +1,21 @@
 # ParallelNP
 
-V tem dokumentu se bomo spoznali s tremi NP-polnimi problemi. To so Partition problem na eni veliki množici, Partition problem na veliko malih množicah in Kamada-Kawai algoritem. Reševali jih bomo v treh različnih programskih jezikih. To so C, Julia in Golang. Za vsakega izmed jezikov pa bomo rešitev implementirali tako v zaporednem kot tudi v vzporednem programu.
+V tem dokumentu se bomo spoznali s tremi NP-polnimi problemi. To so 
+- ***Partition Problem na eni veliki množici***,
+- ***Partition problem na veliko malih množicah*** in
+- ***Kamada-Kawai algoritem***. 
+
+Reševali jih bomo v treh različnih programskih jezikih. To so 
+- C, 
+- Julia in 
+- Golang. 
+
+Za vsakega izmed jezikov pa bomo rešitev implementirali tako v **zaporednem** kot tudi v **vzporednem** programu.
 
 
 
 ## Predstavitev problemov
-V vseh prihodnjih podanih primerih bo `<xy>` predstavljal številko primera.
+V vseh prihodnjih podanih primerih bo `<xy>` predstavljal zaporedno identifikacijsko število testnega primera.
 
 ### 1. Big partition
 ---
@@ -45,7 +55,8 @@ Primer rešitve `c/small_partitions/output<xy>.json`:
 
 ### 3. Kamada-Kawai algoritem
 ---
-Algoritem je opisan v [znanstvenem članku](./docs/document.pdf).
+Obravani grafi so povezani grafi, katerih vozlišča niso omejena (ležijo prosto, kjerkoli v ravnini) in robovi predstavljeni s polnimi črtami. V našem modelu ravnovesje predstavlja kvadratni sum razlik med željenimi razdaljami in dejanskimi razdaljami med vozlišči.\
+Algoritem je podrobno opisan v [znanstvenem članku](./docs/document.pdf).
 
 Primer testne datoteke `/tests/kamada_kawai/<xy>.json`:
 ```json
@@ -121,29 +132,26 @@ Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v 
 
 Zaganjanje samo `make` je enako kot:
 ```make
-make compile measure result check
+make compile run check
 ```
 
 Na voljo pa imamo tudi nekaj drugih možnosti:
 | Ukaz | Efekt |
 | --- | --- |
 | `make compile` | _Prevede vse programe v vseh jezikih._ |
-| `make measure` | _Zagon vseh programov pri čemer se meri čas._ |
-| `make result` | _Zagon vseh programov pri čemer se izpišejo rezultati izvajanja._ |
-| `make c` | _Prevede, zažene in testira programe napisane v jeziku C._ |
-| `make julia` | _Prevede, zažene in testira programe napisane v jeziku Julia._ |
-| `make go` | _Prevede, zažene in testira programe napisane v jeziku Golang._ |
-| `make clean` | _Izbriše vse izvedljive datoteke._ |
+| `make run` | _Vse programe zažene, pri čemer se v datoteke izpišejo rezultati izvajanja in časi izvajanja._ |
+| `make c` | _Prevede in zažene programe napisane v jeziku C._ |
+| `make julia` | _Prevede in zažene programe napisane v jeziku Julia._ |
+| `make go` | _Prevede in zažene programe napisane v jeziku Golang._ |
+| `make clean` | _Izbriše vse datoteke, ki so nastale ob izvajanju programov._ |
 | `make kamada_kawai` | _Generira videe za Kamada-Kawai algoritem._ |
 | `make check` | _Preveri izide izvajanja programov._ |
 
-Ob izvajanju oziroma testiranju se izpišejo rezultati (`make result`) ali pa časi (`make measure`) izvajanja programov.
 
 ## Delovanje programja
 - Programi v vseh jezikih in obeh pristopih (zaporedno in vzporedno) berejo iste testne datoteke.
 - Testne datoteke so shranjene v direktorijih `tests/big_partition`, `tests/small_partitions` in `tests/kamada_kawai`.
-- Vsak program v svoj direktorij zapisuje rezultate v datoteko `output<xy>.csv` / `output<xy>.json`, kadar zaženemo `make result`.
+- Vsak program v svoj direktorij zapisuje rezultate v datoteko `s<xy>.csv` / `s<xy>.json` za zaporedne program in `p<xy>.csv` / `p<xy>.json` za vzporedne programe.
 - Z izbiro `make check` se rezultati izvajanja preverijo na podlagi rešitev v `tests/<algoritem>/solutions`.
 - Po izvedbi `make check` lahko rezultate vidimo v datoteki `views/check.html`.
 - V `views` najdemo tudi ostale izide izvajanja - videe, ki prikazujejo izvajanje Kamada-Kawai algoritma.
-- Z izbiro `make measure` se izvedejo vsi programi, pri čemer se meri tudi čas izvajanja.
