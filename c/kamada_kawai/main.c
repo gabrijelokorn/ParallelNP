@@ -5,6 +5,7 @@
 #include <json-c/json.h>
 
 #include "../lib/parallelNP.h"
+#include "./kamada-kawai.h"
 
 #define NAME "C > Kamada-Kawai"
 
@@ -146,7 +147,7 @@ int main(int argc, char *argv[])
     KamadaKawaiToString(kamadaKawai);
 
     // A) Sequential
-
+    double **resultS = seq(kamadaKawai);
 
     // B) Parallel
 

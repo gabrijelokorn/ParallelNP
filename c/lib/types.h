@@ -19,7 +19,7 @@ typedef struct KamadaKawai
 
 typedef struct Vertices
 {
-    Vertices *next;
+    struct Vertices *next;
     double **coordinates;
 } Vertices;
 

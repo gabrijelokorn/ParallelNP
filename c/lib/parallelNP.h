@@ -1,7 +1,6 @@
 #ifndef PARALLELNP_H
 #define PARALLELNP_H
 
-#include <json-c/json.h>
 #include "./write.h"
 #include "./set.h"
 #include "./fileSize.h"
