@@ -3,6 +3,6 @@
 
 #include "../lib/parallelNP.h"
 
-double **seq(KamadaKawai *kk);
+Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij);
 
 #endif

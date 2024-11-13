@@ -8,7 +8,8 @@ SOURCES = main.c ../lib/json2coords.c ../lib/json2edges.c ../lib/write.c ../lib/
 ../lib/json2KamadaKawai.c ../lib/writeCSV.c ../lib/KK.c ./seq.c
 OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
 
-CFLAGS = -ljson-c
+CFLAGS = -ljson-c # -ljson-c is needed for json-c library
+CFLAGS += -lm # -lm is needed for math library
 
 
 ### --- COMPILE --- ###

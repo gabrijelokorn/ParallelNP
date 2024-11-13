@@ -5,9 +5,15 @@
 # Ignore the result files
 **/output*.csv
 **/output*.avi
-**/*coords*.csv
-**/*edges*.csv
-**/*points*.csv
+c/*coords*.csv
+golang/*coords*.csv
+julia/*coords*.csv
+c/*edges*.csv
+golang/*edges*.csv
+julia/*edges*.csv
+c/*points*.csv
+golang/*points*.csv
+julia/*points*.csv
 **/output*.json
 **/results.js
 **/comparison.js

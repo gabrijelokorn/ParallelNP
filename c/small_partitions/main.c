@@ -102,10 +102,6 @@ int main(int argc, char *argv[])
     dimensions *d = dims(buffer);
     int **arr = json2partitions(buffer, d);
 
-    printf("rows: %d\n", d->rows);
-    printf("quantity: %d\n", d->quantity);
-    printf("cols: %d\n", d->cols[0]);
-    
     // 4.a) Sequential
     bool *resultS = (bool *)malloc(d->rows * sizeof(bool)); 
     for (int i = 0; i < d->rows; i++)

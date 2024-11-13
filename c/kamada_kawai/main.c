@@ -144,15 +144,21 @@ int main(int argc, char *argv[])
     // 7) Calculate the k_ij - spring constants between the vertices
     double **k_ij = k_ij_fun(d_ij, kamadaKawai->n, kamadaKawai->k);
 
+    d_ijToString(d_ij, kamadaKawai->n);
+    l_ijToString(l_ij, kamadaKawai->n);
+    k_ijToString(k_ij, kamadaKawai->n);
+
+
     KamadaKawaiToString(kamadaKawai);
 
     // A) Sequential
-    double **resultS = seq(kamadaKawai);
+    Vertices *resultS = seq(kamadaKawai, d_ij, l_ij, k_ij);
 
     // B) Parallel
 
 
     // 8) Write the output files
+    KamadaKawaiToString(kamadaKawai);
 
 
     return 0;
