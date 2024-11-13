@@ -15,6 +15,8 @@ void KamadaKawaiToString(KamadaKawai *kk)
     printf("n: %d\n", kk->n);
     printf("m: %d\n", kk->m);
     printf("k: %f\n", kk->k);
+    printf("epsilon: %f\n", kk->epsilon);
+    printf("display: %f\n", kk->display);
 
     printf("edges:\n");
     for (int i = 0; i < kk->m; i++)
@@ -68,6 +70,18 @@ void k_ijToString(double **k_ij, int n)
     }
 }
 
+void print(char *file, Vertices *result, int n)
+{
+    FILE *fp = fopen(file, "w");
+    if (fp == NULL)
+    {
+        fprintf(stderr, "%s )-: Unable to open file %s\n", NAME, file);
+        return;
+    }
+
+    writeVertices(fp, result, n);
+}
+
 int main(int argc, char *argv[])
 {
     bool verbose = false;
@@ -77,7 +91,7 @@ int main(int argc, char *argv[])
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":t:x:y:z:a:b:c:v")) != -1)
+    while ((opt = getopt(argc, argv, ":t:x:y:v")) != -1)
     {
         switch (opt)
         {
@@ -132,7 +146,7 @@ int main(int argc, char *argv[])
     int **d_ij = d_ij_fun(kamadaKawai->edges, kamadaKawai->n, kamadaKawai->m);
 
     // 4) Calculate the L_0 - length of a side of a display square area
-    double L_0 = 5;
+    double L_0 = kamadaKawai->display;
 
     // 5) Calculate the L: L = L_0 / max(d_ij)
     int max_d_ij = max_d_ij_fun(d_ij, kamadaKawai->n);
@@ -144,21 +158,16 @@ int main(int argc, char *argv[])
     // 7) Calculate the k_ij - spring constants between the vertices
     double **k_ij = k_ij_fun(d_ij, kamadaKawai->n, kamadaKawai->k);
 
-    d_ijToString(d_ij, kamadaKawai->n);
-    l_ijToString(l_ij, kamadaKawai->n);
-    k_ijToString(k_ij, kamadaKawai->n);
-
-
     KamadaKawaiToString(kamadaKawai);
-
     // A) Sequential
     Vertices *resultS = seq(kamadaKawai, d_ij, l_ij, k_ij);
 
+    KamadaKawaiToString(kamadaKawai);
     // B) Parallel
 
 
     // 8) Write the output files
-    KamadaKawaiToString(kamadaKawai);
+    print(outS, resultS, kamadaKawai->n);
 
 
     return 0;

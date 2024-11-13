@@ -1,14 +1,23 @@
 #include "writeCSV.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-void writeEdges(FILE *fp, int **edges, int m)
+
+void writeVertices(FILE *fp, Vertices *vertices, int n)
 {
-    for (int i = 0; i < m; i++)
-    {
-        fprintf(fp, "%d,%d\n", edges[i][0], edges[i][1]);
+    if (fp == NULL) {
+        fprintf(stderr, ")-: File pointer is null\n");
+        return;
     }
-}
 
-void writePoints(FILE *fp, int n)
-{
-    fprintf(fp, "%d\n", n);
+    while (vertices != NULL)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            fprintf(fp, "%f,%f\n", vertices->coordinates[i][0], vertices->coordinates[i][1]);
+        }
+        vertices = vertices->next;
+        fprintf(fp, "\n");
+    }
 }

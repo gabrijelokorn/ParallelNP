@@ -15,6 +15,8 @@ typedef struct KamadaKawai
     int m; // number of edges
     int **edges; // edges between the vertices
     double k; // constant k
+    double epsilon; // epsilon
+    double display; // display
 } KamadaKawai;
 
 typedef struct Vertices

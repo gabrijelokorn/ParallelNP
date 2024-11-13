@@ -83,6 +83,20 @@ KamadaKawai *json2KamadaKawai(char *buffer)
     // Get the k value
     kamadaKawai->k = json_object_get_double(k);
 
+    // Get the e (epsilon) from the json object
+    struct json_object *e;
+    // Check if the e value exists
+    json_object_object_get_ex(parsed_json, "epsilon", &e);
+    // Get the e value
+    kamadaKawai->epsilon = json_object_get_double(e);
+
+    // Get the display value from the json object
+    struct json_object *display;
+    // Check if the display value exists
+    json_object_object_get_ex(parsed_json, "display", &display);
+    // Get the display value
+    kamadaKawai->display = json_object_get_double(display);
+
     // Return the KamadaKawai struct
     return kamadaKawai;
 }

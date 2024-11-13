@@ -26,9 +26,9 @@ $(TARGET):
 run: $(TARGET)
 	@echo "run: C > Kamada_Kawai"
 	@for case in ../../tests/kamada_kawai/*.json; do \
-		outCoordss=s$$(basename $$case .json)s.csv; \
-		outCoordsp=p$$(basename $$case .json)p.csv; \
-		./$(TARGET) -v -t $$case -v -x $$sequential -y $$parallel; \
+		sequential=s$$(basename $$case .json).csv; \
+		parallel=p$$(basename $$case .json).csv; \
+		./$(TARGET) -v -t $$case -x $$sequential -y $$parallel; \
 	done
 ### --- --- --- ###
 

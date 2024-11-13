@@ -144,29 +144,31 @@ double calculate_delta_x(double derivaitve_x_m, double derivaitve_y_m, double de
     return (-(derivaitve_y_m) - (derivaitve_yy_m * delta_y)) / derivaitve_xy_m;
 }
 
+void copyCoords (double **coords, double **vertices, int n) {
+    for (int i = 0; i < n; i++)
+    {
+        vertices[i] = (double *)malloc(2 * sizeof(double));
+        vertices[i][0] = coords[i][0];
+        vertices[i][1] = coords[i][1];
+    }
+}
+
 Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
 {
-    Vertices *vertices = NULL;
+    Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
+    vertices->coordinates = (double **)malloc(kk->n * sizeof(double *));
+    copyCoords(kk->coordinates, vertices->coordinates, kk->n);
 
-    double epsilon = 1.00;
+    double epsilon = kk->epsilon;
 
     double *deltas = calculate_delatas(kk->coordinates, l_ij, k_ij, kk->n);
 
-    for (int i = 0; i < kk->n; i++)
-    {
-        printf("delta[%d] = %f\n", i, deltas[i]);
-    }
-
     int max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
-
-    int allowed_iterations = 1000;
 
     while (max_delta_m_index != -1)
     {
-        printf("### --- ### index: %d, val: %f\n", max_delta_m_index, deltas[max_delta_m_index]);
         while (deltas[max_delta_m_index] > epsilon)
         {
-            allowed_iterations--;
             double d_x_m = derivaitve_x_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
             double d_y_m = derivaitve_y_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
             double d_xx_m = derivaitve_xx_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
@@ -188,27 +190,21 @@ Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
                 d_xy_m,
                 delta_y);
 
-            printf("delta_x = %f\n", delta_x);
-            printf("delta_y = %f\n", delta_y);
-
             kk->coordinates[max_delta_m_index][0] += delta_x;
             kk->coordinates[max_delta_m_index][1] += delta_y;
 
             deltas[max_delta_m_index] = calculate_delta(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
             if (deltas[max_delta_m_index] < epsilon)
                 max_delta_m_index = -1;
-            if (allowed_iterations == 0)
-                break;
         }
-        if (allowed_iterations == 0)
-            break;
         max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
     }
 
-    for (int i = 0; i < kk->n; i++)
-    {
-        printf("delta[%d] = %f\n", i, deltas[i]);
-    }
+    Vertices *result = (Vertices *)malloc(sizeof(Vertices));
+    result->coordinates = (double **)malloc(kk->n * sizeof(double *));
+    copyCoords(kk->coordinates, result->coordinates, kk->n);
+
+    vertices->next = result;
 
     return vertices;
 }
