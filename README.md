@@ -90,7 +90,9 @@ Primer testne datoteke `/tests/kamada_kawai/<xy>.json`:
             "target": 0
         }
     ],
-    "k": 1.5
+    "K": 2,
+    "epsilon": 0.001,
+    "display": 5
 }
 ```
 
