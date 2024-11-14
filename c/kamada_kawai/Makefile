@@ -1,16 +1,14 @@
 .PHONY: all clean compile measure result
 all: compile run
 
-
-CC = gcc
 TARGET = main.out
 SOURCES = main.c ../lib/json2coords.c ../lib/json2edges.c ../lib/write.c ../lib/writeJson.c ../lib/fileSize.c ../lib/readFile.c \
 ../lib/json2KamadaKawai.c ../lib/writeCSV.c ../lib/KK.c ./seq.c
-OUTPUTS = output*.csv output*.avi # Later add csvs to clean, when they will be automatic
+OUTPUTS = *.csv # Later add csvs to clean, when they will be automatic
 
+CC = gcc
 CFLAGS = -ljson-c # -ljson-c is needed for json-c library
 CFLAGS += -lm # -lm is needed for math library
-
 
 ### --- COMPILE --- ###
 compile: $(TARGET)
@@ -25,6 +23,7 @@ $(TARGET):
 ### --- RUN --- ###
 run: $(TARGET)
 	@echo "run: C > Kamada_Kawai"
+	
 	@for case in ../../tests/kamada_kawai/*.json; do \
 		sequential=s$$(basename $$case .json).csv; \
 		parallel=p$$(basename $$case .json).csv; \

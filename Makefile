@@ -66,6 +66,6 @@ kamada_kawai:
 ### --- ### Clean the program in all languages ### --- ###
 clean:
 	$(MAKE) -C c clean
-#	$(MAKE) -C golang clean
+	$(MAKE) -C golang clean
 #	$(MAKE) -C julia clean
 ### --- ### --- ### --- ### --- ### --- ### --- ###
