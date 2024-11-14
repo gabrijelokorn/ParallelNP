@@ -55,7 +55,7 @@
             "target": 5
         }
     ],
-    "k": 5,
-    "epsilon": 0.04,
-    "display": 10
+    "K": 100,
+    "epsilon": 0.01,
+    "display": 20
 }

@@ -1,4 +1,7 @@
 #include <math.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
 #include "./kamada-kawai.h"
 
 double derivaitve_x_m(double **coords, double **l_ij, double **k_ij, int index, int n)
@@ -13,7 +16,7 @@ double derivaitve_x_m(double **coords, double **l_ij, double **k_ij, int index, 
         double dist_x = coords[index][0] - coords[i][0];
         double dist_y = coords[index][1] - coords[i][1];
 
-        sum += k_ij[index][i] * (dist_x - ((l_ij[index][i] * dist_x) / (sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2)))));
+        sum += k_ij[index][i] * (dist_x - ((l_ij[index][i] * dist_x) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)1 / 2))));
     }
 
     return sum;
@@ -31,7 +34,7 @@ double derivaitve_y_m(double **coords, double **l_ij, double **k_ij, int index, 
         double dist_x = coords[index][0] - coords[i][0];
         double dist_y = coords[index][1] - coords[i][1];
 
-        sum += k_ij[index][i] * (dist_y - ((l_ij[index][i] * dist_y) / (sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2)))));
+        sum += k_ij[index][i] * (dist_y - ((l_ij[index][i] * dist_y) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)1 / 2))));
     }
 
     return sum;
@@ -49,7 +52,7 @@ double derivaitve_xx_m(double **coords, double **l_ij, double **k_ij, int index,
         double dist_x = coords[index][0] - coords[i][0];
         double dist_y = coords[index][1] - coords[i][1];
 
-        sum += k_ij[index][i] * (1 - ((l_ij[index][i] * (double)pow(dist_y, 2)) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), 3 / 2))));
+        sum += k_ij[index][i] * (1 - ((l_ij[index][i] * (double)pow(dist_y, 2)) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)3 / 2))));
     }
 
     return sum;
@@ -67,7 +70,7 @@ double derivaitve_yy_m(double **coords, double **l_ij, double **k_ij, int index,
         double dist_x = coords[index][0] - coords[i][0];
         double dist_y = coords[index][1] - coords[i][1];
 
-        sum += k_ij[index][i] * (1 - ((l_ij[index][i] * (double)pow(dist_x, 2)) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), 3 / 2))));
+        sum += k_ij[index][i] * (1 - ((l_ij[index][i] * (double)pow(dist_x, 2)) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)3 / 2))));
     }
 
     return sum;
@@ -85,7 +88,7 @@ double derivaitve_xy_m(double **coords, double **l_ij, double **k_ij, int index,
         double dist_x = coords[index][0] - coords[i][0];
         double dist_y = coords[index][1] - coords[i][1];
 
-        sum += k_ij[index][i] * ((l_ij[index][i] * dist_x * dist_y) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), 3 / 2)));
+        sum += k_ij[index][i] * ((l_ij[index][i] * dist_x * dist_y) / ((double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)3 / 2)));
     }
 
     return sum;
@@ -144,7 +147,8 @@ double calculate_delta_x(double derivaitve_x_m, double derivaitve_y_m, double de
     return (-(derivaitve_y_m) - (derivaitve_yy_m * delta_y)) / derivaitve_xy_m;
 }
 
-void copyCoords (double **coords, double **vertices, int n) {
+void copyCoords(double **coords, double **vertices, int n)
+{
     for (int i = 0; i < n; i++)
     {
         vertices[i] = (double *)malloc(2 * sizeof(double));
@@ -159,10 +163,11 @@ Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
     vertices->coordinates = (double **)malloc(kk->n * sizeof(double *));
     copyCoords(kk->coordinates, vertices->coordinates, kk->n);
 
+    Vertices *vertices_head = vertices;
+    
     double epsilon = kk->epsilon;
 
     double *deltas = calculate_delatas(kk->coordinates, l_ij, k_ij, kk->n);
-
     int max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
 
     while (max_delta_m_index != -1)
@@ -194,17 +199,17 @@ Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
             kk->coordinates[max_delta_m_index][1] += delta_y;
 
             deltas[max_delta_m_index] = calculate_delta(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
-            if (deltas[max_delta_m_index] < epsilon)
-                max_delta_m_index = -1;
         }
+        vertices->next = (Vertices *)malloc(sizeof(Vertices));
+        vertices->next->coordinates = (double **)malloc(kk->n * sizeof(double *));
+        copyCoords(kk->coordinates, vertices->next->coordinates, kk->n);
+
+        vertices = vertices->next;
+
+        deltas = calculate_delatas(kk->coordinates, l_ij, k_ij, kk->n);
         max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
     }
 
-    Vertices *result = (Vertices *)malloc(sizeof(Vertices));
-    result->coordinates = (double **)malloc(kk->n * sizeof(double *));
-    copyCoords(kk->coordinates, result->coordinates, kk->n);
 
-    vertices->next = result;
-
-    return vertices;
+    return vertices_head;
 }

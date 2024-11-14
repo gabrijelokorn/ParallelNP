@@ -147,8 +147,6 @@ async function iterate(big_partitionTests, small_partitionsTests, kamada_kawaiTe
             }
         }
     }
-
-    console.log(result);
 }
 
 

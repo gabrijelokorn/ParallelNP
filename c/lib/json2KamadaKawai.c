@@ -77,11 +77,11 @@ KamadaKawai *json2KamadaKawai(char *buffer)
 
 
     // Get the k constant from the json object
-    struct json_object *k;
+    struct json_object *K;
     // Check if the k value exists
-    json_object_object_get_ex(parsed_json, "k", &k);
+    json_object_object_get_ex(parsed_json, "K", &K);
     // Get the k value
-    kamadaKawai->k = json_object_get_double(k);
+    kamadaKawai->K = json_object_get_double(K);
 
     // Get the e (epsilon) from the json object
     struct json_object *e;

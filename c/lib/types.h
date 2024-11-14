@@ -14,9 +14,9 @@ typedef struct KamadaKawai
     double **coordinates; // coordinates of the vertices
     int m; // number of edges
     int **edges; // edges between the vertices
-    double k; // constant k
+    double K; // constant k
     double epsilon; // epsilon
-    double display; // display
+    double display; // length of a side of a display square area
 } KamadaKawai;
 
 typedef struct Vertices

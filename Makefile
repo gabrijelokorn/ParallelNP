@@ -55,7 +55,7 @@ kamada_kawai:
 		inPoints=tests/kamada_kawai/solutions/points$$(basename $$case .json).csv; \
 		inCoords=tests/kamada_kawai/solutions/coords$$(basename $$case .json).csv; \
 		inEdges=tests/kamada_kawai/solutions/edges$$(basename $$case .json).csv; \
-		outVideo=views/output$$(basename $$case .json).avi; \
+		outVideo=views/$$(basename $$case .json).avi; \
 		echo "Generating video $$outVideo"; \
 		matlab -nodisplay -nosplash -nodesktop -r "addpath('views/'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
 	done

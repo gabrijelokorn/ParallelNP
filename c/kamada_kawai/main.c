@@ -14,7 +14,7 @@ void KamadaKawaiToString(KamadaKawai *kk)
     printf("Kamada-Kawai:\n");
     printf("n: %d\n", kk->n);
     printf("m: %d\n", kk->m);
-    printf("k: %f\n", kk->k);
+    printf("k: %f\n", kk->K);
     printf("epsilon: %f\n", kk->epsilon);
     printf("display: %f\n", kk->display);
 
@@ -156,19 +156,15 @@ int main(int argc, char *argv[])
     double **l_ij = l_ij_fun(d_ij, kamadaKawai->n, L);
 
     // 7) Calculate the k_ij - spring constants between the vertices
-    double **k_ij = k_ij_fun(d_ij, kamadaKawai->n, kamadaKawai->k);
+    double **k_ij = k_ij_fun(d_ij, kamadaKawai->n, kamadaKawai->K);
 
-    KamadaKawaiToString(kamadaKawai);
     // A) Sequential
     Vertices *resultS = seq(kamadaKawai, d_ij, l_ij, k_ij);
 
-    KamadaKawaiToString(kamadaKawai);
     // B) Parallel
-
 
     // 8) Write the output files
     print(outS, resultS, kamadaKawai->n);
-
 
     return 0;
 }
