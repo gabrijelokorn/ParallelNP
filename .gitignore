@@ -3,24 +3,15 @@
 **/*.o
 
 # Ignore the result files
-**/output*.csv
 **/*.avi
-c/*coords*.csv
-golang/*coords*.csv
-julia/*coords*.csv
-c/*edges*.csv
-golang/*edges*.csv
-julia/*edges*.csv
-c/*points*.csv
-golang/*points*.csv
-julia/*points*.csv
-**/output*.json
-**/results.js
-**/comparison.js
-**/p*.json
+
 **/s*.json
+**/p*.json
 **/s*.csv
 **/s*.csv
+
+# views
+views/checks.js
 
 # node_modules
 node_modules/
