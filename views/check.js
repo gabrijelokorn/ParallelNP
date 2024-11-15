@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const { constants } = require('fs');
 const { parse } = require('csv-parse');
 
-const languages = ["c", "julia", "golang"];
+const languages = ["c", "julia", "go"];
 const programTypes = ["s", "p"];
 
 const result = {
@@ -31,7 +31,7 @@ const result = {
             kamada_kawai: {}
         }
     },
-    golang: {
+    go: {
         s: {
             big_partition: {},
             small_partitions: {},

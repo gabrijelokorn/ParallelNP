@@ -2,10 +2,10 @@
 # This Makefile is the entry point for the ParalelNP project.
 # It is used to to automate the process of
 # compiling, measuring and resulting the program in all 
-# 3 languages (C, Julia, Golang).
+# 3 languages (c, go, julia)
 #################################################
 
-.PHONY: all clean compile run c julia golang check
+.PHONY: all clean compile run c julia go check
 all: compile run check
 
 
@@ -14,9 +14,9 @@ compile_c:
 	$(MAKE) -C c compile
 compile_julia:
 	$(MAKE) -C julia compile
-compile_golang:
-	$(MAKE) -C golang compile
-compile: compile_c compile_julia compile_golang
+compile_go:
+	$(MAKE) -C go compile
+compile: compile_c compile_julia compile_go
 ### --- ### --- ### --- ###
 
 
@@ -26,9 +26,9 @@ run_c:
 	$(MAKE) -C c run
 run_julia:
 	$(MAKE) -C julia run
-run_golang:
-	$(MAKE) -C golang run
-run: run_c run_julia run_golang
+run_go:
+	$(MAKE) -C go run
+run: run_c run_julia run_go
 ### --- ### --- ### --- ###
 
 
@@ -36,7 +36,7 @@ run: run_c run_julia run_golang
 ### --- ### LANGUAGES ### --- ###
 c: compile_c run_c
 julia: compile_julia run_julia
-golang: compile_golang run_golang
+go: compile_go run_go
 ### --- ### ######### ### --- ###
 
 
@@ -66,6 +66,6 @@ kamada_kawai:
 ### --- ### Clean the program in all languages ### --- ###
 clean:
 	$(MAKE) -C c clean
-	$(MAKE) -C golang clean
+	$(MAKE) -C go clean
 #	$(MAKE) -C julia clean
 ### --- ### --- ### --- ### --- ### --- ### --- ###
