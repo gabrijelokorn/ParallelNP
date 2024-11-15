@@ -13,7 +13,6 @@ Reševali jih bomo v treh različnih programskih jezikih. To so
 Za vsakega izmed jezikov pa bomo rešitev implementirali tako v **zaporednem** kot tudi v **vzporednem** programu.
 
 
-
 ## Predstavitev problemov
 V vseh prihodnjih podanih primerih bo `<xy>` predstavljal zaporedno identifikacijsko število testnega primera.
 
@@ -131,6 +130,23 @@ V sledečih datotekah so prikazani rezultati izvajanja:
 To je primer s tremi točkami, ki se je izvedel v štirih korakih. "Stanja" (v kolikih korakih je bil algoritem izveden) so med seboj ločena s praznimi vrsticami.
 
 ## Uporaba
+
+### Zahtevana programska oprema
+- c
+
+    Programi napisani v `c` uporablja knjižnico `<json-c/json.h>`, ki jo lahko namestimo z ukazom:\
+    Za Debian/Ubuntu in druge sisteme, ki uporabljajo `apt`:
+    ```bash
+    sudo apt install libjson-c-dev
+    ```
+    Za Fedora in druge sisteme, ki uporabljajo `dnf`:
+    ```
+    sudo dnf install json-c-devel
+    ```
+- go
+
+- julia
+### Makefile
 Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v korenskem direktoriju z ukazom `make`.
 
 Zaganjanje samo `make` je enako kot:
