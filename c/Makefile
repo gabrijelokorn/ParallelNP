@@ -13,6 +13,7 @@ run:
 	$(MAKE) -C kamada_kawai run
 
 clean:
+	rm -rf lib/*.o
 	$(MAKE) -C big_partition clean
 	$(MAKE) -C small_partitions clean
 	$(MAKE) -C kamada_kawai clean

@@ -15,3 +15,11 @@ views/checks.js
 
 # node_modules
 node_modules/
+
+# c output files
+c/*.out
+c/*.o
+
+# go output files
+go/*.out
+go/**main
