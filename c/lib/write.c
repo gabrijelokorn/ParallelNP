@@ -1,13 +1,8 @@
-# include <stdio.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <json-c/json.h>
-
 # include "./write.h"
 
 void writeJsonObject(FILE *fp, json_object* jobj) {
     if (fp == NULL) {
-        fprintf(stderr, ")-: File pointer is null\n");
+        fprintf(stderr, "%s )-: File pointer is null\n", "writeJsonObject");
         return;
     }
 
@@ -19,7 +14,7 @@ void writeVertices(FILE *fp, Vertices *vertices, int n)
 {
     if (fp == NULL)
     {
-        fprintf(stderr, ")-: File pointer is null\n");
+        fprintf(stderr, "%s )-: File pointer is null\n, writeVertices");
         return;
     }
 
@@ -59,6 +54,11 @@ void writeVertices(FILE *fp, Vertices *vertices, int n)
 
 void writeString(FILE *fp, char* str)
 {
+    if (fp == NULL)
+    {
+        fprintf(stderr, "%s )-: File pointer is null\n", "writeString");
+        return;
+    }
     fprintf(fp, "%s", str);
     return;
 }

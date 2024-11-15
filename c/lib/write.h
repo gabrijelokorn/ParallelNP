@@ -1,11 +1,11 @@
 # ifndef WRITE_H
 # define WRITE_H
 
-# include "types.h"
-
 # include <stdlib.h>
-# include <json-c/json.h>
 # include <stdio.h>
+# include <json-c/json.h>
+
+# include "types.h"
 
 void writeString(FILE *fp, char* str);
 void writeVertices(FILE *fp, Vertices *vertices, int n);

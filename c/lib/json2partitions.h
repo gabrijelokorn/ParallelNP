@@ -1,9 +1,5 @@
 #ifndef JSON2PARTITIONS_H
-
 #define JSON2PARTITIONS_H
-
-#include <stdlib.h>
-#include <json-c/json.h>
 
 #include "./types.h"
 

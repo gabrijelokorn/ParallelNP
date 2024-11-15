@@ -1,10 +1,10 @@
-#include "./json2kamada_kawai.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <json-c/json.h>
 #include <stdint.h>
 #include <limits.h>
+
+#include "./json2kamada_kawai.h"
 
 int **d_ij_fun(int **edges, int n, int m)
 {
