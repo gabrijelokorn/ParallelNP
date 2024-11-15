@@ -1,4 +1,5 @@
-#include "../lib/parallelNP.h"
+#include <stdbool.h>
+
 #include "./big_partition.h"
 
 bool seq(int *arr, int size)

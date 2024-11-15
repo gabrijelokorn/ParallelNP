@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "./kamada-kawai.h"
+#include "./kamada_kawai.h"
 
 double derivaitve_x_m(double **coords, double **l_ij, double **k_ij, int index, int n)
 {
@@ -157,7 +157,7 @@ void copyCoords(double **coords, double **vertices, int n)
     }
 }
 
-Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
+Vertices *seq(KamadaKawai *kk)
 {
     Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
     vertices->coordinates = (double **)malloc(kk->n * sizeof(double *));
@@ -167,18 +167,18 @@ Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
     
     double epsilon = kk->epsilon;
 
-    double *deltas = calculate_delatas(kk->coordinates, l_ij, k_ij, kk->n);
+    double *deltas = calculate_delatas(kk->coordinates, kk->l_ij, kk->k_ij, kk->n);
     int max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
 
     while (max_delta_m_index != -1)
     {
         while (deltas[max_delta_m_index] > epsilon)
         {
-            double d_x_m = derivaitve_x_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
-            double d_y_m = derivaitve_y_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
-            double d_xx_m = derivaitve_xx_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
-            double d_yy_m = derivaitve_yy_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
-            double d_xy_m = derivaitve_xy_m(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
+            double d_x_m = derivaitve_x_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
+            double d_y_m = derivaitve_y_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
+            double d_xx_m = derivaitve_xx_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
+            double d_yy_m = derivaitve_yy_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
+            double d_xy_m = derivaitve_xy_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
 
             double delta_y = calculate_delta_y(
                 d_x_m,
@@ -198,7 +198,7 @@ Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
             kk->coordinates[max_delta_m_index][0] += delta_x;
             kk->coordinates[max_delta_m_index][1] += delta_y;
 
-            deltas[max_delta_m_index] = calculate_delta(kk->coordinates, l_ij, k_ij, max_delta_m_index, kk->n);
+            deltas[max_delta_m_index] = calculate_delta(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
         }
         vertices->next = (Vertices *)malloc(sizeof(Vertices));
         vertices->next->coordinates = (double **)malloc(kk->n * sizeof(double *));
@@ -206,7 +206,7 @@ Vertices *seq(KamadaKawai *kk, int **d_ij, double **l_ij, double **k_ij)
 
         vertices = vertices->next;
 
-        deltas = calculate_delatas(kk->coordinates, l_ij, k_ij, kk->n);
+        deltas = calculate_delatas(kk->coordinates, kk->l_ij, kk->k_ij, kk->n);
         max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
     }
 

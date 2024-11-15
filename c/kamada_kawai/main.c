@@ -5,7 +5,7 @@
 #include <json-c/json.h>
 
 #include "../lib/parallelNP.h"
-#include "./kamada-kawai.h"
+#include "./kamada_kawai.h"
 
 #define NAME "C > Kamada-Kawai"
 
@@ -142,24 +142,8 @@ int main(int argc, char *argv[])
     // 2) Parse the input file into json object
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
 
-    // 3) Calculate the d_ij - distances between the vertices - Floyd Warshall
-    int **d_ij = d_ij_fun(kamadaKawai->edges, kamadaKawai->n, kamadaKawai->m);
-
-    // 4) Calculate the L_0 - length of a side of a display square area
-    double L_0 = kamadaKawai->display;
-
-    // 5) Calculate the L: L = L_0 / max(d_ij)
-    int max_d_ij = max_d_ij_fun(d_ij, kamadaKawai->n);
-    double L = L_0 / max_d_ij;
-
-    // 6) Calculate the l_ij - ideal distances between the vertices
-    double **l_ij = l_ij_fun(d_ij, kamadaKawai->n, L);
-
-    // 7) Calculate the k_ij - spring constants between the vertices
-    double **k_ij = k_ij_fun(d_ij, kamadaKawai->n, kamadaKawai->K);
-
     // A) Sequential
-    Vertices *resultS = seq(kamadaKawai, d_ij, l_ij, k_ij);
+    Vertices *resultS = seq(kamadaKawai);
 
     // B) Parallel
 

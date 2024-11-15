@@ -2,8 +2,7 @@
 all: compile run
 
 TARGET = main.out
-SOURCES = main.c ../lib/json2coords.c ../lib/json2edges.c ../lib/write.c ../lib/writeJson.c ../lib/fileSize.c ../lib/readFile.c \
-../lib/json2KamadaKawai.c ../lib/writeCSV.c ../lib/KK.c ./seq.c
+SOURCES = main.c ../lib/read.c ../lib/write.c ../lib/types.h ./seq.c ../lib/json2kamada_kawai.c ../lib/set.c
 OUTPUTS = *.csv # Later add csvs to clean, when they will be automatic
 
 CC = gcc
