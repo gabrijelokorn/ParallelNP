@@ -14,12 +14,16 @@
 views/checks.js
 
 # node_modules
-node_modules/
+**/node_modules/
 
 # c output files
-c/*.out
-c/*.o
+src/c/*.out
+src/c/*.o
 
 # go output files
-go/*.out
-go/**main
+src/go/*.out
+src/go/**/main
+
+# julia output files
+src/julia/*.out
+src/julia/*.o

@@ -147,9 +147,9 @@ To je primer s tremi točkami, ki se je izvedel v štirih korakih. "Stanja" (v k
 
 - julia
 ### Makefile
-Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v korenskem direktoriju z ukazom `make`.
+Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v `src` direktoriju z ukazom `make`.
 
-Zaganjanje samo `make` je enako kot:
+Zaganjanje samo `make` je ekvivalentno:
 ```make
 make compile run check
 ```
