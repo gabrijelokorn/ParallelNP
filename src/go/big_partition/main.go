@@ -5,6 +5,10 @@ import (
 	"fmt"
 )
 
+var (
+	actorName string = "test"
+)
+
 func main() {
 	// Define flags
 	test := flag.String("t", "test", "Name of the test file")
@@ -17,4 +21,5 @@ func main() {
 	// Parse flags
 	flag.Parse()
 	fmt.Println("params: ", *test, *verbose, *outS, *outP)
+	fmt.Println("actorName: ", actorName)
 }
