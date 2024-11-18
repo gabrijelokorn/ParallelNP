@@ -142,12 +142,12 @@ int main(int argc, char *argv[])
     // 2) Parse the input file into json object
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
 
-    // A) Sequential
+    // Sequential
     Vertices *resultS = seq(kamadaKawai);
 
-    // B) Parallel
+    // Parallel
 
-    // 8) Write the output files
+    // 3) Write the output files
     print(outS, resultS, kamadaKawai->n);
 
     return 0;

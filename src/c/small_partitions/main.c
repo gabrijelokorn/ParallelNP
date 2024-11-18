@@ -102,21 +102,21 @@ int main(int argc, char *argv[])
     dimensions *d = dims(buffer);
     int **arr = json2partitions(buffer, d);
 
-    // 4.a) Sequential
+    // Sequential
     bool *resultS = (bool *)malloc(d->rows * sizeof(bool)); 
     for (int i = 0; i < d->rows; i++)
     {
         resultS[i] = seq(arr[i], d->cols[i]);
     }
 
-    // 4.b) Parallel
+    // Parallel
     bool *resultP = (bool *)malloc(d->rows * sizeof(bool));
     for (int i = 0; i < d->rows; i++)
     {
         // resultP[i] = par(arr[i], d->cols[i]);
     }
 
-    // 5) Print the results
+    // 4) Print the results
     print(outS, resultS, d->rows);
     print(outP, resultP, d->rows);
 

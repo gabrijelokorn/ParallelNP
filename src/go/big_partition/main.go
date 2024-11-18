@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 )
 
 var (
@@ -22,4 +23,13 @@ func main() {
 	flag.Parse()
 	fmt.Println("params: ", *test, *verbose, *outS, *outP)
 	fmt.Println("actorName: ", actorName)
+	
+	data, err := ioutil.ReadFile(*test)
+	if err != nil {
+		fmt.Println("Error reading file: ", *test, err)
+		return
+	}
+	fmt.Println("Data: ", string(data))
+
+
 }

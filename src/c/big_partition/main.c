@@ -99,20 +99,20 @@ int main(int argc, char *argv[])
     dimensions *d = dims(buffer);
     int **arr = json2partitions(buffer, d);
 
-    // 4.a) Sequential
+    // Sequential
     bool resultS = false;
     for (int i = 0; i < d->rows; i++)
     {
         resultS = seq(arr[i], d->cols[i]);
     }
         
-    // 4.b) Parallel
+    // Parallel
     bool resultP = false;
     // for (int i = 0; i < d->rows; i++)
     // {
     // }
 
-    // 5) Write the results to the output
+    // 4) Write the results to the output
     if (verbose)
     {
         print(outS, resultS);
