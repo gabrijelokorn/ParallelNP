@@ -1,14 +1,14 @@
 .PHONY: all clean compile run
 
 TARGET = main
-SOURCES = main.go seq.go
-OUTPUTS = *.json
+SOURCES = main.go seq.go kamada_kawai.go
+OUTPUTS = *.csv
 
 ### --- COMPILE --- ###
 compile: $(TARGET)
 
 $(TARGET): $(SOURCES)
-	@echo "compile: Go > big_partition"
+	@echo "compile: Go > kamada_kawai"
 	@go build -o $(TARGET) $(SOURCES)
 ### --- ------ --- ###
 
@@ -16,11 +16,11 @@ $(TARGET): $(SOURCES)
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@echo "run: Go > big_partition"
+	@echo "run: Go > kamada_kawai"
 	
-	@for case in ../../../tests/big_partition/*.json; do \
-		outs=s$$(basename $$case .json).json; \
-		outp=p$$(basename $$case .json).json; \
+	@for case in ../../../tests/kamada_kawai/*.json; do \
+		outs=s$$(basename $$case .json).csv; \
+		outp=p$$(basename $$case .json).csv; \
 		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v; \
 	done
 

@@ -9,79 +9,6 @@
 
 #define NAME "C > Kamada-Kawai"
 
-void KamadaKawaiToString(KamadaKawai *kk)
-{
-    printf("Kamada-Kawai:\n");
-    printf("n: %d\n", kk->n);
-    printf("m: %d\n", kk->m);
-    printf("k: %f\n", kk->K);
-    printf("epsilon: %f\n", kk->epsilon);
-    printf("display: %f\n", kk->display);
-
-    printf("edges:\n");
-    for (int i = 0; i < kk->m; i++)
-    {
-        printf("%d: [%d,%d]\n", i, kk->edges[i][0], kk->edges[i][1]);
-    }
-
-    printf("coords:\n");
-    for (int i = 0; i < kk->n; i++)
-    {
-        printf("%d: [%f,%f]\n", i, kk->coordinates[i][0], kk->coordinates[i][1]);
-    }
-}
-
-void d_ijToString(int **d_ij, int n)
-{
-    printf("d:\n");
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            printf("%d ", d_ij[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void l_ijToString(double **l_ij, int n)
-{
-    printf("l:\n");
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            printf("%f ", l_ij[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void k_ijToString(double **k_ij, int n)
-{
-    printf("k:\n");
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            printf("%f ", k_ij[i][j]);
-        }
-        printf("\n");
-    }
-}
-
-void print(char *file, Vertices *result, int n)
-{
-    FILE *fp = fopen(file, "w");
-    if (fp == NULL)
-    {
-        fprintf(stderr, "%s )-: Unable to open file %s\n", NAME, file);
-        return;
-    }
-
-    writeVertices(fp, result, n);
-}
-
 int main(int argc, char *argv[])
 {
     bool verbose = false;
@@ -131,24 +58,22 @@ int main(int argc, char *argv[])
     int **edges;
 
     // 1) Read the input file
-    FILE *inputFile = fopen(test, "r");
-    if (inputFile == NULL)
-    {
-        fprintf(stderr, "%s )-: Unable to open file %s\n", NAME, argv[1]);
-        return 1;
-    }
-    char *buffer = readFile(inputFile);
+    char *buffer = readFile(test);
 
-    // 2) Parse the input file into json object
+    // 2) json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
 
+    // 3) Solve
     // Sequential
     Vertices *resultS = seq(kamadaKawai);
 
     // Parallel
 
     // 3) Write the output files
-    print(outS, resultS, kamadaKawai->n);
+    if (verbose)
+    {
+        writeVertices(outS, resultS, kamadaKawai->n);
+    }
 
     return 0;
 }

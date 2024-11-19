@@ -2,7 +2,7 @@
 
 TARGET = main
 SOURCES = main.go seq.go 
-# OUTPUTS = *.json
+OUTPUTS = *.json
 
 ### --- COMPILE --- ###
 compile: $(TARGET)

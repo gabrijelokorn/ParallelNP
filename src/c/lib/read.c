@@ -12,8 +12,10 @@ int getFileSize (FILE *fp)
     return size;
 }
 
-char *readFile(FILE *fp)
+char *readFile(char *filename)
 {
+    FILE *fp = fopen(filename, "r");
+
     if (fp == NULL)
     {
         fprintf(stderr, "%s )-: File pointer is null\n", "readFile");
@@ -38,5 +40,6 @@ char *readFile(FILE *fp)
     // Null terminate the buffer
     buffer[size] = '\0';
 
+    fclose(fp);
     return buffer;
 }

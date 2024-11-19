@@ -3,6 +3,6 @@
 
 #include <stdlib.h>
 
-char *readFile(FILE *fp);
+char *readFile(char *filename);
 
 #endif

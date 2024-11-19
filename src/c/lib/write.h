@@ -4,12 +4,12 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <json-c/json.h>
+# include <stdbool.h>
 
 # include "types.h"
 
-void writeString(FILE *fp, char* str);
-void writeVertices(FILE *fp, Vertices *vertices, int n);
-void writeJsonObject(FILE *fp, json_object *jobj);
-void writeJsonArray(FILE *fp, json_object *jobj);
+void writeString(char *filename, char* str);
+void writeVertices(char *filename, Vertices *vertices, int n);
+void writeJsonArray(char *filename, bool *result, int n);
 
 # endif

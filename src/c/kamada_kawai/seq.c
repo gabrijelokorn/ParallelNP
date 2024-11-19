@@ -168,6 +168,11 @@ Vertices *seq(KamadaKawai *kk)
     double epsilon = kk->epsilon;
 
     double *deltas = calculate_delatas(kk->coordinates, kk->l_ij, kk->k_ij, kk->n);
+    // print deltas here
+    // for (int i = 0; i < kk->n; i++)
+    // {
+    //     printf("delta[%d] = %f\n", i, deltas[i]);
+    // }
     int max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
 
     while (max_delta_m_index != -1)

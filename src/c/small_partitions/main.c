@@ -19,30 +19,6 @@
 
 #define NAME "C > small_partitions"
 
-void print(char *file, bool *result, int size)
-{
-    json_object *jarray = json_object_new_array();
-
-    for (int i = 0; i < size; i++)
-    {
-        json_object *jbool = json_object_new_boolean(result[i]);
-        json_object_array_add(jarray, jbool);
-    }
-
-    FILE *outFile = fopen(file, "w");
-    if (outFile == NULL)
-    {
-        fprintf(stderr, "[%s:] Error opening file %s\n", NAME, file);
-        return;
-    }
-    writeString(outFile, "");
-
-    writeJsonObject(outFile, jarray);
-    json_object_put(jarray);
-
-    fclose(outFile);
-}
-
 int main(int argc, char *argv[])
 {
     bool verbose = false;
@@ -88,22 +64,15 @@ int main(int argc, char *argv[])
     }
 
     // 1) Read the input file
-    FILE *inputFile = fopen(test, "r");
-    if (inputFile == NULL)
-    {
-        fprintf(stderr, "%s )-: Unable to open file %s\n", NAME, argv[1]);
-        return 1;
-    }
+    char *buffer = readFile(test);
 
-    char *buffer = readFile(inputFile);
-
-    // 2) Parse the buffer into json
-    // 3) Convert json into an array (of arrays) of integers
+    // 2) json -> array
     dimensions *d = dims(buffer);
     int **arr = json2partitions(buffer, d);
 
+    // 3) Solve
     // Sequential
-    bool *resultS = (bool *)malloc(d->rows * sizeof(bool)); 
+    bool *resultS = (bool *)malloc(d->rows * sizeof(bool));
     for (int i = 0; i < d->rows; i++)
     {
         resultS[i] = seq(arr[i], d->cols[i]);
@@ -116,11 +85,13 @@ int main(int argc, char *argv[])
         // resultP[i] = par(arr[i], d->cols[i]);
     }
 
-    // 4) Print the results
-    print(outS, resultS, d->rows);
-    print(outP, resultP, d->rows);
+    // 3) Print the results
+    if (verbose)
+    {
+        writeJsonArray(outS, resultS, d->rows);
+        writeJsonArray(outP, resultP, d->rows);
+    }
 
-    fclose(inputFile);
     free(arr);
     free(buffer);
 

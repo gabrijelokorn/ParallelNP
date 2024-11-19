@@ -1,5 +1,20 @@
 # include "./write.h"
 
+#define FREQENCY 3
+
+void writeString(char *filename, char* str)
+{
+    FILE *fp = fopen(filename, "w");
+    if (fp == NULL)
+    {
+        fprintf(stderr, "%s )-: File pointer is null\n", "writeString");
+        return;
+    }
+    
+    fprintf(fp, "%s", str);
+    return;
+}
+
 void writeJsonObject(FILE *fp, json_object* jobj) {
     if (fp == NULL) {
         fprintf(stderr, "%s )-: File pointer is null\n", "writeJsonObject");
@@ -10,8 +25,26 @@ void writeJsonObject(FILE *fp, json_object* jobj) {
     fprintf(fp, "%s", json_string);
 }
 
-void writeVertices(FILE *fp, Vertices *vertices, int n)
+void writeJsonArray(char* filename, bool* result, int n) {
+    FILE *fp = fopen(filename, "w");
+    if (fp == NULL) {
+        fprintf(stderr, "%s )-: File pointer is null\n", "writeJsonArray");
+        return;
+    }
+
+    json_object *jobj = json_object_new_array();
+    for (int i = 0; i < n; i++) {
+        json_object *jbool = json_object_new_boolean(result[i]);
+        json_object_array_add(jobj, jbool);
+    }
+
+    writeJsonObject(fp, jobj);
+    fclose(fp);
+}
+
+void writeVertices(char *filename, Vertices *vertices, int n)
 {
+    FILE *fp = fopen(filename, "w");
     if (fp == NULL)
     {
         fprintf(stderr, "%s )-: File pointer is null\n, writeVertices");
@@ -26,7 +59,7 @@ void writeVertices(FILE *fp, Vertices *vertices, int n)
         temp = temp->next;
     }
 
-    int freq = frames / 3;
+    int freq = frames / FREQENCY;
     if (freq == 0)
         freq = 1;
 
@@ -50,15 +83,4 @@ void writeVertices(FILE *fp, Vertices *vertices, int n)
         vertices = vertices->next;
         fprintf(fp, "\n");
     }
-}
-
-void writeString(FILE *fp, char* str)
-{
-    if (fp == NULL)
-    {
-        fprintf(stderr, "%s )-: File pointer is null\n", "writeString");
-        return;
-    }
-    fprintf(fp, "%s", str);
-    return;
 }

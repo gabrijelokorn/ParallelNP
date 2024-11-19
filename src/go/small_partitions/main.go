@@ -1,68 +1,52 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	parallelNP "golang/lib"
 	"io/ioutil"
-	"os"
-	"encoding/json"
-	"golang/lib"
+	"strconv"
 )
 
-func print(filename string, result []bool) {
-	file, err := os.Create(filename)
-	if err != nil {
-		fmt.Println("Error creating file: ", filename, err)
-		return
-	}
-	defer file.Close()
-
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(result); err != nil {	
-		fmt.Println("Error encoding JSON:", err)
-		return
-	}
-
-	parallelNP.WritePartitionsArray()
-}
+const (
+	NAME = "Go > small_partitions"
+)
 
 func main() {
+
 	// Define flags
-	test := flag.String("t", "test", "Name of the test file")
-
-	verbose := flag.Bool("v", false, "Verbose mode")
-
-	outS := flag.String("x", "unknonw_sequential_file", "Name of the output file for the sequential program")
-	outP := flag.String("y", "unknonw_parallel_file", "Name of the output file for the parallel program")
-
-	// Parse flags
+	t := flag.String("t", "test", "Name of the test file")
+	v := flag.Bool("v", false, "Verbose mode")
+	s := flag.String("x", "unknonw_sequential_file", "Name of the output file for the sequential program")
+	p := flag.String("y", "unknonw_parallel_file", "Name of the output file for the parallel program")
 	flag.Parse()
-	fmt.Println("params: ", *test, *verbose, *outS, *outP)
-	
-	data, err := ioutil.ReadFile(*test)
+	test := *t
+	verbose := *v
+	outS := *s
+	outP := *p
+	fmt.Println("Go > small_partitions", outP)
+
+	// 1) Read the file
+	data, err := ioutil.ReadFile(test)
 	if err != nil {
-		fmt.Println("Error reading file: ", *test, err)
-		return
+		parallelNP.Panic(NAME, "Error reading file: ", err)
 	}
 
-	// Decode into a map for initial parsing
+	// 2) json test -> map -> slice
 	var tempMap map[string][]int
 	if err := json.Unmarshal(data, &tempMap); err != nil {
-		fmt.Println("Error decoding JSON:", err)
-		return
+		parallelNP.Panic(NAME, "Error unmarshalling JSON: ", err)
 	}
 
-	fmt.Println("Data: ", string(data))
-	fmt.Println("Map: ", tempMap)
-
-	//make a 2d slice to store the data
-	var arr [][]int
+	var arr = make([][]int, len(tempMap))
 	for key, value := range tempMap {
-		fmt.Println("Key: ", key, "Value: ", value)
-		arr = append(arr, value)
+		index, err := strconv.Atoi(key)
+		if err != nil {
+			parallelNP.Panic(NAME, "Error converting key to int: ", err)
+		}
+		arr[index-1] = value
 	}
-	fmt.Println("Data Slice: ", arr)
-	fmt.Println("Data Slice 2: ", arr[1])
 
 	var resultS []bool = make([]bool, len(arr))
 
@@ -76,6 +60,8 @@ func main() {
 	// 	resultP[i] = Par(value)
 	// }
 
-	// Write to file
-	print(*outS, resultS)
+	// 3) Print the results
+	if verbose {
+		parallelNP.WritePartitionsArray(outS, resultS)
+	}
 }
