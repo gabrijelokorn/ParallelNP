@@ -99,9 +99,7 @@ func get_delta_y(
 }
 
 func get_delta_x(
-	derivative_x_m float64,
 	derivative_y_m float64,
-	derivative_xx_m float64,
 	derivative_yy_m float64,
 	derivative_xy_m float64,
 	delta_y float64) float64 {
@@ -167,7 +165,7 @@ func (kk *KamadaKawai) Seq() [][]Coord {
 			var d_xy_m = derivative_xy_m(kk, max_delta_m_index)
 
 			var delta_y float64 = get_delta_y(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m)
-			var delta_x float64 = get_delta_x(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m, delta_y)
+			var delta_x float64 = get_delta_x(d_y_m, d_yy_m, d_xy_m, delta_y)
 
 			kk.Coords[max_delta_m_index].X += delta_x
 			kk.Coords[max_delta_m_index].Y += delta_y
