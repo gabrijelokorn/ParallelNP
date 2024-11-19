@@ -12,10 +12,10 @@ all: compile run check
 ### --- COMPILE --- ###
 compile_c:
 	$(MAKE) -C c compile
-compile_julia:
-	$(MAKE) -C julia compile
 compile_go:
 	$(MAKE) -C go compile
+compile_julia:
+	$(MAKE) -C julia compile
 compile: compile_c compile_julia compile_go
 ### --- ### --- ### --- ###
 
@@ -24,10 +24,10 @@ compile: compile_c compile_julia compile_go
 ### --- RUN --- ###
 run_c:
 	$(MAKE) -C c run
-run_julia:
-	$(MAKE) -C julia run
 run_go:
 	$(MAKE) -C go run
+run_julia:
+	$(MAKE) -C julia run
 run: run_c run_julia run_go
 ### --- ### --- ### --- ###
 
@@ -35,8 +35,8 @@ run: run_c run_julia run_go
 
 ### --- ### LANGUAGES ### --- ###
 c: compile_c run_c
-julia: compile_julia run_julia
 go: compile_go run_go
+julia: compile_julia run_julia
 ### --- ### ######### ### --- ###
 
 
@@ -67,5 +67,5 @@ kamada_kawai:
 clean:
 	$(MAKE) -C c clean
 	$(MAKE) -C go clean
-#	$(MAKE) -C julia clean
+	$(MAKE) -C julia clean
 ### --- ### --- ### --- ### --- ### --- ### --- ###

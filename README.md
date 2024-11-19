@@ -131,21 +131,46 @@ To je primer s tremi točkami, ki se je izvedel v štirih korakih. "Stanja" (v k
 
 ## Uporaba
 
-### Zahtevana programska oprema
-- c
+### Zahtevana programska oprema (Prerequisites)
+- **c**
 
-    Programi napisani v `c` uporablja knjižnico `<json-c/json.h>`, ki jo lahko namestimo z ukazom:\
-    Za Debian/Ubuntu in druge sisteme, ki uporabljajo `apt`:
-    ```bash
-    sudo apt install libjson-c-dev
-    ```
-    Za Fedora in druge sisteme, ki uporabljajo `dnf`:
-    ```
-    sudo dnf install json-c-devel
-    ```
-- go
+    Programi napisani v `c` uporablja knjižnico `<json-c/json.h>`, ki jo lahko namestimo z ukazom:
+    - Za Debian/Ubuntu in druge sisteme, ki uporabljajo `apt`:
+        ```bash
+        sudo apt install libjson-c-dev
+        ```
+    - Za Fedora in druge sisteme, ki uporabljajo `dnf`:
+        ```
+        sudo dnf install json-c-devel
+        ```
+- **go**
 
-- julia
+    - Za Fedora in druge sisteme, ki uporabljajo `dnf`:
+        ```bash
+        sudo dnf install golang
+        ```
+    - Za Debian/Ubuntu in druge sisteme, ki uporabljajo `apt`:
+        ```bash
+        sudo apt install golang
+        ```    
+
+- **julia**
+
+    - Linux distribucije z bash ukazom:
+        ```bash
+        curl -fsSL https://install.julialang.org | sh
+        ```
+
+    - ali ročno:
+        - prenos arhiva
+        - razpakiranje
+        - premik v direktorij `/usr/local/julia`
+        - dodajanje poti v `PATH` v `/~.bashrc`
+        ```
+        export PATH="/usr/local/julia/bin:$PATH"
+        ```
+        - bash ukaz `source ~/.bashrc`
+
 ### Makefile
 Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v `src` direktoriju z ukazom `make`.
 

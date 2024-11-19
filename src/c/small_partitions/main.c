@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     if (verbose)
     {
         writeJsonArray(outS, resultS, d->rows);
-        writeJsonArray(outP, resultP, d->rows);
+        // writeJsonArray(outP, resultP, d->rows);
     }
 
     free(arr);

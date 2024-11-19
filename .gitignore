@@ -8,7 +8,7 @@
 **/s*.json
 **/p*.json
 **/s*.csv
-**/s*.csv
+**/p*.csv
 
 # views
 views/checks.js
