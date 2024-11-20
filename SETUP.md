@@ -3,43 +3,71 @@
 ## Avtomatska namestitev
 
 ### Debian, Ubuntu
-```bash
-sudo apt install golang libjson-c-dev
-curl -fsSL https://install.julialang.org | sh
-```
-```bash
-source ~/.bashrc
-```
-```bash
-julia
-```
-```julia
-using Pkg
-Pkg.add("ArgParse")
-```
+- Namestitev programskih jezikov Golang, Julia in knjižnice `libjson-c-dev`:
+    ```bash
+    sudo apt install golang libjson-c-dev
+    curl -fsSL https://install.julialang.org | sh
+    ```
+- Dodajanje poti v PATH v `/~.bashrc`
+    ```bash
+    source ~/.bashrc
+    ```
+- Vstop v interaktivni način julia:
+    ```bash
+    julia
+    ```
+- Namestitev knjižnic za Julia programski jezik:
+    ```julia
+    using Pkg
+    Pkg.add("ArgParse")
+    ```
 
 ### Fedora, RHEL, and CentOS
-```bash
-sudo dnf install golang json-c-devel
-curl -fsSL https://install.julialang.org | sh
-```
-```bash
-source ~/.bashrc
-```
-```bash
-julia
-```
-```julia
-using Pkg
-Pkg.add("ArgParse")
-```
+- Namestitev programskega jezika Golang, Julia in knjižnice `json-c-devel`:
+    ```bash
+    sudo dnf install golang json-c-devel
+    curl -fsSL https://install.julialang.org | sh
+    ```
+- Dodajanje poti v PATH v `/~.bashrc`
+    ```bash
+    source ~/.bashrc
+    ```
+- Vstop v interaktivni način julia:
+    ```bash
+    julia
+    ```
+- Namestitev knjižnic za Julia programski jezik:
+    ```julia
+    using Pkg
+    Pkg.add("ArgParse")
+    ```
+
 
 ## Ročna namestitev
-V primeru, da se julia ne namesti pravilno, lahko sledite navodilom:
+V primeru, da se julia ne namesti uspešno, lahko sledite navodilom:
 
-1)  Prenos arhiva
+1)  Prenos arhiva 
+    ```bash
+    cd $HOME/Downloads
+    wget https://julialang-s3.julialang.org/bin/linux/x64/1.11/julia-1.11.1-linux-x86_64.tar.gz
+    ```
 2)  Razpakiranje
+    ```bash
+    tar -xzf julia-1.11.1-linux-x86_64.tar.gz
+    ```
 3)  Premik razpakirane vsebine v direktorij `/usr/local/julia`
+    ```bash
+    sudo mv julia-1.11.1 /usr/local/julia
+    ```
 4)  Dodajanje poti v PATH v `/~.bashrc`
-5) `source ~/.bashrc`
-6)  Preverjanje namestitve z `julia --version`
+    ```bash
+    echo 'export PATH="/usr/local/julia/bin:$PATH"' >> ~/.bashrc
+    ```
+5) Ponovni zagon terminala ali izvedba
+    ```bash
+    source ~/.bashrc
+    ```
+6)  Preverjanje namestitve z
+    ```bash
+    julia --version
+    ```
