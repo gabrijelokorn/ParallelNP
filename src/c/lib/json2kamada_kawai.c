@@ -45,13 +45,13 @@ int **d_ij_fun(int **edges, int n, int m)
     return d_ij;
 }
 
-double **l_ij_fun(int **d_ij, int n, double L)
+float **l_ij_fun(int **d_ij, int n, float L)
 {
 
-    double **l_ij = (double **)malloc(n * sizeof(double *));
+    float **l_ij = (float **)malloc(n * sizeof(float *));
     for (int i = 0; i < n; i++)
     {
-        l_ij[i] = (double *)malloc(n * sizeof(double));
+        l_ij[i] = (float *)malloc(n * sizeof(float));
         for (int j = 0; j < n; j++)
         {
             if (i != j)
@@ -62,12 +62,12 @@ double **l_ij_fun(int **d_ij, int n, double L)
     return l_ij;
 }
 
-double **k_ij_fun(int **d_ij, int n, double k)
+float **k_ij_fun(int **d_ij, int n, float k)
 {
-    double **k_ij = (double **)malloc(n * sizeof(double *));
+    float **k_ij = (float **)malloc(n * sizeof(float *));
     for (int i = 0; i < n; i++)
     {
-        k_ij[i] = (double *)malloc(n * sizeof(double));
+        k_ij[i] = (float *)malloc(n * sizeof(float));
         for (int j = 0; j < n; j++)
         {
             if (i != j)
@@ -95,16 +95,16 @@ int max_d_ij_fun(int **d_ij, int n)
     return max;
 }
 
-double **getCoordinates(json_object *coords, int n)
+float **getCoordinates(json_object *coords, int n)
 {
     // Allocate memory for the coordinates
-    double **coordinates = malloc(n * sizeof(double *));
+    float **coordinates = malloc(n * sizeof(float *));
 
     // Loop through the coords array
     for (int i = 0; i < n; i++)
     {
         // Allocate memory for the i-th element of the coordinates
-        coordinates[i] = malloc(2 * sizeof(double));
+        coordinates[i] = malloc(2 * sizeof(float));
 
         // Get the i-th element of the coords array
         struct json_object *coord = json_object_array_get_idx(coords, i);
@@ -193,11 +193,11 @@ KamadaKawai *json2KamadaKawai(char *buffer)
     kamadaKawai->d_ij = d_ij_fun(kamadaKawai->edges, kamadaKawai->n, kamadaKawai->m);
 
     // L_0 - length of a side of a display square area
-    double L_0 = kamadaKawai->display;
+    float L_0 = kamadaKawai->display;
 
     // Calculate the L: L = L_0 / max(d_ij)
     int max_d_ij = max_d_ij_fun(kamadaKawai->d_ij, kamadaKawai->n);
-    double L = L_0 / max_d_ij;
+    float L = L_0 / max_d_ij;
 
     // Calculate the l_ij - ideal distances between the vertices
     kamadaKawai->l_ij = l_ij_fun(kamadaKawai->d_ij, kamadaKawai->n, L);

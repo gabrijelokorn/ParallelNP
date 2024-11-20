@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     }
 
     int n;
-    double k;
+    float k;
     int **vertices;
     int **edges;
 
