@@ -26,7 +26,7 @@ mutable struct KamadaKawai
     epsilon::Float64
     display::Float64
 
-    function get_d_ij(n::Int, coords::Vector{Coord}, m::Int, edges::Vector{Edge})
+    function get_d_ij(n::Int, m::Int, edges::Vector{Edge})
         d_ij = fill(n + 1, n, n)
         for i in 1:n
             d_ij[i, i] = 0
@@ -53,6 +53,21 @@ mutable struct KamadaKawai
         return d_ij
     end # get_d_ij
 
+    function get_l_ij(d_ij::Matrix{Int}, L::Float64)
+        return d_ij .* L
+    end # get_l_ij
+
+    function get_k_ij(d_ij::Matrix{Int}, K::Float64)
+        k_ij = K ./ (d_ij .^ 2)
+
+        # Put 0 in the diagonal
+        for i in 1:size(d_ij, 1)
+            k_ij[i, i] = 0
+        end
+
+        return k_ij
+    end # get_k_ij
+
     function KamadaKawai(coords::Vector{Any}, edges::Vector{Any}, K::Float64, epsilon::Float64, display::Float64)
         n = length(coords)
         m = length(edges)
@@ -64,7 +79,7 @@ mutable struct KamadaKawai
         edges = [Edge(edges[i]["source"], edges[i]["target"]) for i in 1:m]
 
         # Compute the d_ij matrix
-        d_ij = get_d_ij(n, coords, m, edges)
+        d_ij = get_d_ij(n, m, edges)
 
         # Get the max from d_ij
         max_d_ij = maximum(d_ij)
@@ -72,12 +87,13 @@ mutable struct KamadaKawai
         # Compute the l_ij matrix
         L_0 = display
         L = L_0 / max_d_ij
-        l_ij = d_ij .* L
+        l_ij = get_l_ij(d_ij, L)
 
         # Compute the k_ij matrix
-        k_ij = K ./ (d_ij .^ 2)
+        k_ij = get_k_ij(d_ij, K)
 
         new(n, coords, m, edges, d_ij, l_ij, k_ij, K, epsilon, display)
+
     end # KamadaKawai
 
 end # Kamada_Kawai
