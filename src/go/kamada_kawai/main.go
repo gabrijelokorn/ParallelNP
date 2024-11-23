@@ -80,9 +80,9 @@ func main() {
 		parallelNP.Panic(NAME, "Error unmarshalling JSON: ", err)
 	}
 	kk.Init()
-	var states [][]Coord = kk.Seq()
 
 	// Sequential
+	var states [][]Coord = kk.Seq()
 
 	// Parallel
 	// for i, value := range arr {

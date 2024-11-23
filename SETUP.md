@@ -20,6 +20,7 @@
     ```julia
     using Pkg
     Pkg.add("ArgParse")
+    Pkg.add("JSON")
     ```
 
 ### Fedora, RHEL, and CentOS

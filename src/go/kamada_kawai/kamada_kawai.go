@@ -15,6 +15,7 @@ type KamadaKawai struct {
 	Coords  []Coord `json:"coords"`
 	M       int
 	Edge    []Edge `json:"edges"`
+	
 	D_ij    [][]int
 	L_ij    [][]float64
 	K_ij    [][]float64
