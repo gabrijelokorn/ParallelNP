@@ -134,7 +134,7 @@ end # get_max_delta_m_index
 function seq(kk::KamadaKawai)
     states = Vector{Vector{Coord}}()
     # copy the coordinates into the first element of states
-    push!(states, copy(kk.coords))
+    push!(states, deepcopy(kk.coords))
 
     deltas = calculate_deltas(kk)
     max_delta_m_index = get_max_delta_m_index(deltas, kk.epsilon)
@@ -155,7 +155,7 @@ function seq(kk::KamadaKawai)
 
             deltas[max_delta_m_index] = calculate_delta(kk, max_delta_m_index)
         end # while
-        push!(states, copy(kk.coords))
+        push!(states, deepcopy(kk.coords))
 
         deltas = calculate_deltas(kk)
         max_delta_m_index = get_max_delta_m_index(deltas, kk.epsilon)
