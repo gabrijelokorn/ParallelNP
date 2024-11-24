@@ -4,11 +4,15 @@ TARGET = main
 SOURCES = main.go seq.go kamada_kawai.go
 OUTPUTS = *.csv
 
+TESTD = ../../../tests
+WD = $(notdir $(CURDIR))
+TESTF = *.json
+
 ### --- COMPILE --- ###
 compile: $(TARGET)
 
 $(TARGET): $(SOURCES)
-	@echo "compile: Go > kamada_kawai"
+	@echo "  |- $(WD)"
 	@go build -o $(TARGET) $(SOURCES)
 ### --- ------ --- ###
 
@@ -16,14 +20,13 @@ $(TARGET): $(SOURCES)
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@echo "run: Go > kamada_kawai"
+	@echo "  |- $(WD)"
 	
-	@for case in ../../../tests/kamada_kawai/*.json; do \
+	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		outs=s$$(basename $$case .json).csv; \
 		outp=p$$(basename $$case .json).csv; \
 		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v; \
 	done
-
 ### --- --- --- ###
 
 

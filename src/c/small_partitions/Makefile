@@ -9,11 +9,15 @@ CC = gcc
 CFLAGS = -ljson-c # -ljson-c is needed for json-c library
 CFLAGS += -lm # -lm is needed for math library
 
+TESTD = ../../../tests
+WD = $(notdir $(CURDIR))
+TESTF = *.json
+
 ### --- COMPILE --- ###
 compile: $(TARGET)
 
 $(TARGET):
-	@echo "compile: C > small_partitions"
+	@echo "  |- $(WD)"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
 ### --- ------ --- ###
 
@@ -21,9 +25,9 @@ $(TARGET):
 
 ### --- RUN --- ###
 run: $(TARGET) compile
-	@echo "run: C > small_partitions"
+	@echo "  |- $(WD)"
 	
-	@for case in ../../../tests/small_partitions/*.json; do \
+	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		outs=s$$(basename $$case .json).json; \
 		outp=p$$(basename $$case .json).json; \
 		./$(TARGET) -v -t $$case -x $$outs -y $$outp; \

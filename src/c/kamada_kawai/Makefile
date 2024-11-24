@@ -9,11 +9,15 @@ CC = gcc
 CFLAGS = -ljson-c # -ljson-c is needed for json-c library
 CFLAGS += -lm # -lm is needed for math library
 
+TESTD = ../../../tests
+WD = $(notdir $(CURDIR))
+TESTF = *.json
+
 ### --- COMPILE --- ###
 compile: $(TARGET)
 
 $(TARGET):
-	@echo "compile: C > Kamada_Kawai"
+	@echo "  |- $(WD)"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
 ### --- ------ --- ###
 
@@ -21,9 +25,9 @@ $(TARGET):
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@echo "run: C > Kamada_Kawai"
+	@echo "  |- $(WD)"
 	
-	@for case in ../../../tests/kamada_kawai/*.json; do \
+	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		sequential=s$$(basename $$case .json).csv; \
 		parallel=p$$(basename $$case .json).csv; \
 		./$(TARGET) -v -t $$case -x $$sequential -y $$parallel; \

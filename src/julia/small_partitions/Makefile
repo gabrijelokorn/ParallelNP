@@ -2,18 +2,19 @@
 
 OUTPUTS = *.json
 
-
+TESTD = ../../../tests
+WD = $(notdir $(CURDIR))
+TESTF = *.json
 
 ### --- RUN --- ###
 run:
-	@echo "run: Julia > small_partitions"
+	@echo "  |- $(WD)"
 	
-	@for case in ../../../tests/small_partitions/*.json; do \
+	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		outs=s$$(basename $$case .json).json; \
 		outp=p$$(basename $$case .json).json; \
 		julia main.jl -t $$case -x $$outs -y $$outp -v true; \
 	done
-
 ### --- --- --- ###
 
 

@@ -2,18 +2,19 @@
 
 OUTPUTS = *.csv
 
-
+TESTD = ../../../tests
+WD = $(notdir $(CURDIR))
+TESTF = *.json
 
 ### --- RUN --- ###
 run:
-	@echo "run: Julia > kamada_kawai"
+	@echo "  |- $(WD)"
 	
-	@for case in ../../../tests/kamada_kawai/*.json; do \
+	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		outs=s$$(basename $$case .json).csv; \
 		outp=p$$(basename $$case .json).csv; \
 		julia main.jl -t $$case -x $$outs -y $$outp -v true; \
 	done
-
 ### --- --- --- ###
 
 

@@ -43,6 +43,8 @@ julia: compile_julia run_julia
 
 ### --- CHECK --- ###
 check:
+	@echo "Check out the results in views/check.html"
+	@echo ""
 	@node check.js
 	@xdg-open ../views/check.html
 ### --- ### --- ### --- ###
