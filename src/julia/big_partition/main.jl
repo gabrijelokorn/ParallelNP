@@ -5,6 +5,8 @@ using JSON
 include("seq.jl")
 using .Seq
 
+include("../lib/kamada_kawai.jl")
+using .Kamada_Kawai
 include("../lib/file.jl")
 using .Out
 include("../lib/print.jl")
@@ -58,7 +60,7 @@ function main()
 
     if verbose
         file = Out.openFile(outS)
-        Print.openFile(file, resultS)
+        fOutJsonArray(file, resultS)
     end
 
 end
