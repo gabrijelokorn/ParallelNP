@@ -2,7 +2,7 @@
 all: compile run
 
 TARGET = main.out
-SOURCES = main.c ../lib/read.c ../lib/write.c ../lib/types.h ./seq.c ../lib/json2partitions.c ../lib/set.c
+SOURCES = main.c ../common/read.c ../common/write.c ../common/types.h ./seq.c ../common/json2partitions.c ../common/set.c ../common/file.c
 OUTPUTS = *.json
 
 CC = gcc

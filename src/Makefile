@@ -1,9 +1,9 @@
-############# ParalelNP Entry Point #############
-# This Makefile is the entry point for the ParalelNP project.
-# It is used to to automate the process of
-# compiling, measuring and resulting the program in all 
-# 3 languages (c, go, julia)
-#################################################
+# #################### ParalelNP Entry Point ################## #
+# This Makefile is an entry point of the ParalelNP project. 	#
+# It is used to to automate the process of					 	#
+# compiling, measuring and resulting the program in all 		#
+# 3 languages (c, go, julia)									#
+# ############################################################# #
 
 .PHONY: all clean compile run c julia go check
 all: compile run check

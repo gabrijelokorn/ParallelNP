@@ -4,8 +4,10 @@
 #include <getopt.h>
 #include <json-c/json.h>
 
-#include "../lib/parallelNP.h"
+#include "../common/parallelNP.h"
 #include "./kamada_kawai.h"
+#include "./json2kamada_kawai.h"
+#include "./kamada_kawai2csv.h"
 
 #define NAME "C > Kamada-Kawai"
 
@@ -13,8 +15,8 @@ int main(int argc, char *argv[])
 {
     bool verbose = false;
     char *test;
-    char *outS;
-    char *outP;
+    FILE *outS;
+    FILE *outP;
     bool help = false;
 
     int opt;
@@ -29,10 +31,10 @@ int main(int argc, char *argv[])
             verbose = true;
             break;
         case 'x':
-            outS = optarg;
+            outS = openFile(optarg, "w");
             break;
         case 'y':
-            outP = optarg;
+            outP = openFile(optarg, "w");
             break;
         case ':':
         case '?':
@@ -58,7 +60,8 @@ int main(int argc, char *argv[])
     int **edges;
 
     // 1) Read the input file
-    char *buffer = readFile(test);
+    FILE *testF = openFile(test, "r");
+    char *buffer = readFile(testF);
 
     // 2) json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
@@ -74,6 +77,11 @@ int main(int argc, char *argv[])
     {
         writeVertices(outS, resultS, kamadaKawai->n);
     }
+
+    free(kamadaKawai);
+    fclose(testF);
+    fclose(outS);
+    fclose(outP);
 
     return 0;
 }

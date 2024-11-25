@@ -12,15 +12,8 @@ int getFileSize (FILE *fp)
     return size;
 }
 
-char *readFile(char *filename)
+char *readFile(FILE* fp)
 {
-    FILE *fp = fopen(filename, "r");
-
-    if (fp == NULL)
-    {
-        fprintf(stderr, "%s )-: File pointer is null\n", "readFile");
-        return NULL;
-    }
     // 1. Determine input file size
     fseek(fp, 0, SEEK_END);     // Move the cursor to the end of the file
     int size = getFileSize(fp); // Get the position of the cursor
@@ -37,9 +30,9 @@ char *readFile(char *filename)
 
     // 3. Read the file into a buffer
     fread(buffer, size, 1, fp);
+    
     // Null terminate the buffer
     buffer[size] = '\0';
 
-    fclose(fp);
     return buffer;
 }

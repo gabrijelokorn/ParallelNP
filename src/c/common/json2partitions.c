@@ -4,7 +4,7 @@
 
 #include "json2partitions.h"
 
-dimensions *dims(char *buffer)
+dimensions *get_dimensions(char *buffer)
 {
     dimensions *d = (dimensions *)malloc(sizeof(dimensions));
 

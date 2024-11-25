@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#include "../lib/parallelNP.h"
+#include "../common/parallelNP.h"
 #include "./small_partitions.h"
 
 bool seq(int *arr, int size)

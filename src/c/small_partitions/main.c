@@ -14,7 +14,7 @@
 #include <getopt.h>
 #include <json-c/json.h>
 
-#include "../lib/parallelNP.h"
+#include "../common/parallelNP.h"
 #include "./small_partitions.h"
 
 #define NAME "C > small_partitions"
@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
 {
     bool verbose = false;
     char *test;
-    char *outS;
-    char *outP;
+    FILE *outS;
+    FILE *outP;
     bool help = false;
 
     int opt;
@@ -39,10 +39,10 @@ int main(int argc, char *argv[])
             verbose = true;
             break;
         case 'x':
-            outS = optarg;
+            outS = openFile(optarg, "w");
             break;
         case 'y':
-            outP = optarg;
+            outP = openFile(optarg, "w");
             break;
         case ':':
             help = true;
@@ -64,10 +64,11 @@ int main(int argc, char *argv[])
     }
 
     // 1) Read the input file
-    char *buffer = readFile(test);
+    FILE *testF = openFile(test, "r");
+    char *buffer = readFile(testF);
 
     // 2) json -> array
-    dimensions *d = dims(buffer);
+    dimensions *d = get_dimensions(buffer);
     int **arr = json2partitions(buffer, d);
 
     // 3) Solve
@@ -94,6 +95,9 @@ int main(int argc, char *argv[])
 
     free(arr);
     free(buffer);
+    fclose(testF);
+    fclose(outS);
+    fclose(outP);
 
     return 0;
 }

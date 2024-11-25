@@ -26,24 +26,7 @@ func WriteStates(filename string, states [][]Coord) {
 	defer file.Close()
 
 	// write to csv file
-	var frames = len(states)
-	var freq int = frames / FREQUNCY
-	if freq == 0 {
-		freq = 1
-	}
-
-	var count int = 0
-
-	for i := 0; i < frames; i++ {
-		if i%freq != 0 &&
-			count != 0 &&
-			count != 1 &&
-			count != 2 &&
-			count != frames-1 {
-			continue
-		}
-		count++
-
+	for i := 0; i < len(states); i++ {
 		for j := 0; j < len(states[i]); j++ {
 			file.WriteString(fmt.Sprintf("%f,%f\n", states[i][j].X, states[i][j].Y))
 		}
