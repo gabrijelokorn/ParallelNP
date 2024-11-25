@@ -56,23 +56,17 @@ int main(int argc, char *argv[])
         help = true;
 
     if (help)
-    {
-        fprintf(stderr, ">->->\n");
-        fprintf(stderr, "[WARNING - Unrecognized Arguments] Try:\n");
-        fprintf(stderr, "%s [-v] -t <test> -x <sequential> -y <parallel>\n", argv[0]);
-        fprintf(stderr, "<-<-<\n");
-        return 1;
-    }
+        error_args(argv[0]);
 
-    // 1) Read the input file
+    // Read the input file
     FILE *testF = openFile(test, "r");
     char *buffer = readFile(testF);
 
-    // 2) json -> array
-    dimensions *d = get_dimensions(buffer);
+    // json -> partitions
+    Partitions *d = get_partitions(buffer);
+    // partitions -> array
     int **arr = json2partitions(buffer, d);
 
-    // 3) Solve
     // Sequential
     bool resultS = false;
     for (int i = 0; i < d->rows; i++)
@@ -86,15 +80,16 @@ int main(int argc, char *argv[])
     // {
     // }
 
-    // 3) Write the results to the output
+    // Write the results to the output
     if (verbose)
     {
-        writeJsonArray(outS, &resultS, 1);
-        // writeJsonArray(outP, &resultP, 1);
+        writePartitions(outS, &resultS, 1);
+        // writePartitions(outP, &resultP, 1);
     }
 
     free(arr);
     free(buffer);
+    fclose(testF);
     fclose(outS);
     fclose(outP);
 

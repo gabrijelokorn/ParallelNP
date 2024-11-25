@@ -2,7 +2,10 @@
 all: compile run
 
 TARGET = main.out
-SOURCES = main.c ../common/read.c ../common/write.c ../common/types.h ./seq.c ../common/json2partitions.c ../common/set.c ../common/file.c
+SOURCES = main.c ./seq.c\
+../common/types.h\
+../common/file.c ../common/read.c ../common/write.c ../common/error.c\
+../common/json2partitions.c 
 OUTPUTS = *.json
 
 CC = gcc
@@ -12,6 +15,8 @@ CFLAGS += -lm # -lm is needed for math library
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
+
+
 
 ### --- COMPILE --- ###
 compile: $(TARGET)

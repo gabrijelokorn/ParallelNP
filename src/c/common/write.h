@@ -5,7 +5,6 @@
 
 # include "types.h"
 
-void writeString(FILE *fp, char* str);
-void writeJsonArray(FILE *fp, bool *result, int n);
+void writePartitions(FILE* fp, bool* result, int n);
 
 # endif

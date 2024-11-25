@@ -8,7 +8,7 @@ import (
 
 func WritePartitionsArray(filename string, result []bool) {
 	file, err := os.Create(filename)
-	if err != nil {
+	if err != nil { 
 		fmt.Println("Error creating file: ", filename, err)
 		return
 	}

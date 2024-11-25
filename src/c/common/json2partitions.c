@@ -4,9 +4,9 @@
 
 #include "json2partitions.h"
 
-dimensions *get_dimensions(char *buffer)
+Partitions *get_partitions(char *buffer)
 {
-    dimensions *d = (dimensions *)malloc(sizeof(dimensions));
+    Partitions *d = (Partitions *)malloc(sizeof(Partitions));
 
     d->rows = 0;
     d->quantity = 0;
@@ -48,23 +48,22 @@ dimensions *get_dimensions(char *buffer)
     return d;
 }
 
-int **json2partitions(char *buffer, dimensions *d)
+int **json2partitions(char *buffer, Partitions *d)
 {
     struct json_object *parsed_json, *array, *item;
-    struct json_object_iterator it;
-    struct json_object_iterator itEnd;
+    struct json_object_iterator itBeg, itEnd;
 
     parsed_json = json_tokener_parse(buffer);
-    it = json_object_iter_begin(parsed_json);
+    itBeg = json_object_iter_begin(parsed_json);
     itEnd = json_object_iter_end(parsed_json);
 
     int **arr = (int **)malloc(d->quantity * sizeof(int *));
     uint8_t index = 0;
 
-    while (!json_object_iter_equal(&it, &itEnd))
+    while (!json_object_iter_equal(&itBeg, &itEnd))
     {
-        const char *key = json_object_iter_peek_name(&it);
-        array = json_object_iter_peek_value(&it);
+        const char *key = json_object_iter_peek_name(&itBeg);
+        array = json_object_iter_peek_value(&itBeg);
 
         // Allocate memory for the array
         arr[index] = (int *)malloc(json_object_array_length(array) * sizeof(int));
@@ -75,7 +74,7 @@ int **json2partitions(char *buffer, dimensions *d)
             arr[index][i] = json_object_get_int(item);
         }
 
-        json_object_iter_next(&it);
+        json_object_iter_next(&itBeg);
         index++;
     }
 

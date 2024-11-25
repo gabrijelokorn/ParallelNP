@@ -3,7 +3,7 @@
 
 #include "./types.h"
 
-dimensions *get_dimensions(char *buffer);
-int **json2partitions(char *buffer, dimensions *d);
+Partitions *get_partitions(char *buffer);
+int **json2partitions(char *buffer, Partitions *d);
 
 #endif

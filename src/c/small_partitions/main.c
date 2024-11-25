@@ -55,20 +55,14 @@ int main(int argc, char *argv[])
         help = true;
 
     if (help)
-    {
-        fprintf(stderr, ">->->\n");
-        fprintf(stderr, "[WARNING - Unrecognized Arguments] Try:\n");
-        fprintf(stderr, "%s [-v] -t <test> -x <sequential> -y <parallel>\n", argv[0]);
-        fprintf(stderr, "<-<-<\n");
-        return 1;
-    }
+        error_args(argv[0]);
 
     // 1) Read the input file
     FILE *testF = openFile(test, "r");
     char *buffer = readFile(testF);
 
     // 2) json -> array
-    dimensions *d = get_dimensions(buffer);
+    Partitions *d = get_partitions(buffer);
     int **arr = json2partitions(buffer, d);
 
     // 3) Solve
@@ -89,8 +83,8 @@ int main(int argc, char *argv[])
     // 3) Print the results
     if (verbose)
     {
-        writeJsonArray(outS, resultS, d->rows);
-        // writeJsonArray(outP, resultP, d->rows);
+        writePartitions(outS, resultS, d->rows);
+        // writePartitions(outP, resultP, d->rows);
     }
 
     free(arr);

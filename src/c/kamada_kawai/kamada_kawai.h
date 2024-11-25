@@ -1,13 +1,25 @@
 #ifndef KAMADA_KAWAI_H
 #define KAMADA_KAWAI_H
 
+typedef struct Coord
+{
+    float x;
+    float y;
+} Coord;
+
+typedef struct Edge
+{
+    int source;
+    int target;
+} Edge;
+
 typedef struct KamadaKawai
 {
-    int n;                // number of vertices
-    float **coordinates; // coordinates of the vertices
+    int n;               // number of vertices
+    Coord *coords; // coordinates of the vertices
 
     int m;       // number of edges
-    int **edges; // edges between the vertices
+    Edge *edges; // edges between the vertices
 
     int **d_ij;
     float **l_ij;
@@ -21,9 +33,8 @@ typedef struct KamadaKawai
 typedef struct Vertices
 {
     struct Vertices *next;
-    float **coordinates;
+    Coord *coords;
 } Vertices;
-
 
 Vertices *seq(KamadaKawai *kk);
 

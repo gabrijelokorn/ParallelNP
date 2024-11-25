@@ -4,107 +4,107 @@
 
 #include "./kamada_kawai.h"
 
-float derivaitve_x_m(float **coords, float **l_ij, float **k_ij, int index, int n)
+float derivaitve_x_m(KamadaKawai *kk, int index)
 {
     float sum = 0;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
             continue;
 
-        float dist_x = coords[index][0] - coords[i][0];
-        float dist_y = coords[index][1] - coords[i][1];
+        float dist_x = kk->coords[index].x - kk->coords[i].x;
+        float dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        sum += k_ij[index][i] * (dist_x - ((l_ij[index][i] * dist_x) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
+        sum += kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
     }
 
     return sum;
 }
 
-float derivaitve_y_m(float **coords, float **l_ij, float **k_ij, int index, int n)
+float derivaitve_y_m(KamadaKawai *kk, int index)
 {
     float sum = 0;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
             continue;
 
-        float dist_x = coords[index][0] - coords[i][0];
-        float dist_y = coords[index][1] - coords[i][1];
+        float dist_x = kk->coords[index].x - kk->coords[i].x;
+        float dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        sum += k_ij[index][i] * (dist_y - ((l_ij[index][i] * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
+        sum += kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
     }
 
     return sum;
 }
 
-float derivaitve_xx_m(float **coords, float **l_ij, float **k_ij, int index, int n)
+float derivaitve_xx_m(KamadaKawai *kk, int index)
 {
     float sum = 0;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
             continue;
 
-        float dist_x = coords[index][0] - coords[i][0];
-        float dist_y = coords[index][1] - coords[i][1];
+        float dist_x = kk->coords[index].x - kk->coords[i].x;
+        float dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        sum += k_ij[index][i] * (1 - ((l_ij[index][i] * (float)pow(dist_y, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
+        sum += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (float)pow(dist_y, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
     }
 
     return sum;
 }
 
-float derivaitve_yy_m(float **coords, float **l_ij, float **k_ij, int index, int n)
+float derivaitve_yy_m(KamadaKawai *kk, int index)
 {
     float sum = 0;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
             continue;
 
-        float dist_x = coords[index][0] - coords[i][0];
-        float dist_y = coords[index][1] - coords[i][1];
+        float dist_x = kk->coords[index].x - kk->coords[i].x;
+        float dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        sum += k_ij[index][i] * (1 - ((l_ij[index][i] * (float)pow(dist_x, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
+        sum += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (float)pow(dist_x, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
     }
 
     return sum;
 }
 
-float derivaitve_xy_m(float **coords, float **l_ij, float **k_ij, int index, int n)
+float derivaitve_xy_m(KamadaKawai *kk, int index)
 {
     float sum = 0;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
             continue;
 
-        float dist_x = coords[index][0] - coords[i][0];
-        float dist_y = coords[index][1] - coords[i][1];
+        float dist_x = kk->coords[index].x - kk->coords[i].x;
+        float dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        sum += k_ij[index][i] * ((l_ij[index][i] * dist_x * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2)));
+        sum += kk->k_ij[index][i] * ((kk->l_ij[index][i] * dist_x * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2)));
     }
 
     return sum;
 }
 
-int get_max_delta_m_index(float *deltas, int n, float epsilon)
+int get_max_delta_m_index(KamadaKawai *kk, float *deltas)
 {
     int max_index = -1;
     float max = -1;
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < kk->n; i++)
     {
         if (deltas[i] > max)
         {
             max = deltas[i];
-            if (max > epsilon)
+            if (max > kk->epsilon)
                 max_index = i;
         }
     }
@@ -117,21 +117,21 @@ float delta_m(float derivaitve_x, float derivaitve_y)
     return sqrt((float)pow(derivaitve_x, 2) + (float)pow(derivaitve_y, 2));
 }
 
-float calculate_delta(float **coords, float **l_ij, float **k_ij, int index, int n)
+float calculate_delta(KamadaKawai *kk, int index)
 {
-    float derivaitve_x = derivaitve_x_m(coords, l_ij, k_ij, index, n);
-    float derivaitve_y = derivaitve_y_m(coords, l_ij, k_ij, index, n);
+    float derivaitve_x = derivaitve_x_m(kk, index);
+    float derivaitve_y = derivaitve_y_m(kk, index);
 
     return delta_m(derivaitve_x, derivaitve_y);
 }
 
-float *calculate_delatas(float **coords, float **l_ij, float **k_ij, int n)
+float *calculate_delatas(KamadaKawai *kk)
 {
-    float *deltas = (float *)malloc(n * sizeof(float));
+    float *deltas = (float *)malloc(kk->n * sizeof(float));
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < kk->n; i++)
     {
-        deltas[i] = calculate_delta(coords, l_ij, k_ij, i, n);
+        deltas[i] = calculate_delta(kk, i);
     }
 
     return deltas;
@@ -147,43 +147,35 @@ float calculate_delta_x(float derivaitve_x_m, float derivaitve_y_m, float deriva
     return (-(derivaitve_y_m) - (derivaitve_yy_m * delta_y)) / derivaitve_xy_m;
 }
 
-void copyCoords(float **coords, float **vertices, int n)
+void copyCoords(Coord *kk_coords, Coord *v_coords, int n)
 {
     for (int i = 0; i < n; i++)
     {
-        vertices[i] = (float *)malloc(2 * sizeof(float));
-        vertices[i][0] = coords[i][0];
-        vertices[i][1] = coords[i][1];
+        v_coords[i].x = kk_coords[i].x;
+        v_coords[i].y = kk_coords[i].y;
     }
 }
 
 Vertices *seq(KamadaKawai *kk)
 {
     Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
-    vertices->coordinates = (float **)malloc(kk->n * sizeof(float *));
-    copyCoords(kk->coordinates, vertices->coordinates, kk->n);
+    vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
+    copyCoords(kk->coords, vertices->coords, kk->n);
 
     Vertices *vertices_head = vertices;
-    
-    float epsilon = kk->epsilon;
 
-    float *deltas = calculate_delatas(kk->coordinates, kk->l_ij, kk->k_ij, kk->n);
-    // print deltas here
-    // for (int i = 0; i < kk->n; i++)
-    // {
-    //     printf("delta[%d] = %f\n", i, deltas[i]);
-    // }
-    int max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
+    float *deltas = calculate_delatas(kk);
+    int max_delta_m_index = get_max_delta_m_index(kk, deltas);
 
     while (max_delta_m_index != -1)
     {
-        while (deltas[max_delta_m_index] > epsilon)
+        while (deltas[max_delta_m_index] > kk->epsilon)
         {
-            float d_x_m = derivaitve_x_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
-            float d_y_m = derivaitve_y_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
-            float d_xx_m = derivaitve_xx_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
-            float d_yy_m = derivaitve_yy_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
-            float d_xy_m = derivaitve_xy_m(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
+            float d_x_m = derivaitve_x_m(kk, max_delta_m_index);
+            float d_y_m = derivaitve_y_m(kk, max_delta_m_index);
+            float d_xx_m = derivaitve_xx_m(kk, max_delta_m_index);
+            float d_yy_m = derivaitve_yy_m(kk, max_delta_m_index);
+            float d_xy_m = derivaitve_xy_m(kk, max_delta_m_index);
 
             float delta_y = calculate_delta_y(
                 d_x_m,
@@ -200,19 +192,18 @@ Vertices *seq(KamadaKawai *kk)
                 d_xy_m,
                 delta_y);
 
-            kk->coordinates[max_delta_m_index][0] += delta_x;
-            kk->coordinates[max_delta_m_index][1] += delta_y;
+            kk->coords[max_delta_m_index].x += delta_x;
+            kk->coords[max_delta_m_index].y += delta_y;
 
-            deltas[max_delta_m_index] = calculate_delta(kk->coordinates, kk->l_ij, kk->k_ij, max_delta_m_index, kk->n);
+            deltas[max_delta_m_index] = calculate_delta(kk, max_delta_m_index);
         }
         vertices->next = (Vertices *)malloc(sizeof(Vertices));
-        vertices->next->coordinates = (float **)malloc(kk->n * sizeof(float *));
-        copyCoords(kk->coordinates, vertices->next->coordinates, kk->n);
-
+        vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
+        copyCoords(kk->coords, vertices->next->coords, kk->n);
         vertices = vertices->next;
 
-        deltas = calculate_delatas(kk->coordinates, kk->l_ij, kk->k_ij, kk->n);
-        max_delta_m_index = get_max_delta_m_index(deltas, kk->n, epsilon);
+        deltas = calculate_delatas(kk);
+        max_delta_m_index = get_max_delta_m_index(kk, deltas);
     }
 
 

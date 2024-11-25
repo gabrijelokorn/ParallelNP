@@ -46,13 +46,7 @@ int main(int argc, char *argv[])
         help = true;
 
     if (help)
-    {
-        fprintf(stderr, ">->->\n");
-        fprintf(stderr, "[WARNING - Unrecognized Arguments] Try:\n");
-        fprintf(stderr, "%s [-v] -t <test> -x <sequential> -y <parallel>\n", argv[0]);
-        fprintf(stderr, "<-<-<\n");
-        return 1;
-    }
+        error_args(argv[0]);
 
     int n;
     float k;
@@ -79,6 +73,11 @@ int main(int argc, char *argv[])
     }
 
     free(kamadaKawai);
+    free(vertices);
+    free(edges);
+    free(resultS);
+    free(buffer);
+    
     fclose(testF);
     fclose(outS);
     fclose(outP);

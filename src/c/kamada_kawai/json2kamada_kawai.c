@@ -6,7 +6,7 @@
 
 #include "./json2kamada_kawai.h"
 
-int **d_ij_fun(int **edges, int n, int m)
+int **d_ij_fun(Edge *edges, int n, int m)
 {
     int **d_ij = (int **)malloc(n * sizeof(int *));
     for (int i = 0; i < n; i++)
@@ -23,8 +23,8 @@ int **d_ij_fun(int **edges, int n, int m)
 
     for (int i = 0; i < m; i++)
     {
-        d_ij[edges[i][0] - 1][edges[i][1] - 1] = 1;
-        d_ij[edges[i][1] - 1][edges[i][0] - 1] = 1;
+        d_ij[edges[i].source - 1][edges[i].target - 1] = 1;
+        d_ij[edges[i].target - 1][edges[i].source - 1] = 1;
     }
 
     // Do the floyd warshall algorithm
@@ -95,16 +95,16 @@ int max_d_ij_fun(int **d_ij, int n)
     return max;
 }
 
-float **getCoordinates(json_object *coords, int n)
+Coord *getCoordinates(json_object *coords, int n)
 {
     // Allocate memory for the coordinates
-    float **coordinates = malloc(n * sizeof(float *));
+    Coord *coordinates = malloc(n * sizeof(Coord *));
 
     // Loop through the coords array
     for (int i = 0; i < n; i++)
     {
         // Allocate memory for the i-th element of the coordinates
-        coordinates[i] = malloc(2 * sizeof(float));
+        // coordinates[i] = malloc(sizeof(Coord));
 
         // Get the i-th element of the coords array
         struct json_object *coord = json_object_array_get_idx(coords, i);
@@ -114,23 +114,23 @@ float **getCoordinates(json_object *coords, int n)
         json_object_object_get_ex(coord, "y", &y);
 
         // Get the x and y values of the i-th element of the coords array
-        coordinates[i][0] = json_object_get_double(x);
-        coordinates[i][1] = json_object_get_double(y);
+        coordinates[i].x = json_object_get_double(x);
+        coordinates[i].y = json_object_get_double(y);
     }
 
     return coordinates;
 }
 
-int **getEdges(json_object *edges, int m)
+Edge *getEdges(json_object *edges, int m)
 {
     // Allocate memory for the edges
-    int **edgesArray = malloc(m * sizeof(int *));
+    Edge *edgesArray = malloc(m * sizeof(int *));
 
     // Loop through the edges array
     for (int i = 0; i < m; i++)
     {
         // Allocate memory for the i-th element of the edges
-        edgesArray[i] = malloc(2 * sizeof(int));
+        // edgesArray[i] = malloc(2 * sizeof(int));
 
         // Get the i-th element of the edges array
         struct json_object *edge = json_object_array_get_idx(edges, i);
@@ -140,8 +140,8 @@ int **getEdges(json_object *edges, int m)
         json_object_object_get_ex(edge, "target", &target);
 
         // Get the source and target values of the i-th element of the edges array
-        edgesArray[i][0] = json_object_get_int(source);
-        edgesArray[i][1] = json_object_get_int(target);
+        edgesArray[i].source = json_object_get_int(source);
+        edgesArray[i].target = json_object_get_int(target);
     }
 
     return edgesArray;
@@ -159,7 +159,7 @@ KamadaKawai *json2KamadaKawai(char *buffer)
     // Get the length of the coords array
     kamadaKawai->n = json_object_array_length(coords);
     // Get ocordinates of the vertices
-    kamadaKawai->coordinates = getCoordinates(coords, kamadaKawai->n);
+    kamadaKawai->coords = getCoordinates(coords, kamadaKawai->n);
 
     // Get the edges array from the json object
     json_object *edges = json_object_object_get(parsed_json, "edges");

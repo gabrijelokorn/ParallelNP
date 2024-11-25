@@ -4,14 +4,6 @@
 
 #include "./write.h"
 
-#define FREQENCY 3
-
-void writeString(FILE *fp, char *str)
-{
-    fprintf(fp, "%s", str);
-    return;
-}
-
 void writeJsonObject(FILE *fp, json_object *jobj)
 {
     if (fp == NULL)
@@ -34,4 +26,8 @@ void writeJsonArray(FILE *fp, bool *result, int n)
     }
 
     writeJsonObject(fp, jobj);
+}
+
+void writePartitions(FILE* fp, bool* result, int n) {
+    writeJsonArray(fp, result, n);    
 }

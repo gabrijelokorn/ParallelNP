@@ -10,7 +10,7 @@ void writeVertices(FILE *fp, Vertices *vertices, int n)
     {
         for (int i = 0; i < n; i++)
         {
-            fprintf(fp, "%f,%f\n", vertices->coordinates[i][0], vertices->coordinates[i][1]);
+            fprintf(fp, "%f,%f\n", vertices->coords[i].x, vertices->coords[i].y);
         }
         vertices = vertices->next;
         fprintf(fp, "\n");
