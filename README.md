@@ -22,14 +22,14 @@ V vseh prihodnjih podanih primerih bo `<xy>` predstavljal zaporedno identifikaci
 Partition problem spada v teorijo števil in računalniških znanosti, kjer je cilj ugotoviti, če za dano množico pozitivnih števil S, obstajata taki podmnožici _S1_ in _S2_, da so seštevki števil množice _S1_ in množice _S2_ enaki.
 Uporabili bomo eno samo množico, na kateri bomo izvedli ta algoritem.
 
-Primer testne datoteke `/tests/big_partition/<xy>.json`:
+Primer testne datoteke `/tests/partition/l/<xy>.json`:
 ```json
 {
     "1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1]
 }
 ```
 
-Primer rešitve `/tests/big_partition/solutions/<xy>.json`:
+Primer rešitve `/tests/partition/l/solutions/<xy>.json`:
 ```json
 [ true ]
 ```
@@ -39,7 +39,7 @@ Primer rešitve `/tests/big_partition/solutions/<xy>.json`:
 Partition problem spada v teorijo števil in računalniških znanosti, kjer je cilj ugotoviti, če za dano množico pozitivnih števil S, obstajata taki podmnožici _S1_ in _S2_, da so seštevki števil množice _S1_ in množice _S2_ enaki.
 Uporabili bomo hkrati več majhnih množic, na katerih bomo izvedli ta algoritem.
 
-Primer testne datoteke `/tests/small_partitions/<xy>.json`:
+Primer testne datoteke `/tests/partition/s/<xy>.json`:
 ```json
 {
     "1": [1, 2, 3, 4, 5],
@@ -48,7 +48,7 @@ Primer testne datoteke `/tests/small_partitions/<xy>.json`:
     "4": [6, 7, 8, 9, 10]
 }
 ```
-Primer rešitve `/tests/small_partitions/solutions/<xy>.json`:
+Primer rešitve `/tests/partition/s/solutions/<xy>.json`:
 ```json
 [ false, false, true, false ]
 ```
@@ -147,8 +147,8 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 
 ## Delovanje programja
 - Programi v vseh jezikih in obeh pristopih (zaporedno in vzporedno) berejo iste testne datoteke.
-- Testne datoteke so shranjene v direktorijih `tests/big_partition`, `tests/small_partitions` in `tests/kamada_kawai`.
-- Vsak program v svoj direktorij zapisuje rezultate v datoteko `s<xy>.csv` / `s<xy>.json` za zaporedne program in `p<xy>.csv` / `p<xy>.json` za vzporedne programe.
+- Testne datoteke so shranjene v direktorijih `tests/partition`, in `tests/kamada_kawai`.
+- Vsak program v svoj direktorij zapisuje rezultate v datoteko `s<xy>.csv` / `s<xy>.json` za zaporedne programe in `p<xy>.csv` / `p<xy>.json` za vzporedne programe.
 - Z izbiro `make check` se rezultati izvajanja preverijo na podlagi rešitev v `tests/<algoritem>/solutions`.
 - Po izvedbi `make check` lahko rezultate vidimo v datoteki `views/check.html`.
 - V `views` najdemo tudi ostale izide izvajanja - videe, ki prikazujejo izvajanje Kamada-Kawai algoritma.

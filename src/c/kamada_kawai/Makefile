@@ -3,8 +3,7 @@ all: compile run
 
 TARGET = main.out
 SOURCES = main.c ./seq.c\
-../common/types.h\
-../common/file.c ../common/read.c ../common/write.c ../common/error.c\
+../common/file.c ../common/read.c ../common/error.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c
 OUTPUTS = *.csv # Later add csvs to clean, when they will be automatic
 
@@ -33,7 +32,7 @@ run: $(TARGET)
 	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		sequential=s$$(basename $$case .json).csv; \
 		parallel=p$$(basename $$case .json).csv; \
-		./$(TARGET) -v -t $$case -x $$sequential -y $$parallel; \
+		./$(TARGET) -t $$case -x $$sequential -y $$parallel -v; \
 	done
 ### --- --- --- ###
 

@@ -1,7 +1,6 @@
 #include <stdbool.h>
 
-#include "../common/parallelNP.h"
-#include "./small_partitions.h"
+#include "./large.h"
 
 int set_sum (int *arr, int size)
 {

@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#include "./big_partition.h"
+#include "./small.h"
 
 int set_sum (int *arr, int size)
 {

@@ -44,7 +44,7 @@
     ```
 
 
-## Ročna namestitev
+## ? Neuspešna namestitev programskega jezika Julia ?
 V primeru, da se julia ne namesti uspešno, lahko sledite navodilom:
 
 1)  Prenos arhiva 

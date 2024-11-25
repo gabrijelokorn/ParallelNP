@@ -8,20 +8,17 @@ TESTF = *.json
 
 compile:
 	@echo "### ### ### >>> Compiling $(WD) <<< ### ### ###"
-	$(MAKE) -C big_partition compile
-	$(MAKE) -C small_partitions compile
+	$(MAKE) -C partition compile
 	$(MAKE) -C kamada_kawai compile
 	@echo ""
 
 run:
 	@echo "### ### ### >>> Running $(WD) <<< ### ### ###"
-	$(MAKE) -C big_partition run
-	$(MAKE) -C small_partitions run
+	$(MAKE) -C partition run
 	$(MAKE) -C kamada_kawai run
 	@echo ""
 
 clean:
 	rm -rf lib/*.o
-	$(MAKE) -C big_partition clean
-	$(MAKE) -C small_partitions clean
+	$(MAKE) -C partition clean
 	$(MAKE) -C kamada_kawai clean

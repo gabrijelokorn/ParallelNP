@@ -8,39 +8,62 @@ const programTypes = ["s", "p"];
 const result = {
     c: {
         s: {
-
-            big_partition: {},
-            small_partitions: {},
-            kamada_kawai: {}
+            partition: {
+                l: {},
+                s: {}
+            },
+            kamada_kawai: {
+                n: {}
+            }
         },
         p: {
-            big_partition: {},
-            small_partitions: {},
-            kamada_kawai: {}
+            partition: {
+                l: {},
+                s: {}
+            },
+            kamada_kawai: {
+                n: {}
+            }
         }
     },
     julia: {
         s: {
-            big_partition: {},
-            small_partitions: {},
-            kamada_kawai: {}
+            partition: {
+                l: {},
+                s: {}
+            },
+            kamada_kawai: {
+                n: {}
+            }
         },
         p: {
-            big_partition: {},
-            small_partitions: {},
-            kamada_kawai: {}
+            partition: {
+                l: {},
+                s: {}
+            },
+            kamada_kawai: {
+                n: {}
+            }
         }
     },
     go: {
         s: {
-            big_partition: {},
-            small_partitions: {},
-            kamada_kawai: {}
+            partition: {
+                l: {},
+                s: {}
+            },
+            kamada_kawai: {
+                n: {}
+            }
         },
         p: {
-            big_partition: {},
-            small_partitions: {},
-            kamada_kawai: {}
+            partition: {
+                l: {},
+                s: {}
+            },
+            kamada_kawai: {
+                n: {}
+            }
         }
     }
 };
@@ -102,48 +125,54 @@ function readTests(algorithm) {
         });
 }
 
-async function compare(l, t, a, n, filename, solutionFilename) {
+async function compare(l, t, a, sa, n, filename, solutionFilename) {
     if (! await fileExists(filename) || ! await fileExists(solutionFilename)) return;
 
-    if (await compareFiles(filename, solutionFilename)) result[l][t][a][n] = true;
-    else result[l][t][a][n] = false;
+    if (await compareFiles(filename, solutionFilename)) result[l][t][a][sa][n] = true;
+    else result[l][t][a][sa][n] = false;
 }
 
-async function iterate(big_partitionTests, small_partitionsTests, kamada_kawaiTests) {
+async function iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests) {
     // Iterate over all languages
     for (let l of languages) {
         // For both program types
         for (let t of programTypes) {
             // Iterate over all algorithms
 
-            // big_partition
-            for (let test of big_partitionTests) {
-                const a = "big_partition";
-
-                const solutionFilename = `../tests/${a}/solutions/${test}.json`;
-                const filename = `${l}/${a}/${t}${test}.json`;
-
-                await compare(l, t, a, test, filename, solutionFilename);
+            // l_partition
+            for (let test of l_partitionTests) {
+                const algoDir = "partition/l";
+                const algoName = "partition";
+                const subAlgo = "l"
+                
+                const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
+                const filename = `${l}/${algoDir}/${t}${test}.json`;
+                
+                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename);
             }
-
-            // small_partitions
-            for (let test of small_partitionsTests) {
-                const a = "small_partitions";
-
-                const solutionFilename = `../tests/${a}/solutions/${test}.json`;
-                const filename = `${l}/${a}/${t}${test}.json`;
-
-                await compare(l, t, a, test, filename, solutionFilename);
+            
+            // s_partition
+            for (let test of s_partitionTests) {
+                const algoDir = "partition/s";
+                const algoName = "partition";
+                const subAlgo = "s";
+                
+                const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
+                const filename = `${l}/${algoDir}/${t}${test}.json`;
+                
+                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename);
             }
-
+            
             // kamada_kawai
             for (let test of kamada_kawaiTests) {
-                const a = "kamada_kawai";
+                const algoDir = "kamada_kawai";
+                const algoName = "kamada_kawai";
+                const subAlgo = "n";
 
-                const solutionFilename = `../tests/${a}/solutions/coords${test}.csv`;
-                const filename = `${l}/${a}/${t}${test}.csv`;
+                const solutionFilename = `../tests/${algoDir}/solutions/coords${test}.csv`;
+                const filename = `${l}/${algoDir}/${t}${test}.csv`;
 
-                await compare(l, t, a, test, filename, solutionFilename);
+                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename);
             }
         }
     }
@@ -151,11 +180,11 @@ async function iterate(big_partitionTests, small_partitionsTests, kamada_kawaiTe
 
 
 async function test() {
-    const big_partitionTests = await readTests("big_partition");
-    const small_partitionsTests = await readTests("small_partitions");
+    const l_partitionTests = await readTests("partition/l");
+    const s_partitionTests = await readTests("partition/s");
     const kamada_kawaiTests = await readTests("kamada_kawai");
 
-    await iterate(big_partitionTests, small_partitionsTests, kamada_kawaiTests);
+    await iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests);
 
     const output = `const results = ${JSON.stringify(result)};`;
     fs.writeFile('../views/assets/checks.js', output);

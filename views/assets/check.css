@@ -3,11 +3,11 @@
 }
 
 body {
-    background-color: #2a2a31;
+    background-color: #1f2226;
 }
 
 i, i b {
-    color: #f97777
+    color: #908d8d
 }
 
 table {
@@ -16,12 +16,12 @@ table {
     padding: 1rem;
 }
 
-hr {
-    border: 1px solid rgb(0, 0, 0);
-}
-
-h2 {
-    color: rgb(255, 127, 127)
+.container {
+    width: 50%;
+    background-color: #20222a;
+    border: 0.1rem solid rgb(86, 88, 92);
+    margin: 1rem 0;
+    padding: 0.5rem;
 }
 
 .lang {
@@ -35,6 +35,15 @@ h2 {
     width: 100%;
 }
 
+.s {
+    padding-right: 1rem;
+    border-right: 0.1rem solid rgb(115, 107, 118);
+}
+
+.p {
+    padding-left: 1rem;
+}
+
 .algos {
     width: 100%;
     display: flex;
@@ -43,13 +52,42 @@ h2 {
 }
 
 .algo {
+    background-color:#2d2f39;
     width: 100%;
+    border: dotted rgb(115, 107, 118);
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    margin: 0.5rem;
+}
+
+.lang-title, .type-title, .algo-title {
+    display: flex;
+    justify-content: center;
+}
+
+.lang-title, .type-title {
+    margin: 0 0 0.5rem 0;
+}
+
+.type-title, .algo-title {
+    color: rgb(184, 184, 184);
+}
+
+.tableDiv {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.correct, .incorrect {
+    display: flex;
+    justify-content: space-evenly;
 }
 
 .correct {
-    background-color: green;
+    justify-content: center;
+    background-color: rgb(87, 97, 87);
 }
 
 .incorrect {
-    background-color: red;
+    background-color: rgb(113, 85, 85);
 }
+

@@ -53,20 +53,19 @@ int main(int argc, char *argv[])
     int **vertices;
     int **edges;
 
-    // 1) Read the input file
+    // Read the input file
     FILE *testF = openFile(test, "r");
     char *buffer = readFile(testF);
 
-    // 2) json -> KamadaKawai struct
+    // json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
 
-    // 3) Solve
     // Sequential
     Vertices *resultS = seq(kamadaKawai);
 
     // Parallel
 
-    // 3) Write the output files
+    // Write the output files
     if (verbose)
     {
         writeVertices(outS, resultS, kamadaKawai->n);

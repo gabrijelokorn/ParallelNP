@@ -10,8 +10,7 @@
 <body>
     <h1>Preverjanje rezultatov</h1>
     <i>Pravilnost posameznih programov je določena na podlagi rešitev v <b>tests&lt;algoritem&gt;/solutions</b></i>
-    
-    <hr />
+
     <div id="results"></div>
 
     <script src="assets/checks.js"></script>
@@ -22,18 +21,21 @@
 
             for (let l in results) {
                 const container = document.createElement('div');
+                container.classList.add('container');
 
                 const title = document.createElement('h2');
+                title.classList.add('lang-title');
                 title.innerText = l;
 
                 const lang = document.createElement('div');
                 lang.classList.add('lang');
-                
+
                 for (let t in results[l]) {
                     const type = document.createElement('div');
                     type.classList.add(t);
 
                     const typeTitle = document.createElement('h3');
+                    typeTitle.classList.add('type-title');
                     typeTitle.innerText = t === "s" ? "Zaporedni programi" : "Paralelni programi";
 
                     const algos = document.createElement('div');
@@ -42,33 +44,42 @@
                     for (let a in results[l][t]) {
                         const algo = document.createElement('div');
                         algo.classList.add('algo');
-
+                        
                         const algoTitle = document.createElement('h4');
-                        algoTitle.innerText = a;
+                        algoTitle.classList.add('algo-title');
+                        if (a === "partition") algoTitle.innerText = "Partitioning Problem";
+                        else algoTitle.innerText = "Kamada Kawai Algorithm";
+                        
                         
                         algo.appendChild(algoTitle);
+                        
+                        
+                        const tableDiv = document.createElement('div');
+                        tableDiv.classList.add('tableDiv');
+                        for (let sa in results[l][t][a]) {
+                            const table = document.createElement('table');
+                            const th = document.createElement('th');
 
-                        const table = document.createElement('table');
-                        const th = document.createElement('th');
-                        th.innerText = "Test";
+                            th.innerText = sa === "s" ? "Small Partitions" : sa === "l" ? "Large Partition" : "Kamada Kawai";
+                            
+                            table.appendChild(th);
+                            for (let i in results[l][t][a][sa]) {
+                                const tr = document.createElement('tr');
+                                const td = document.createElement('td');
+                                td.innerText = i;
+                                if (results[l][t][a][sa][i] === true) {
+                                    td.classList.add('correct');
+                                } else {
+                                    td.classList.add('incorrect');
+                                }
 
-                        table.appendChild(th);
-
-                        for (let i in results[l][t][a]) {
-                            const tr = document.createElement('tr');
-                            const td = document.createElement('td');
-                            td.innerText = i;
-                            if (results[l][t][a][i] === true) {
-                                td.classList.add('correct');
-                            } else {
-                                td.classList.add('incorrect');
+                                tr.appendChild(td);
+                                table.appendChild(tr);
                             }
-
-                            tr.appendChild(td);
-                            table.appendChild(tr);
+                            tableDiv.appendChild(table);
                         }
+                        algo.appendChild(tableDiv);
 
-                        algo.appendChild(table);
                         algos.appendChild(algo);
                     }
 
@@ -80,9 +91,6 @@
 
                 container.appendChild(title);
                 container.appendChild(lang);
-
-                const horizontal = document.createElement('hr');
-                container.appendChild(horizontal);
 
                 result.appendChild(container);
             }

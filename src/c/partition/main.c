@@ -16,20 +16,21 @@
 #include <json-c/json.h>
 
 #include "../common/parallelNP.h"
-#include "./big_partition.h"
+#include "./partition.h"
 
 #define NAME "C > big_partition"
 
 int main(int argc, char *argv[])
 {
     bool verbose = false;
+    bool l = false;
     char *test;
     FILE *outS;
     FILE *outP;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":t:vx:y:")) != -1)
+    while ((opt = getopt(argc, argv, ":vlt:x:y:")) != -1)
     {
         switch (opt)
         {
@@ -38,6 +39,9 @@ int main(int argc, char *argv[])
             break;
         case 'v':
             verbose = true;
+            break;
+        case 'l':
+            l = true;
             break;
         case 'x':
             outS = openFile(optarg, "w");
@@ -63,32 +67,17 @@ int main(int argc, char *argv[])
     char *buffer = readFile(testF);
 
     // json -> partitions
-    Partitions *d = get_partitions(buffer);
+    Partitions *p = get_partitions(buffer);
     // partitions -> array
-    int **arr = json2partitions(buffer, d);
+    int **arr = json2partitions(buffer, p);
 
-    // Sequential
-    bool resultS = false;
-    for (int i = 0; i < d->rows; i++)
-    {
-        resultS = seq(arr[i], d->cols[i]);
-    }
+    if (l)
+        large(arr, p, verbose, outS, outP);
+    else
+        small(arr, p, verbose, outS, outP);
 
-    // Parallel
-    bool resultP = false;
-    // for (int i = 0; i < d->rows; i++)
-    // {
-    // }
-
-    // Write the results to the output
-    if (verbose)
-    {
-        writePartitions(outS, &resultS, 1);
-        // writePartitions(outP, &resultP, 1);
-    }
-
-    free(arr);
     free(buffer);
+    free(arr);
     fclose(testF);
     fclose(outS);
     fclose(outP);

@@ -1,8 +1,12 @@
-package main
+package large
 
-import (
-	parallelNP "golang/lib"
-)
+func setSum(arr []int) int {
+	var sum int = 0
+	for i := 0; i < len(arr); i++ {
+		sum += arr[i]
+	}
+	return sum
+}
 
 func Seq(arr []int) bool {
 	var size int = len(arr)
@@ -24,8 +28,8 @@ func Seq(arr []int) bool {
 			}
 		}
 
-		var sum1 int = parallelNP.SetSum(array1)
-		var sum2 int = parallelNP.SetSum(array2)
+		var sum1 int = setSum(array1)
+		var sum2 int = setSum(array2)
 
 		if sum1 == sum2 {
 			return true

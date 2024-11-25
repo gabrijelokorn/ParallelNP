@@ -1,12 +1,14 @@
 .PHONY: all clean compile run
 
 TARGET = main
-SOURCES = main.go seq.go
-OUTPUTS = *.json
+SOURCES = main.go
+OUTPUTS = **/*.json
 
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
+LARGE = partition/l
+SMALL = partition/s
 
 ### --- COMPILE --- ###
 compile: $(TARGET)
@@ -22,11 +24,18 @@ $(TARGET): $(SOURCES)
 run: $(TARGET)
 	@echo "  |- $(WD)"
 	
-	@for case in $(TESTD)/$(WD)/$(TESTF); do \
-		outs=s$$(basename $$case .json).json; \
-		outp=p$$(basename $$case .json).json; \
+	@for case in $(TESTD)/$(LARGE)/$(TESTF); do \
+		outs=l/s$$(basename $$case .json).json; \
+		outp=l/p$$(basename $$case .json).json; \
+		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v -l; \
+	done
+	
+	@for case in $(TESTD)/$(SMALL)/$(TESTF); do \
+		outs=s/s$$(basename $$case .json).json; \
+		outp=s/p$$(basename $$case .json).json; \
 		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v; \
 	done
+
 ### --- --- --- ###
 
 

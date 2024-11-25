@@ -2,7 +2,7 @@
 # include <json-c/json.h>
 # include <stdbool.h>
 
-#include "./write.h"
+#include "./partitions2json.h"
 
 void writeJsonObject(FILE *fp, json_object *jobj)
 {

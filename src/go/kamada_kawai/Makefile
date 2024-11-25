@@ -1,7 +1,8 @@
 .PHONY: all clean compile run
 
 TARGET = main
-SOURCES = main.go seq.go kamada_kawai.go
+SOURCES = main.go seq.go \
+kamada_kawai.go kamada_kawai2csv.go
 OUTPUTS = *.csv
 
 TESTD = ../../../tests
