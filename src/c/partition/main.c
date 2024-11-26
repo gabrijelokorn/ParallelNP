@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
     bool verbose = false;
     bool l = false;
     char *test;
-    FILE *outS;
-    FILE *outP;
+    char *outS;
+    char *outP;
     bool help = false;
 
     int opt;
@@ -44,10 +44,10 @@ int main(int argc, char *argv[])
             l = true;
             break;
         case 'x':
-            outS = openFile(optarg, "w");
+            outS = optarg;
             break;
         case 'y':
-            outP = openFile(optarg, "w");
+            outP = optarg;
             break;
         case ':':
             help = true;
@@ -79,8 +79,6 @@ int main(int argc, char *argv[])
     free(buffer);
     free(arr);
     fclose(testF);
-    fclose(outS);
-    fclose(outP);
 
     return 0;
 }

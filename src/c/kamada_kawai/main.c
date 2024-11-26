@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
 {
     bool verbose = false;
     char *test;
-    FILE *outS;
-    FILE *outP;
+    char *outS;
+    char *outP;
     bool help = false;
 
     int opt;
@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
             verbose = true;
             break;
         case 'x':
-            outS = openFile(optarg, "w");
+            outS = optarg;
             break;
         case 'y':
-            outP = openFile(optarg, "w");
+            outP = optarg;
             break;
         case ':':
         case '?':
@@ -64,22 +64,29 @@ int main(int argc, char *argv[])
     Vertices *resultS = seq(kamadaKawai);
 
     // Parallel
+    // Vertices *resultP = par(kamadaKawai);
 
     // Write the output files
     if (verbose)
     {
-        writeVertices(outS, resultS, kamadaKawai->n);
+        FILE *fileS = fopen(outS, "w");
+        writeVertices(fileS, resultS, kamadaKawai->n);
+
+        // FILE *fileP = fopen(outP, "w");
+
+        fclose(fileS);
+        // fclose(fileP);
     }
 
+    free(buffer);
+    
     free(kamadaKawai);
     free(vertices);
     free(edges);
+
     free(resultS);
-    free(buffer);
-    
+
     fclose(testF);
-    fclose(outS);
-    fclose(outP);
 
     return 0;
 }

@@ -1,16 +1,13 @@
 using ArgParse
 using JSON
 
-include("../lib/kamada_kawai.jl")
+include("./kamada_kawai.jl")
 using .Kamada_Kawai
+include("./kamada_kawai2csv.jl")
+using .Kamada_Kawai2csv
 
 include("seq.jl")
 using .Seq
-
-include("../lib/file.jl")
-using .Out
-include("../lib/print.jl")
-using .Print
 
 function main()
     # Define the arguments you expect
@@ -44,12 +41,20 @@ function main()
 
     data = JSON.parsefile(test)
 
-    kk = Kamada_Kawai.KamadaKawai(data["coords"], data["edges"], Float64(data["K"]), Float64(data["epsilon"]), Float64(data["display"]))
+    kk = KamadaKawai(
+        data["coords"],
+        data["edges"],
+        Float64(data["K"]),
+        Float64(data["epsilon"]),
+        Float64(data["display"])
+    )
+
     resultS = seq(kk)
 
     if verbose
-        file = Out.openFile(outS)
-        Print.fOutStates(file, resultS)
+        file = open(outS, "w")
+        WriteVertices(file, resultS)
+        close(file)
     end
 end
 

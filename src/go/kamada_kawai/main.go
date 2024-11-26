@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"encoding/json"
 	"flag"
 	"io/ioutil"
+	"os"
 	parallelNP "golang/common"
 )
 
@@ -18,10 +20,8 @@ func main() {
 
 	test := *t
 	verbose := *v
-	outS := parallelNP.OpenFile(*s)
-	defer parallelNP.CloseFile(outS)
-	outP := parallelNP.OpenFile(*p)
-	defer parallelNP.CloseFile(outP)
+	outS := *s
+	outP := *p
 
 	// Read the file
 	data, err := ioutil.ReadFile(test)
@@ -45,6 +45,21 @@ func main() {
 
 	// Print the results
 	if verbose {
-		WriteVertices(outS, resultS)
+		// open the file
+		fileS, err := os.Create(outS)
+		if err != nil {
+			parallelNP.IOError("large.go", "Error creating the file", err)
+			fmt.Println("I dont like the golang syntax nazism: ", outP)
+		}
+		defer fileS.Close()
+
+
+		// fileP, err := os.Create(outP)
+		// if err != nil {
+		// 	parallelNP.IOError("large.go", "Error creating the file", err)
+		// }
+		// defer fileP.Close()
+
+		WriteVertices(fileS, resultS)
 	}
 }

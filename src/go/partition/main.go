@@ -20,10 +20,8 @@ func main() {
 
 	test := *t
 	verbose := *v
-	outS := parallelNP.OpenFile(*s)
-	defer parallelNP.CloseFile(outS)
-	outP := parallelNP.OpenFile(*p)
-	defer parallelNP.CloseFile(outP)
+	outS := *s
+	outP := *p
 	size := *l
 	
 	// Read the file

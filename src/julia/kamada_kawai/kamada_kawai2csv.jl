@@ -1,16 +1,9 @@
-module Print
+module Kamada_Kawai2csv
 
-using JSON
 using ..Kamada_Kawai
 
-export fOutJsonArray, fOutStates
-
-function fOutJsonArray(file, arr::Vector{Bool})
-    jsonString = JSON.json(arr)
-    write(file, jsonString)
-end
-
-function fOutStates(file, states::Vector{Vector{Coord}})
+export WriteVertices
+function WriteVertices(file, states::Vector{Vector{Coord}})
     for i in 1:length(states)
         for j in 1:length(states[i])
             write(file, string(states[i][j].x))
@@ -21,6 +14,6 @@ function fOutStates(file, states::Vector{Vector{Coord}})
         write(file, "\n")
     end
 
-end # fOutStates
+end # WriteVertices
 
 end # module

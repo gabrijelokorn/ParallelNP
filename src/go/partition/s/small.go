@@ -3,9 +3,10 @@ package small
 import (
 	"os"
 	partition "golang/partition/lib"
+	parallelNP "golang/common"
 )
 
-func Small (arr [][]int, verbose bool, outS *os.File, outP *os.File) {
+func Small (arr [][]int, verbose bool, outS string, outP string) {
 	// Sequential
 	resultS := make([]bool, len(arr))
 
@@ -15,6 +16,12 @@ func Small (arr [][]int, verbose bool, outS *os.File, outP *os.File) {
 
 	// Write the result to the file
 	if verbose {
-		partition.WritePartitions(outS, resultS)
+		fileS, err := os.Create(outS)
+		if err != nil {
+			parallelNP.IOError("large.go", "Error creating the file", err)
+		}
+		defer fileS.Close()
+
+		partition.WritePartitions(fileS, resultS)
 	}
 }

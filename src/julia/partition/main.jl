@@ -2,16 +2,14 @@
 using ArgParse
 using JSON
 
-
-include("seq.jl")
-using .Seq
-
-include("../lib/kamada_kawai.jl")
-using .Kamada_Kawai
-include("../lib/file.jl")
-using .Out
-include("../lib/print.jl")
-using .Print
+include("l/large.jl")
+using .Large
+include("s/small.jl")
+using .Small
+include("partitions2json.jl")
+using .Partitions2Json
+include("json2partitions.jl")
+using .Json2partitions
 
 function main()
     # Define the arguments you expect
@@ -34,6 +32,11 @@ function main()
         help = "Enable verbose output"
         arg_type = Bool
         default = false
+
+        "-l"
+        help = "Use the partitioning algorithm for large sets"
+        arg_type = Bool
+        default = false
     end
     # Parse the arguments
     parsed_args = parse_args(ARGS, s)
@@ -42,28 +45,17 @@ function main()
     outS = get(parsed_args, "x", "")
     outP = get(parsed_args, "y", "")
     verbose = get(parsed_args, "v", false)
+    l = get(parsed_args, "l", false)
 
+    # json test -> partitions
     data = JSON.parsefile(test)
-    
-    arr = Vector{Vector{Int64}}(undef, length(data))
-    for (key, value) in data
-        index = parse(Int, key)
-        arr[index] = value
+    arr = json2partitions(data)
+
+    if l
+        Large.large(arr, verbose, outS, outP)
+    else
+        Small.small(arr, verbose, outS, outP)
     end
-    
-    resultS = fill(false, length(data))
-    for i in 1:length(data)
-        resultS[i] = Seq.seq(arr[i])
-    end
-
-
-    resultP = fill(false, length(data))
-
-    if verbose
-        file = Out.openFile(outS)
-        Print.fOutJsonArray(file, resultS)
-    end
-
 end
 
 # Run the main function

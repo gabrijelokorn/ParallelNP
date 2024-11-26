@@ -11,7 +11,7 @@
 **/p*.csv
 
 # views
-views/checks.js
+views/assets/checks.js
 
 # node_modules
 **/node_modules/

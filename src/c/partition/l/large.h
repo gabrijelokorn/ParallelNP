@@ -7,7 +7,7 @@
 #include "../types.h"
 #include "../partitions2json.h"
 
-void large(int **arr, Partitions *p, bool verbose, FILE *outS, FILE *outP);
+void large(int **arr, Partitions *p, bool verbose, char* outS, char* outP);
 bool seq(int *arr, int size);
 
 #endif

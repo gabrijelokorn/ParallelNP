@@ -1,8 +1,9 @@
 #include <stdbool.h>
 
+#include "../../common/parallelNP.h"
 #include "small.h"
 
-void small(int **arr, Partitions *p, bool verbose, FILE *outS, FILE *outP)
+void small(int **arr, Partitions *p, bool verbose, char* outS, char* outP)
 {
     // Sequential
     bool *resultS = (bool *)malloc(p->rows * sizeof(bool));
@@ -21,7 +22,10 @@ void small(int **arr, Partitions *p, bool verbose, FILE *outS, FILE *outP)
     // Write the results
     if (verbose)
     {
-        writePartitions(outS, resultS, p->rows);
+        FILE* fileS = openFile(outS, "w");
+        writePartitions(fileS, resultS, p->rows);
+
+        fclose(fileS);
     }
 
     return;
