@@ -5,7 +5,7 @@ TARGET = main.out
 SOURCES = main.c\
 ./types.h\
 ./s/small.c\
-./l/large.c ./l/seq.c\
+./l/large.c ./l/seq.c ./l/par.c\
 ../common/file.c ../common/read.c ../common/error.c\
 ./json2partitions.c partitions2json.c
 OUTPUTS = *.json

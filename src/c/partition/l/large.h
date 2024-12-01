@@ -3,11 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "../types.h"
 #include "../partitions2json.h"
 
 void large(int **arr, Partitions *p, bool verbose, char* outS, char* outP);
 bool seq(int *arr, int size);
+bool par(int *arr, int size);
 
 #endif
