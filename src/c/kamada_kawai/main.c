@@ -50,8 +50,6 @@ int main(int argc, char *argv[])
 
     int n;
     float k;
-    int **vertices;
-    int **edges;
 
     // Read the input file
     FILE *testF = openFile(test, "r");
@@ -79,13 +77,9 @@ int main(int argc, char *argv[])
     }
 
     free(buffer);
-    
     free(kamadaKawai);
-    free(vertices);
-    free(edges);
 
     free(resultS);
-
     fclose(testF);
 
     return 0;

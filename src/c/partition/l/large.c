@@ -9,6 +9,7 @@ void large(int **arr, Partitions *p, bool verbose, char* outS, char* outP)
     bool resultS = seq(arr[0], p->cols[0]);
 
     // Parallel
+    printf("### ### ### ### ###\n");
     bool resultP = par(arr[0], p->cols[0]);
 
     // Write the results to the file
@@ -22,8 +23,6 @@ void large(int **arr, Partitions *p, bool verbose, char* outS, char* outP)
 
         fclose(fileS);
     }
-
-
 
     return;
 }

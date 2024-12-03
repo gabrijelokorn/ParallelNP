@@ -10,6 +10,7 @@ OUTPUTS = *.csv # Later add csvs to clean, when they will be automatic
 CC = gcc
 CFLAGS = -ljson-c # -ljson-c is needed for json-c library
 CFLAGS += -lm # -lm is needed for math library
+CFLAGS += -fopenmp # -fopenmp is needed for OpenMP library
 
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
