@@ -5,6 +5,7 @@
 int set_sum_par(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
+#pragma omp parallel for reduction(+ : sum)
     for (int i = 0; i < size; i++)
     {
         if (index & (1 << i))
@@ -25,18 +26,16 @@ bool par(int *arr, int size)
         return false;
 
     bool found = false;
-    printf("cancel %d\n", omp_get_cancellation());
 
 #pragma omp teams distribute parallel for shared(found)
     for (int i = 0; i < possibilities; i++)
     {
-        printf("Thread %d from team: %d testing possibility: %d\n", omp_get_thread_num(), omp_get_team_num(), i);
+        if (found)
+            continue;
+
         int sum = set_sum_par(arr, size, i);
         if (sum == half_sum)
-        {
-            // printf("--------------- The thread %d from team %d found the solution: %d\n", omp_get_thread_num(), omp_get_team_num(), sum);
             found = true;
-        }
     }
 
     return found;
