@@ -1,46 +1,33 @@
-#include <stdbool.h>
+#include "large.h"
 
-#include "./large.h"
-
-int set_sum (int *arr, int size)
+int seq_sum(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
     for (int i = 0; i < size; i++)
     {
-        sum += arr[i];
+        if (index & (1 << i))
+        {
+            sum += arr[size - 1 - i];
+        }
     }
     return sum;
 }
 
 bool seq(int *arr, int size)
 {
-    unsigned long long int index = 1 << (size - 1);
+    unsigned long long int possibilities = 1 << (size - 1);
+    unsigned long long int complete_set = ((unsigned long long int)1 << size) - 1;
+    
+    int total_sum = seq_sum(arr, size, complete_set);
+    if (total_sum % 2 != 0)
+        return false;
+    int half_sum = total_sum / 2;
 
-    for (unsigned long long int i = 0; i < index; i++)
+    for (int i = 0; i < possibilities; i++)
     {
-        int array1[size];
-        int index1 = 0;
-        int array2[size];
-        int index2 = 0;
-
-        for (int j = 0; j < size; j++)
-        {
-            if (i & (1 << j))
-            {
-                array1[index1] = arr[j];
-                index1++;
-            }
-            else
-            {
-                array2[index2] = arr[j];
-                index2++;
-            }
-        }
-
-        if (set_sum(array1, index1) == set_sum(array2, index2))
-        {
+        int sum = seq_sum(arr, size, i);
+        if (sum == half_sum)
             return true;
-        }
     }
 
     return false;

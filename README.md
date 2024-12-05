@@ -152,3 +152,7 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 - Z izbiro `make check` se rezultati izvajanja preverijo na podlagi rešitev v `tests/<algoritem>/solutions`.
 - Po izvedbi `make check` lahko rezultate vidimo v datoteki `views/check.html`.
 - V `views` najdemo tudi ostale izide izvajanja - videe, ki prikazujejo izvajanje Kamada-Kawai algoritma.
+
+### Vprašanja
+
+Časovno merjenje - po threadih ali stenski uri?
