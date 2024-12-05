@@ -1,5 +1,5 @@
-#include <omp.h>
 #include <stdbool.h>
+#include <omp.h>
 #include <time.h>
 
 #include "../../common/parallelNP.h"
@@ -7,15 +7,15 @@
 
 void large(int **arr, Partitions *p, bool verbose, char *outS, char *outP)
 {
-    printf("### ### ### ### ###\n");
+    printf("Large\n");
     // Sequential
     double start_seq = omp_get_wtime();
-    bool resultS = seq(arr[0], p->cols[0]);
+    bool resultS = large_seq(arr[0], p->cols[0]);
     double end_seq = omp_get_wtime();
 
     // Parallel
     double start_par = omp_get_wtime();
-    bool resultP = par(arr[0], p->cols[0]);
+    bool resultP = large_par(arr[0], p->cols[0]);
     double end_par = omp_get_wtime();
 
     // Print the times

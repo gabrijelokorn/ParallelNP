@@ -2,7 +2,7 @@
 
 #include "small.h"
 
-int small_seq_sum(int *arr, int size, unsigned long long int index)
+int small_par_sum(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
     for (int i = 0; i < size; i++)
@@ -15,10 +15,11 @@ int small_seq_sum(int *arr, int size, unsigned long long int index)
     return sum;
 }
 
-bool *small_seq(int **arr, Partitions *p)
+bool *small_par(int **arr, Partitions *p)
 {
     bool *result = (bool *)malloc(p->rows * sizeof(bool));
 
+#pragma omp parallel for
     for (int i = 0; i < p->rows; i++)
     {
         result[i] = false;
@@ -29,14 +30,14 @@ bool *small_seq(int **arr, Partitions *p)
         unsigned long long int possibilities = 1 << (size - 1);
         unsigned long long int complete_set = ((unsigned long long int)1 << size) - 1;
 
-        int total_sum = small_seq_sum(row, size, complete_set);
+        int total_sum = small_par_sum(row, size, complete_set);
         if (total_sum % 2 != 0)
             continue;
         int half_sum = total_sum / 2;
 
         for (int j = 0; j < possibilities; j++)
         {
-            int sum = small_seq_sum(row, size, j);
+            int sum = small_par_sum(row, size, j);
             if (sum == half_sum)
             {
                 result[i] = true;

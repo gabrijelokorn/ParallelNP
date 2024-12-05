@@ -3,8 +3,7 @@ all: compile run
 
 TARGET = main.out
 SOURCES = main.c\
-./types.h\
-./s/small.c\
+./s/small.c ./s/seq.c ./s/par.c\
 ./l/large.c ./l/seq.c ./l/par.c\
 ../common/file.c ../common/read.c ../common/error.c\
 ./json2partitions.c partitions2json.c
@@ -28,6 +27,7 @@ compile: $(TARGET)
 $(TARGET):
 	@echo "  |- $(WD)"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
+	@export OMP_CANCELLATION=true
 ### --- ------ --- ###
 
 

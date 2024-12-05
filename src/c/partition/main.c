@@ -16,9 +16,12 @@
 #include <json-c/json.h>
 
 #include "../common/parallelNP.h"
-#include "./partition.h"
 
-#define NAME "C > big_partition"
+#include "./partition.h"
+#include "./s/small.h"
+#include "./l/large.h"
+
+#include "./json2partitions.h"
 
 int main(int argc, char *argv[])
 {

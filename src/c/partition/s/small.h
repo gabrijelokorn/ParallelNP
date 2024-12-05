@@ -4,10 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../types.h"
+#include "../partition.h"
 #include "../partitions2json.h"
 
 void small(int **arr, Partitions *p, bool verbose, char* outS, char* outP);
-bool seq(int *arr, int size);
+bool* small_seq(int **arr, Partitions *p);
+bool* small_par(int **arr, Partitions *p);
 
 #endif
