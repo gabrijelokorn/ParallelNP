@@ -74,10 +74,17 @@ int main(int argc, char *argv[])
     // partitions -> array
     int **arr = json2partitions(buffer, p);
 
+
     if (l)
+    {
+        printf("large\n");
         large(arr, p, verbose, outS, outP);
+    }
     else
+    {
+        printf("small\n");
         small(arr, p, verbose, outS, outP);
+    }
 
     free(buffer);
     free(arr);

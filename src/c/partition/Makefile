@@ -20,6 +20,7 @@ TESTF = *.json
 LARGE = partition/l
 SMALL = partition/s
 
+export OMP_CANCELLATION=true
 
 ### --- COMPILE --- ###
 compile: $(TARGET)
@@ -27,7 +28,6 @@ compile: $(TARGET)
 $(TARGET):
 	@echo "  |- $(WD)"
 	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
-	@export OMP_CANCELLATION=true
 ### --- ------ --- ###
 
 

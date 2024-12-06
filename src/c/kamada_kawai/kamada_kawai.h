@@ -37,5 +37,6 @@ typedef struct Vertices
 } Vertices;
 
 Vertices *seq(KamadaKawai *kk);
+Vertices *par(KamadaKawai *kk);
 
 #endif

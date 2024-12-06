@@ -7,7 +7,6 @@
 
 void large(int **arr, Partitions *p, bool verbose, char *outS, char *outP)
 {
-    printf("Large\n");
     // Sequential
     double start_seq = omp_get_wtime();
     bool resultS = large_seq(arr[0], p->cols[0]);
@@ -18,11 +17,6 @@ void large(int **arr, Partitions *p, bool verbose, char *outS, char *outP)
     bool resultP = large_par(arr[0], p->cols[0]);
     double end_par = omp_get_wtime();
 
-    // Print the times
-    printf("Sequential: %f seconds\n", end_seq - start_seq);
-    printf("Parallel: %f seconds\n", end_par - start_par);
-
-    
     // Write the results to the file
     if (verbose)
     {
@@ -33,6 +27,11 @@ void large(int **arr, Partitions *p, bool verbose, char *outS, char *outP)
         writePartitions(fileP, &resultP, 1);
 
         fclose(fileS);
+        fclose(fileP);
+
+        // Print the times
+        printf("Sequential: %f seconds\n", end_seq - start_seq);
+        printf("Parallel: %f seconds\n", end_par - start_par);
     }
 
     return;

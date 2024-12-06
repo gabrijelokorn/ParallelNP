@@ -2,7 +2,7 @@
 all: compile run
 
 TARGET = main.out
-SOURCES = main.c ./seq.c\
+SOURCES = main.c ./seq.c ./par.c\
 ../common/file.c ../common/read.c ../common/error.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c
 OUTPUTS = *.csv # Later add csvs to clean, when they will be automatic

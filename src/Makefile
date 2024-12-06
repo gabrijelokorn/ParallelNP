@@ -8,6 +8,7 @@
 .PHONY: all clean compile run c julia go check
 all: compile run check
 
+export OMP_CANCELLATION=true
 
 ### --- COMPILE --- ###
 compile_c:
