@@ -15,7 +15,7 @@ compile: $(TARGET)
 
 $(TARGET): $(SOURCES)
 	@echo "  |- $(WD)"
-	@go build -o $(TARGET) $(SOURCES)
+	@go build -race -o $(TARGET) $(SOURCES)
 ### --- ------ --- ###
 
 

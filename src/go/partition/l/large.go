@@ -14,7 +14,7 @@ func Large(arr [][]int, verbose bool, outS string, outP string) {
 	resultS := make([]bool, 1)
 	resultS[0] = Seq(arr[0])
 	end_seq := time.Since(start_seq)
-
+	
 	// Parallel
 	start_par := time.Now()
 	resultP := make([]bool, 1)

@@ -2,7 +2,8 @@ package large
 
 import (
 	"sync"
-	"sync/atomic"
+	"runtime"
+	"fmt"
 )
 
 func set_sum_par(arr []int, index int64) int {
@@ -28,11 +29,12 @@ func Par(arr []int) bool {
 	var half_sum = total_sum / 2
 
 	// Shared variable to indicate if a solution is found
-	var found int32 = 0
+	// var found int32 = 0
 	var wg sync.WaitGroup
 
 	// Number of workers (goroutines)
-	numWorkers := 4
+	fmt.Println("Number of CPUs: ", runtime.NumCPU())
+	numWorkers := runtime.NumCPU()
 	chunkSize := possibilities / int64(numWorkers)
 	if chunkSize == 0 {
 		chunkSize = 1
@@ -41,25 +43,23 @@ func Par(arr []int) bool {
 	// Parallelize the computation
 	for w := 0; w < numWorkers; w++ {
 		wg.Add(1)
-		go func(start, end int64) {
+
+		go func(w int64) {
 			defer wg.Done()
 
-			for i := start; i < end; i++ {
-				if atomic.LoadInt32(&found) == 1 {
-					return
-				}
-
-				var sum int = set_sum_seq(arr, i)
-				if sum == half_sum {
-					atomic.StoreInt32(&found, 1)
-					return
-				}
+			var start int64 = w * chunkSize
+			var end int64 = (w + 1) * chunkSize
+			if w == int64(numWorkers-1) {
+				end = possibilities
 			}
-		}(int64(w)*chunkSize, int64(w+1)*chunkSize)
+
+			fmt.Println("Worker ", w, " start: ", start, " end: ", end)
+		}(int64(w))
 	}
 
 	// Wait for all goroutines to complete
 	wg.Wait()
 
-	return atomic.LoadInt32(&found) == 1
+	fmt.Println("Unused variables: ", chunkSize, possibilities, half_sum)
+	return true
 }
