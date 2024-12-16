@@ -5,6 +5,7 @@
 int large_par_sum(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
+#pragma omp reduction(+ : sum)
     for (int i = 0; i < size; i++)
     {
         if (index & (1 << i))
@@ -15,7 +16,7 @@ int large_par_sum(int *arr, int size, unsigned long long int index)
     return sum;
 }
 
-bool large_par(int *arr, int size)
+bool large_par(int *arr, int size) // Solution 1
 {
     unsigned long long int possibilities = 1 << (size - 1);
     unsigned long long int complete_set = ((unsigned long long int)1 << size) - 1;
@@ -27,18 +28,22 @@ bool large_par(int *arr, int size)
 
     bool found = false;
 
-#pragma omp parallel shared(found)
+#pragma omp parallel default(none) shared(found, possibilities, arr, size, half_sum)
     {
 #pragma omp for
         for (unsigned long long int i = 0; i < possibilities; i++)
         {
+            if (found)
+                continue;
             int sum = large_par_sum(arr, size, i);
             if (sum == half_sum)
             {
-                found = true;
-#pragma omp cancel for
+#pragma omp critical
+                {
+                    found = true;
+#pragma omp flush(found)
+                }
             }
-#pragma omp cancellation point for
         }
     }
 

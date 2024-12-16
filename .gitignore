@@ -5,10 +5,10 @@
 # Ignore the result files
 **/*.avi
 
-**/s*.json
-**/p*.json
-**/s*.csv
-**/p*.csv
+src/**/s*.json
+src/**/p*.json
+src/**/s*.csv
+src/**/p*.csv
 
 # views
 views/assets/checks.js

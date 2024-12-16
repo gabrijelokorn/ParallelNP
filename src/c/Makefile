@@ -14,7 +14,7 @@ compile:
 
 run:
 	@echo "### ### ### >>> Running $(WD) <<< ### ### ###"
-	$(MAKE) -C partition run
+# 	$(MAKE) -C partition run
 	$(MAKE) -C kamada_kawai run
 	@echo ""
 

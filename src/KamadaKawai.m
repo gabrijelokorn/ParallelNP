@@ -15,7 +15,7 @@ function KamadaKawai(pointsFile, vertexFile, edgeFile, productionFile)
     states = rows / points;
    
 % Create a new 3-dimensional matrix representing STATE, POINTS and TIME
-    coordinates = reshape(coordinates, columns, points, states);
+    coordinates = reshape(coordinates, columns, points, states)
 
 % Read data of edges into matrix "edges"
     edges = readmatrix(edgeFile);
@@ -51,7 +51,7 @@ function KamadaKawai(pointsFile, vertexFile, edgeFile, productionFile)
 
 % Execute the loop
     M = zeros(points, 2, steps);
-    for state = 1 : (states - 1)
+    for state = 1 : (states - 1) % -1 because we are going to interpolate between states
         for p = 1 : points
             M(p, 1, :) = linspace(coordinates(1,p,state), coordinates(1,p,state + 1), steps);
             M(p, 2, :) = linspace(coordinates(2,p,state), coordinates(2,p,state + 1), steps);
