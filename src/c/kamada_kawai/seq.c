@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -161,7 +162,6 @@ Vertices *seq(KamadaKawai *kk)
     Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
     vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
     copyCoords_seq(kk->coords, vertices->coords, kk->n);
-
     Vertices *vertices_head = vertices;
 
     float *deltas = calculate_delatas_seq(kk);
@@ -197,15 +197,16 @@ Vertices *seq(KamadaKawai *kk)
 
             deltas[max_delta_m_seq_index] = calculate_delta_seq(kk, max_delta_m_seq_index);
         }
-        vertices->next = (Vertices *)malloc(sizeof(Vertices));
-        vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
-        copyCoords_seq(kk->coords, vertices->next->coords, kk->n);
-        vertices = vertices->next;
 
         deltas = calculate_delatas_seq(kk);
         max_delta_m_seq_index = get_max_delta_m_seq_index_seq(kk, deltas);
     }
 
+    vertices->next = (Vertices *)malloc(sizeof(Vertices));
+    vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
+    copyCoords_seq(kk->coords, vertices->next->coords, kk->n);
+    vertices = vertices->next;
+    vertices->next = NULL;
 
     return vertices_head;
 }

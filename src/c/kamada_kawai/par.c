@@ -223,14 +223,15 @@ Vertices *par(KamadaKawai *kk)
 
             deltas[max_delta_m_index] = calculate_delta_par(kk, max_delta_m_index);
         }
-        vertices->next = (Vertices *)malloc(sizeof(Vertices));
-        vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
-        copyCoords_par(kk->coords, vertices->next->coords, kk->n);
-        vertices = vertices->next;
 
         deltas = calculate_delatas_par(kk);
         max_delta_m_index = get_max_delta_m_index_par(kk, deltas);
     }
+    vertices->next = (Vertices *)malloc(sizeof(Vertices));
+    vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
+    copyCoords_par(kk->coords, vertices->next->coords, kk->n);
+    vertices = vertices->next;
+    vertices->next = NULL;
 
     return vertices_head;
 }
