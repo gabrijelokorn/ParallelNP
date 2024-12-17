@@ -15,7 +15,7 @@ function KamadaKawai(pointsFile, vertexFile, edgeFile, productionFile)
     states = rows / points;
    
 % Create a new 3-dimensional matrix representing STATE, POINTS and TIME
-    coordinates = reshape(coordinates, columns, points, states)
+    coordinates = reshape(coordinates, columns, points, states);
 
 % Read data of edges into matrix "edges"
     edges = readmatrix(edgeFile);
@@ -38,9 +38,9 @@ function KamadaKawai(pointsFile, vertexFile, edgeFile, productionFile)
     drawnow;
     
 % Configuration for animation
-    steps = 50;
-    fps = 25;
-    animationPause = 0.001;
+    steps = 100;
+    fps = 50;
+    animationPause = 0.0001;
 
 % Setup the videomaker     
     write = VideoWriter(productionFile);
