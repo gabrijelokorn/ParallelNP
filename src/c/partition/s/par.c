@@ -2,7 +2,7 @@
 
 #include "small.h"
 
-int small_par_sum(int *arr, int size, unsigned long long int index)
+int small_sum_par(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
     for (int i = 0; i < size; i++)
@@ -33,15 +33,15 @@ bool *small_par(int **arr, Partitions *p)
             unsigned long long int possibilities = 1 << (size - 1);
             unsigned long long int complete_set = ((unsigned long long int)1 << size) - 1;
 
-            int total_sum = small_par_sum(row, size, complete_set);
+            int total_sum = small_sum_par(row, size, complete_set);
             if (total_sum % 2 != 0)
                 continue;
-            int half_sum = total_sum / 2;
+            int half_problem_sum = total_sum / 2;
 
             for (int j = 0; j < possibilities; j++)
             {
-                int sum = small_par_sum(row, size, j);
-                if (sum == half_sum)
+                int sum = small_sum_par(row, size, j);
+                if (sum == half_problem_sum)
                 {
                     result[i] = true;
                     break;

@@ -1,14 +1,15 @@
 package large
 
 import (
-	"sync"
 	"runtime"
-	"fmt"
+	"sync"
+	"sync/atomic"
 )
 
-func set_sum_par(arr []int, index int64) int {
+func large_sum_par(arr []int, size int, index int64) int {
 	var sum int = 0
-	for i := 0; i < len(arr); i++ {
+
+	for i := 0; i < size; i++ {
 		if index&(1<<i) != 0 {
 			sum += arr[i]
 		}
@@ -17,14 +18,16 @@ func set_sum_par(arr []int, index int64) int {
 	return sum
 }
 
-func Par(arr []int) bool {
+func Par(arr []int) int32 {
+	var result int32 = 0
+
 	var possibilities int64 = 1 << (len(arr) - 1)
 	var complete_set int64 = (1 << len(arr)) - 1
 
 	// Calculate the total sum of the array
-	var total_sum int = set_sum_seq(arr, complete_set)
+	var total_sum int = large_sum_par(arr, len(arr), complete_set)
 	if total_sum%2 != 0 {
-		return false
+		return 0
 	}
 	var half_sum = total_sum / 2
 
@@ -32,34 +35,36 @@ func Par(arr []int) bool {
 	// var found int32 = 0
 	var wg sync.WaitGroup
 
-	// Number of workers (goroutines)
-	fmt.Println("Number of CPUs: ", runtime.NumCPU())
-	numWorkers := runtime.NumCPU()
-	chunkSize := possibilities / int64(numWorkers)
-	if chunkSize == 0 {
-		chunkSize = 1
-	}
+	threads := runtime.NumCPU()
+	minProblems := possibilities / int64(threads)
 
 	// Parallelize the computation
-	for w := 0; w < numWorkers; w++ {
+	for w := 0; w < threads; w++ {
 		wg.Add(1)
 
-		go func(w int64) {
+		go func(w int) {
 			defer wg.Done()
 
-			var start int64 = w * chunkSize
-			var end int64 = (w + 1) * chunkSize
-			if w == int64(numWorkers-1) {
-				end = possibilities
+			for i := 0; i <= int(minProblems); i++ {
+				var index int64 = int64(i*threads + w)
+				if index >= possibilities {
+					break
+				}
+
+				if atomic.LoadInt32(&result) == 1 {
+					break
+				}
+
+				if large_sum_par(arr, len(arr), index) == half_sum {
+					atomic.StoreInt32(&result, 1)
+				}
 			}
 
-			fmt.Println("Worker ", w, " start: ", start, " end: ", end)
-		}(int64(w))
+		}(int(w))
 	}
 
 	// Wait for all goroutines to complete
 	wg.Wait()
 
-	fmt.Println("Unused variables: ", chunkSize, possibilities, half_sum)
-	return true
+	return result
 }

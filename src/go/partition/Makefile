@@ -31,12 +31,12 @@ run: $(TARGET)
 		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v -l; \
 	done
 	
-# @echo small
-# @for case in $(TESTD)/$(SMALL)/$(TESTF); do \
-# 	outs=s/s$$(basename $$case .json).json; \
-# 	outp=s/p$$(basename $$case .json).json; \
-# 	./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v; \
-# done
+	@echo small
+	@for case in $(TESTD)/$(SMALL)/$(TESTF); do \
+		outs=s/s$$(basename $$case .json).json; \
+		outp=s/p$$(basename $$case .json).json; \
+		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v; \
+	done
 
 ### --- --- --- ###
 

@@ -1,40 +1,49 @@
 package small
 
-func setSum(arr []int) int {
+import (
+	"fmt"
+	"runtime"
+	"sync"
+)
+
+func small_sum_seq(arr []int, size int, index int64) int {
 	var sum int = 0
-	for i := 0; i < len(arr); i++ {
-		sum += arr[i]
+
+	for i := 0; i < size; i++ {
+		if index&(1<<i) != 0 {
+			sum += arr[i]
+		}
 	}
+
 	return sum
 }
 
-func Seq(arr []int) bool {
-	var size int = len(arr)
-	var index int64 = 1 << (size - 1)
+func Seq(arr [][]int) []int32 {
+	var result []int32 = make([]int32, len(arr))
 
-	for i := int64(0); i < index; i++ {
-		array1 := make([]int, size)
-		var index1 = 0
-		array2 := make([]int, size)
-		var index2 = 0
+	threads := runtime.NumCPU()
 
-		for j := 0; j < size; j++ {
-			if (i & (1 << j)) != 0 {
-				array1[index1] = arr[j]
-				index1++
-			} else {
-				array2[index2] = arr[j]
-				index2++
+	minProblems := len(arr) / threads
+
+	var wg sync.WaitGroup
+	for w := 0; w < threads; w++ {
+		wg.Add(1)
+
+		go func(w int) {
+			defer wg.Done()
+
+			for i := 0; i <= minProblems; i++ {
+				var problem int = i*threads + w
+				if problem >= len(arr) {
+					break
+				}
+
+				fmt.Println("Problem: ", problem)
 			}
-		}
-
-		var sum1 int = setSum(array1)
-		var sum2 int = setSum(array2)
-
-		if sum1 == sum2 {
-			return true
-		}
+		}(w)
 	}
 
-	return false
+	wg.Wait()
+
+	return result
 }

@@ -1,18 +1,19 @@
 package small
 
 import (
-	"os"
-	partition "golang/partition/lib"
+	"fmt"
 	parallelNP "golang/common"
+	partition "golang/partition/lib"
+	"os"
+	"time"
 )
 
-func Small (arr [][]int, verbose bool, outS string, outP string) {
+func Small(arr [][]int, verbose bool, outS string, outP string) {
 	// Sequential
-	resultS := make([]bool, len(arr))
-
-	for i := 0; i < len(arr); i++ {
-		resultS[i] = Seq(arr[i])
-	}
+	start_seq := time.Now()
+	resultS := make([]int32, len(arr))
+	resultS = Seq(arr)
+	end_seq := time.Since(start_seq)
 
 	// Write the result to the file
 	if verbose {
@@ -23,5 +24,7 @@ func Small (arr [][]int, verbose bool, outS string, outP string) {
 		defer fileS.Close()
 
 		partition.WritePartitions(fileS, resultS)
+
+		fmt.Printf("Seq: %v\n", end_seq)
 	}
 }

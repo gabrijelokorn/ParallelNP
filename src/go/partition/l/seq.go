@@ -1,8 +1,9 @@
 package large
 
-func set_sum_seq(arr []int, index int64) int {
+func large_sum_seq(arr []int, size int, index int64) int {
 	var sum int = 0
-	for i := 0; i < len(arr); i++ {
+
+	for i := 0; i < size; i++ {
 		if index&(1<<i) != 0 {
 			sum += arr[i]
 		}
@@ -11,22 +12,22 @@ func set_sum_seq(arr []int, index int64) int {
 	return sum
 }
 
-func Seq(arr []int) bool {
-	// var possibilities int64 = 1 << (len(arr) - 1)
-	// var complete_set int64 = (1 << len(arr)) - 1
+func Seq(arr []int) int32 {
+	var possibilities int64 = 1 << (len(arr) - 1)
+	var complete_set int64 = (1 << len(arr)) - 1
 
-	// var total_sum int = set_sum_seq(arr, complete_set)
-	// if total_sum%2 != 0 {
-	// 	return false
-	// }
-	// var half_sum = total_sum / 2
+	var problem_sum int = large_sum_seq(arr, len(arr), complete_set)
+	if problem_sum%2 != 0 {
+		return 0
+	}
+	var half_problem_sum = problem_sum / 2
 
-	// for i := int64(1); i < possibilities; i++ {
-	// 	var sum int = set_sum_seq(arr, i)
-	// 	if sum == half_sum {
-	// 		return true
-	// 	}
-	// }
+	for i := int64(1); i < possibilities; i++ {
+		var sum int = large_sum_seq(arr, len(arr), i)
+		if sum == half_problem_sum {
+			return 1
+		}
+	}
 
-	return false
+	return 0
 }
