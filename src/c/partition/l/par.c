@@ -18,25 +18,25 @@ int large_sum_par(int *arr, int size, unsigned long long int index)
 
 bool large_par(int *arr, int size) // Solution 1
 {
-    unsigned long long int possibilities = 1 << (size - 1);
-    unsigned long long int complete_set = ((unsigned long long int)1 << size) - 1;
+    unsigned long long int combs = 1 << (size - 1);
+    unsigned long long int all = ((unsigned long long int)1 << size) - 1;
 
-    int problem_sum = large_sum_par(arr, size, complete_set);
+    int problem_sum = large_sum_par(arr, size, all);
     if (problem_sum % 2 != 0)
         return false;
-    int half_problem_sum = problem_sum / 2;
+    int half_sum = problem_sum / 2;
 
     bool found = false;
 
-#pragma omp parallel default(none) shared(found, possibilities, arr, size, half_problem_sum)
+#pragma omp parallel default(none) shared(found, combs, arr, size, half_sum)
     {
 #pragma omp for
-        for (unsigned long long int i = 0; i < possibilities; i++)
+        for (unsigned long long int i = 0; i < combs; i++)
         {
             if (found)
                 continue;
             int sum = large_sum_par(arr, size, i);
-            if (sum == half_problem_sum)
+            if (sum == half_sum)
             {
 #pragma omp critical
                 {

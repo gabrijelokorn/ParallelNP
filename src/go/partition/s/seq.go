@@ -1,9 +1,6 @@
 package small
 
 import (
-	"fmt"
-	"runtime"
-	"sync"
 )
 
 func small_sum_seq(arr []int, size int, index int64) int {
@@ -21,29 +18,26 @@ func small_sum_seq(arr []int, size int, index int64) int {
 func Seq(arr [][]int) []int32 {
 	var result []int32 = make([]int32, len(arr))
 
-	threads := runtime.NumCPU()
+	for i := 0; i < len(arr); i++ {
+		result[i] = 0
+		
+		var combs int64 = 1 << (len(arr[i]) - 1)
+		var all int64 = (1 << len(arr[i])) - 1
 
-	minProblems := len(arr) / threads
+		var problem_sum int = small_sum_seq(arr[i], len(arr[i]), all)
+		if problem_sum%2 != 0 {
+			continue
+		}
+		var half_sum int = problem_sum / 2
 
-	var wg sync.WaitGroup
-	for w := 0; w < threads; w++ {
-		wg.Add(1)
-
-		go func(w int) {
-			defer wg.Done()
-
-			for i := 0; i <= minProblems; i++ {
-				var problem int = i*threads + w
-				if problem >= len(arr) {
-					break
-				}
-
-				fmt.Println("Problem: ", problem)
+		for j := int64(0); j < combs; j++ {
+			var sum int = small_sum_seq(arr[i], len(arr[i]), j)
+			if sum == half_sum {
+				result[i] = 1
+				break
 			}
-		}(w)
+		}
 	}
-
-	wg.Wait()
 
 	return result
 }

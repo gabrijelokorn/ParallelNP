@@ -30,18 +30,18 @@ bool *small_par(int **arr, Partitions *p)
             int *row = arr[i];
             int size = p->cols[i];
 
-            unsigned long long int possibilities = 1 << (size - 1);
-            unsigned long long int complete_set = ((unsigned long long int)1 << size) - 1;
+            unsigned long long int combs = 1 << (size - 1);
+            unsigned long long int all = ((unsigned long long int)1 << size) - 1;
 
-            int total_sum = small_sum_par(row, size, complete_set);
-            if (total_sum % 2 != 0)
+            int problem_sum = small_sum_par(row, size, all);
+            if (problem_sum % 2 != 0)
                 continue;
-            int half_problem_sum = total_sum / 2;
+            int half_sum = problem_sum / 2;
 
-            for (int j = 0; j < possibilities; j++)
+            for (int j = 0; j < combs; j++)
             {
                 int sum = small_sum_par(row, size, j);
-                if (sum == half_problem_sum)
+                if (sum == half_sum)
                 {
                     result[i] = true;
                     break;

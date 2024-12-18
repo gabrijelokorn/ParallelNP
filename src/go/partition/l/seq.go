@@ -13,18 +13,18 @@ func large_sum_seq(arr []int, size int, index int64) int {
 }
 
 func Seq(arr []int) int32 {
-	var possibilities int64 = 1 << (len(arr) - 1)
-	var complete_set int64 = (1 << len(arr)) - 1
+	var combs int64 = 1 << (len(arr) - 1)
+	var all int64 = (1 << len(arr)) - 1
 
-	var problem_sum int = large_sum_seq(arr, len(arr), complete_set)
+	var problem_sum int = large_sum_seq(arr, len(arr), all)
 	if problem_sum%2 != 0 {
 		return 0
 	}
-	var half_problem_sum = problem_sum / 2
+	var half_sum = problem_sum / 2
 
-	for i := int64(1); i < possibilities; i++ {
+	for i := int64(1); i < combs; i++ {
 		var sum int = large_sum_seq(arr, len(arr), i)
-		if sum == half_problem_sum {
+		if sum == half_sum {
 			return 1
 		}
 	}

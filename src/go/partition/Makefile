@@ -24,12 +24,12 @@ $(TARGET): $(SOURCES)
 run: $(TARGET)
 	@echo "  |- $(WD)"
 	
-	@echo large
-	@for case in $(TESTD)/$(LARGE)/$(TESTF); do \
-		outs=l/s$$(basename $$case .json).json; \
-		outp=l/p$$(basename $$case .json).json; \
-		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v -l; \
-	done
+# @echo large
+# @for case in $(TESTD)/$(LARGE)/$(TESTF); do \
+# 	outs=l/s$$(basename $$case .json).json; \
+# 	outp=l/p$$(basename $$case .json).json; \
+# 	./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v -l; \
+# done
 	
 	@echo small
 	@for case in $(TESTD)/$(SMALL)/$(TESTF); do \
