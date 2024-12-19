@@ -3,6 +3,7 @@
 
 #include "./file.h"
 #include "./read.h"
+#include "./write.h"
 #include "./error.h"
 
 #endif 

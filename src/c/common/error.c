@@ -11,3 +11,11 @@ void error_args(char *name)
     fprintf(stderr, "<-<-<-<-<\n\n");
     exit(1);
 }
+
+void error_file()
+{
+    fprintf(stderr, "\n>->->->->\n");
+    fprintf(stderr, "[ERROR - File] Could not use file\n");
+    fprintf(stderr, "<-<-<-<-<\n\n");
+    exit(1);
+}

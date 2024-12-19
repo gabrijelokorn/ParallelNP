@@ -9,15 +9,15 @@ TESTF = *.json
 compile:
 	@echo "### ### ### >>> Compiling $(WD) <<< ### ### ###"
 	$(MAKE) -C partition compile
-# $(MAKE) -C kamada_kawai compile
+	$(MAKE) -C kamada_kawai compile
 	@echo ""
 
 run:
 	@echo "### ### ### >>> Running $(WD) <<< ### ### ###"
 	$(MAKE) -C partition run
-# $(MAKE) -C kamada_kawai run
+	$(MAKE) -C kamada_kawai run
 	@echo ""
 
 clean:
 	$(MAKE) -C partition clean
-# $(MAKE) -C kamada_kawai clean
+	$(MAKE) -C kamada_kawai clean

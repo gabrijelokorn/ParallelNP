@@ -5,9 +5,9 @@ TARGET = main.out
 SOURCES = main.c\
 ./s/small.c ./s/seq.c ./s/par.c\
 ./l/large.c ./l/seq.c ./l/par.c\
-../common/file.c ../common/read.c ../common/error.c\
+../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./json2partitions.c partitions2json.c
-OUTPUTS = *.json
+OUTPUTS = *.json **/*.txt
 
 CC = gcc
 CFLAGS = -ljson-c # -ljson-c is needed for json-c library
@@ -39,13 +39,17 @@ run: $(TARGET)
 	@for case in $(TESTD)/$(LARGE)/$(TESTF); do \
 		outs=l/s$$(basename $$case .json).json; \
 		outp=l/p$$(basename $$case .json).json; \
-		./$(TARGET) -t $$case -x $$outs -y $$outp -v -l; \
+		timeseq=l/s$$(basename $$case .json)t.txt; \
+		timepar=l/p$$(basename $$case .json)t.txt; \
+		./$(TARGET) -t $$case -x $$outs -y $$outp -m $$timeseq -n $$timepar -v -l; \
 	done
 
 	@for case in $(TESTD)/$(SMALL)/$(TESTF); do \
 		outs=s/s$$(basename $$case .json).json; \
 		outp=s/p$$(basename $$case .json).json; \
-		./$(TARGET) -t $$case -x $$outs -y $$outp -v; \
+		timeseq=s/s$$(basename $$case .json)t.txt; \
+		timepar=s/p$$(basename $$case .json)t.txt; \
+		./$(TARGET) -t $$case -x $$outs -y $$outp -m $$timeseq -n $$timepar -v; \
 	done
 ### --- --- --- ###
 

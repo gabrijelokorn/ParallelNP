@@ -3,9 +3,9 @@ all: compile run
 
 TARGET = main.out
 SOURCES = main.c ./seq.c ./par.c\
-../common/file.c ../common/read.c ../common/error.c\
+../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c
-OUTPUTS = *.csv # Later add csvs to clean, when they will be automatic
+OUTPUTS = *.csv *.json *.txt
 
 CC = gcc
 CFLAGS = -ljson-c # -ljson-c is needed for json-c library
@@ -33,7 +33,9 @@ run: $(TARGET)
 	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		sequential=s$$(basename $$case .json).csv; \
 		parallel=p$$(basename $$case .json).csv; \
-		./$(TARGET) -t $$case -x $$sequential -y $$parallel -v; \
+		timeseq=s$$(basename $$case .json)t.txt; \
+		timepar=p$$(basename $$case .json)t.txt; \
+		./$(TARGET) -t $$case -x $$sequential -y $$parallel -m $$timeseq -n $$timepar -v; \
 	done
 ### --- --- --- ###
 

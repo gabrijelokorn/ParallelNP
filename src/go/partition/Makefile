@@ -2,7 +2,7 @@
 
 TARGET = main
 SOURCES = main.go
-OUTPUTS = **/*.json
+OUTPUTS = **/*.json **/*.txt
 
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
@@ -24,18 +24,20 @@ $(TARGET): $(SOURCES)
 run: $(TARGET)
 	@echo "  |- $(WD)"
 	
-# @echo large
-# @for case in $(TESTD)/$(LARGE)/$(TESTF); do \
-# 	outs=l/s$$(basename $$case .json).json; \
-# 	outp=l/p$$(basename $$case .json).json; \
-# 	./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v -l; \
-# done
+	@for case in $(TESTD)/$(LARGE)/$(TESTF); do \
+		outs=l/s$$(basename $$case .json).json; \
+		outp=l/p$$(basename $$case .json).json; \
+		timeseq=l/s$$(basename $$case .json)t.txt; \
+		timepar=l/p$$(basename $$case .json)t.txt; \
+		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -m $$timeseq -n $$timepar -v -l; \
+	done
 	
-	@echo small
 	@for case in $(TESTD)/$(SMALL)/$(TESTF); do \
 		outs=s/s$$(basename $$case .json).json; \
 		outp=s/p$$(basename $$case .json).json; \
-		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v; \
+		timeseq=s/s$$(basename $$case .json)t.txt; \
+		timepar=s/p$$(basename $$case .json)t.txt; \
+		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -m $$timeseq -n $$timepar -v; \
 	done
 
 ### --- --- --- ###

@@ -3,5 +3,6 @@
 
 // error for wrong arguments to the program
 void error_args(char* name);
+void error_file();
 
 #endif

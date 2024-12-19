@@ -1,9 +1,9 @@
 .PHONY: all clean compile run
 
 TARGET = main
-SOURCES = main.go seq.go \
+SOURCES = main.go seq.go par.go\
 kamada_kawai.go kamada_kawai2csv.go
-OUTPUTS = *.csv
+OUTPUTS = *.csv *.json *.txt
 
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
@@ -14,7 +14,7 @@ compile: $(TARGET)
 
 $(TARGET): $(SOURCES)
 	@echo "  |- $(WD)"
-	@go build -o $(TARGET) $(SOURCES)
+	@go build -race -o $(TARGET) $(SOURCES)
 ### --- ------ --- ###
 
 
@@ -26,7 +26,9 @@ run: $(TARGET)
 	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		outs=s$$(basename $$case .json).csv; \
 		outp=p$$(basename $$case .json).csv; \
-		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -v; \
+		timeseq=s$$(basename $$case .json)t.txt; \
+		timepar=p$$(basename $$case .json)t.txt; \
+		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -m=$$timeseq -n=$$timepar -v; \
 	done
 ### --- --- --- ###
 

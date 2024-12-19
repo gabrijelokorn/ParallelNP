@@ -30,64 +30,72 @@
                 const lang = document.createElement('div');
                 lang.classList.add('lang');
 
-                for (let t in results[l]) {
-                    const type = document.createElement('div');
-                    type.classList.add(t);
+                const algos = document.createElement('div');
+                algos.classList.add('algos');
 
-                    const typeTitle = document.createElement('h3');
-                    typeTitle.classList.add('type-title');
-                    typeTitle.innerText = t === "s" ? "Zaporedni programi" : "Paralelni programi";
+                for (let a in results[l]) {
+                    const algo = document.createElement('div');
+                    algo.classList.add('algo');
 
-                    const algos = document.createElement('div');
-                    algos.classList.add('algos');
+                    const algoTitle = document.createElement('h4');
+                    algoTitle.classList.add('algo-title');
+                    if (a === "partition") algoTitle.innerText = "Partitioning Problem";
+                    else algoTitle.innerText = "Kamada Kawai";
 
-                    for (let a in results[l][t]) {
-                        const algo = document.createElement('div');
-                        algo.classList.add('algo');
-                        
-                        const algoTitle = document.createElement('h4');
-                        algoTitle.classList.add('algo-title');
-                        if (a === "partition") algoTitle.innerText = "Partitioning Problem";
-                        else algoTitle.innerText = "Kamada Kawai Algorithm";
-                        
-                        
-                        algo.appendChild(algoTitle);
-                        
-                        
-                        const tableDiv = document.createElement('div');
-                        tableDiv.classList.add('tableDiv');
-                        for (let sa in results[l][t][a]) {
-                            const table = document.createElement('table');
-                            const th = document.createElement('th');
+                    algo.appendChild(algoTitle);
 
-                            th.innerText = sa === "s" ? "Small Partitions" : sa === "l" ? "Large Partition" : "Kamada Kawai";
+                    const tableDiv = document.createElement('div');
+                    tableDiv.classList.add('tableDiv');
+
+                    for (let sa in results[l][a]) {
+                        const algorithmTable = document.createElement('table');
+                        algorithmTable.classList.add('algorithmTable');
+
+                        const headerRow = document.createElement('tr');
+                        const headNum = document.createElement('th');
+                        headNum.innerText = "Test";
+                        headerRow.appendChild(headNum);
+                        const headSeq = document.createElement('th');
+                        headSeq.innerText = "Sequential";
+                        headerRow.appendChild(headSeq);
+                        const headPar = document.createElement('th');
+                        headPar.innerText = "Parallel";
+                        headerRow.appendChild(headPar);
+
+                        algorithmTable.appendChild(headerRow);
+
+                        for (let n in results[l][a][sa]) {
+                            const caseRow = document.createElement('tr');
+
+                            const caseNum = document.createElement('td');
+                            caseNum.innerText = n;
+                            caseRow.appendChild(caseNum);
                             
-                            table.appendChild(th);
-                            for (let i in results[l][t][a][sa]) {
-                                const tr = document.createElement('tr');
-                                const td = document.createElement('td');
-                                td.innerText = i;
-                                if (results[l][t][a][sa][i] === true) {
-                                    td.classList.add('correct');
+                            for (let t in results[l][a][sa][n]) {
+                                console.log(results[l][a][sa][n][t]);
+                                const caseTTime = document.createElement('td');
+                                caseTTime.innerText = results[l][a][sa][n][t].time;
+
+                                caseRow.appendChild(caseTTime);
+
+                                if (results[l][a][sa][n][t].correct) {
+                                    caseTTime.classList.add('correct');
                                 } else {
-                                    td.classList.add('incorrect');
+                                    caseTTime.classList.add('incorrect');
                                 }
-
-                                tr.appendChild(td);
-                                table.appendChild(tr);
                             }
-                            tableDiv.appendChild(table);
-                        }
-                        algo.appendChild(tableDiv);
 
-                        algos.appendChild(algo);
+                            algorithmTable.appendChild(caseRow);
+                        }
+                        
+                        tableDiv.appendChild(algorithmTable);
                     }
 
-                    type.appendChild(typeTitle);
-                    type.appendChild(algos);
-
-                    lang.appendChild(type);
+                    algo.appendChild(tableDiv);
+                    algos.appendChild(algo);
                 }
+
+                lang.appendChild(algos);
 
                 container.appendChild(title);
                 container.appendChild(lang);

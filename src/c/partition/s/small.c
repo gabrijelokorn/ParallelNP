@@ -5,7 +5,7 @@
 #include "../../common/parallelNP.h"
 #include "small.h"
 
-void small(int **arr, Partitions *p, bool verbose, char *outS, char *outP)
+void small(int **arr, Partitions *p, bool verbose, char *outS, char *outP, char *outST, char *outPT)
 {
     // Sequential
     double start_seq = omp_get_wtime();
@@ -23,14 +23,16 @@ void small(int **arr, Partitions *p, bool verbose, char *outS, char *outP)
         FILE *fileS = openFile(outS, "w");
         writePartitions(fileS, resultS, p->rows);
         fclose(fileS);
+        FILE *timeS = openFile(outST, "w");
+        writeTime(timeS, end_seq - start_seq);
+        fclose(timeS);
 
         FILE *fileP = openFile(outP, "w");
         writePartitions(fileP, resultP, p->rows);
         fclose(fileP);
-        
-        // Print the times
-        printf("Sequential: %f seconds\n", end_seq - start_seq);
-        printf("Parallel: %f seconds\n", end_par - start_par);
+        FILE *timeP = openFile(outPT, "w");
+        writeTime(timeP, end_par - start_par);
+        fclose(timeP);
     }
 
     free(resultS);

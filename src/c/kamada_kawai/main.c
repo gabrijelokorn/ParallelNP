@@ -5,6 +5,7 @@
 #include <json-c/json.h>
 #include <omp.h>
 #include <time.h>
+#include <string.h>
 
 #include "../common/parallelNP.h"
 
@@ -19,10 +20,12 @@ int main(int argc, char *argv[])
     char *test;
     char *outS;
     char *outP;
+    char *outST;
+    char *outPT;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":t:x:y:v")) != -1)
+    while ((opt = getopt(argc, argv, ":t:x:y:m:n:v")) != -1)
     {
         switch (opt)
         {
@@ -37,6 +40,12 @@ int main(int argc, char *argv[])
             break;
         case 'y':
             outP = optarg;
+            break;
+        case 'm':
+            outST = optarg;
+            break;
+        case 'n':
+            outPT = optarg;
             break;
         case ':':
         case '?':
@@ -82,16 +91,17 @@ int main(int argc, char *argv[])
     {
         FILE *fileS = fopen(outS, "w");
         writeVertices(fileS, resultS, kamadaKawai->n);
+        fclose(fileS);
+        FILE *timeS = fopen(outST, "w");
+        writeTime(timeS, end_seq - start_seq);
+        fclose(timeS);
 
         FILE *fileP = fopen(outP, "w");
         writeVertices(fileP, resultP, kamadaKawai->n);
-
-        fclose(fileS);
         fclose(fileP);
-
-        // Print the times
-        printf("Sequential: %f seconds\n", end_seq - start_seq);
-        printf("Parallel: %f seconds\n", end_par - start_par);
+        FILE *timeP = fopen(outPT, "w");
+        writeTime(timeP, end_par - start_par);
+        fclose(timeP);
     }
 
     free(buffer);

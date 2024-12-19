@@ -7,7 +7,7 @@
 #include "../partition.h"
 #include "../partitions2json.h"
 
-void small(int **arr, Partitions *p, bool verbose, char* outS, char* outP);
+void small(int **arr, Partitions *p, bool verbose, char* outS, char* outP, char* outST, char* outPT);
 bool* small_seq(int **arr, Partitions *p);
 bool* small_par(int **arr, Partitions *p);
 

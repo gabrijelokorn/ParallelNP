@@ -17,35 +17,15 @@ table {
 }
 
 .container {
-    width: 50%;
     background-color: #20222a;
     border: 0.1rem solid rgb(86, 88, 92);
-    margin: 1rem 0;
     padding: 0.5rem;
-}
-
-.lang {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-}
-
-.s, .p {
-    width: 100%;
-}
-
-.s {
-    padding-right: 1rem;
-    border-right: 0.1rem solid rgb(115, 107, 118);
-}
-
-.p {
-    padding-left: 1rem;
+    margin: 0.5rem;
+    width: fit-content;
 }
 
 .algos {
-    width: 100%;
+    width: fit-content;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -53,13 +33,12 @@ table {
 
 .algo {
     background-color:#2d2f39;
-    width: 100%;
     border: dotted rgb(115, 107, 118);
     padding: 0 0.5rem 0.5rem 0.5rem;
     margin: 0.5rem;
 }
 
-.lang-title, .type-title, .algo-title {
+.lang-title, .algo-title {
     display: flex;
     justify-content: center;
 }
@@ -77,17 +56,14 @@ table {
     justify-content: space-evenly;
 }
 
-.correct, .incorrect {
-    display: flex;
-    justify-content: space-evenly;
+.algorithmTable {
+    margin: 0 0.5rem;
 }
 
 .correct {
-    justify-content: center;
     background-color: rgb(87, 97, 87);
 }
 
 .incorrect {
     background-color: rgb(113, 85, 85);
 }
-

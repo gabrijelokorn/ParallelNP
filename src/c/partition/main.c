@@ -30,10 +30,12 @@ int main(int argc, char *argv[])
     char *test;
     char *outS;
     char *outP;
+    char *outST;
+    char *outPT;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":vlt:x:y:")) != -1)
+    while ((opt = getopt(argc, argv, ":vlt:x:y:m:n:")) != -1)
     {
         switch (opt)
         {
@@ -51,6 +53,12 @@ int main(int argc, char *argv[])
             break;
         case 'y':
             outP = optarg;
+            break;
+        case 'm':   
+            outST = optarg;
+            break;
+        case 'n':
+            outPT = optarg;
             break;
         case ':':
             help = true;
@@ -77,13 +85,11 @@ int main(int argc, char *argv[])
 
     if (l)
     {
-        printf("large\n");
-        large(arr, p, verbose, outS, outP);
+        large(arr, p, verbose, outS, outP, outST, outPT);
     }
     else
     {
-        printf("small\n");
-        small(arr, p, verbose, outS, outP);
+        small(arr, p, verbose, outS, outP, outST, outPT);
     }
 
     free(buffer);

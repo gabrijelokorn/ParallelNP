@@ -1,14 +1,13 @@
 package small
 
 import (
-	"fmt"
 	parallelNP "golang/common"
 	partition "golang/partition/lib"
 	"os"
 	"time"
 )
 
-func Small(arr [][]int, verbose bool, outS string, outP string) {
+func Small(arr [][]int, verbose bool, outS string, outP string, outST string, outPT string) {
 	// Sequential
 	start_seq := time.Now()
 	resultS := Seq(arr)
@@ -26,17 +25,25 @@ func Small(arr [][]int, verbose bool, outS string, outP string) {
 			parallelNP.IOError("large.go", "Error creating the file", err)
 		}
 		defer fileS.Close()
+		partition.WritePartitions(fileS, resultS)
+		timeS, err := os.Create(outST)
+		if err != nil {
+			parallelNP.IOError("large.go", "Error creating the file", err)
+		}
+		defer timeS.Close()
+		parallelNP.WriteTime(timeS, end_seq)
 
 		fileP, err := os.Create(outP)
 		if err != nil {
 			parallelNP.IOError("large.go", "Error creating the file", err)
 		}
 		defer fileP.Close()
-
-		partition.WritePartitions(fileS, resultS)
 		partition.WritePartitions(fileP, resultP)
-
-		fmt.Printf("Seq: %v\n", end_seq)
-		fmt.Printf("Par: %v\n", end_par)
+		timeP, err := os.Create(outPT)
+		if err != nil {
+			parallelNP.IOError("large.go", "Error creating the file", err)
+		}
+		defer timeP.Close()
+		parallelNP.WriteTime(timeP, end_par)
 	}
 }

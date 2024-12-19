@@ -7,63 +7,30 @@ const programTypes = ["s", "p"];
 
 const result = {
     c: {
-        s: {
-            partition: {
-                l: {},
-                s: {}
-            },
-            kamada_kawai: {
-                n: {}
-            }
+        partition: {
+            l: {},
+            s: {}
         },
-        p: {
-            partition: {
-                l: {},
-                s: {}
-            },
-            kamada_kawai: {
-                n: {}
-            }
+        kamada_kawai: {
+            n: {}
         }
     },
     julia: {
-        s: {
-            partition: {
-                l: {},
-                s: {}
-            },
-            kamada_kawai: {
-                n: {}
-            }
+        partition: {
+            l: {},
+            s: {}
         },
-        p: {
-            partition: {
-                l: {},
-                s: {}
-            },
-            kamada_kawai: {
-                n: {}
-            }
+        kamada_kawai: {
+            n: {}
         }
     },
     go: {
-        s: {
-            partition: {
-                l: {},
-                s: {}
-            },
-            kamada_kawai: {
-                n: {}
-            }
+        partition: {
+            l: {},
+            s: {}
         },
-        p: {
-            partition: {
-                l: {},
-                s: {}
-            },
-            kamada_kawai: {
-                n: {}
-            }
+        kamada_kawai: {
+            n: {}
         }
     }
 };
@@ -125,11 +92,22 @@ function readTests(algorithm) {
         });
 }
 
-async function compare(l, t, a, sa, n, filename, solutionFilename) {
+async function compare(l, t, a, sa, n, filename, solutionFilename, timefilename) {
     if (! await fileExists(filename) || ! await fileExists(solutionFilename)) return;
 
-    if (await compareFiles(filename, solutionFilename)) result[l][t][a][sa][n] = true;
-    else result[l][t][a][sa][n] = false;
+    if (!result[l][a][sa][n]) result[l][a][sa][n] = {};
+    result[l][a][sa][n][t] = {
+        time: 0,
+        correct: false
+    };
+
+    const time = await readCsv(timefilename);
+    result[l][a][sa][n][t]["time"] = time;
+
+    if (await compareFiles(filename, solutionFilename)) {
+        // Read the time.json file
+        result[l][a][sa][n][t]["correct"] = true;
+    }
 }
 
 async function iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests) {
@@ -144,25 +122,27 @@ async function iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests) {
                 const algoDir = "partition/l";
                 const algoName = "partition";
                 const subAlgo = "l"
-                
+
                 const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
                 const filename = `${l}/${algoDir}/${t}${test}.json`;
-                
-                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename);
+                const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
+
+                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename, timefilename);
             }
-            
+
             // s_partition
             for (let test of s_partitionTests) {
                 const algoDir = "partition/s";
                 const algoName = "partition";
                 const subAlgo = "s";
-                
+
                 const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
                 const filename = `${l}/${algoDir}/${t}${test}.json`;
-                
-                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename);
+                const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
+
+                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename, timefilename);
             }
-            
+
             // kamada_kawai
             for (let test of kamada_kawaiTests) {
                 const algoDir = "kamada_kawai";
@@ -171,8 +151,9 @@ async function iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests) {
 
                 const solutionFilename = `../tests/${algoDir}/solutions/coords${test}.csv`;
                 const filename = `${l}/${algoDir}/${t}${test}.csv`;
+                const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
 
-                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename);
+                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename, timefilename);
             }
         }
     }
