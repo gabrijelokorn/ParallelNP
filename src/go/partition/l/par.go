@@ -18,7 +18,7 @@ func large_sum_par(arr []int, size int, index int64) int {
 	return sum
 }
 
-func Par(arr []int) int32 {
+func Par(arr []int) []int32 {
 	var result int32 = 0
 
 	var combs int64 = 1 << (len(arr) - 1)
@@ -27,7 +27,7 @@ func Par(arr []int) int32 {
 	// Calculate the total sum of the array
 	var problem_sum int = large_sum_par(arr, len(arr), all)
 	if problem_sum%2 != 0 {
-		return 0
+		return []int32{0}
 	}
 	var half_sum = problem_sum / 2
 
@@ -66,5 +66,5 @@ func Par(arr []int) int32 {
 	// Wait for all goroutines to complete
 	wg.Wait()
 
-	return result
+	return []int32{result}
 }

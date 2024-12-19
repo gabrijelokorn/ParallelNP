@@ -11,14 +11,12 @@ import (
 func Large(arr [][]int, verbose bool, outS string, outP string) {
 	// Sequential
 	start_seq := time.Now()
-	resultS := make([]int32, 1)
-	resultS[0] = Seq(arr[0])
+	resultS := Seq(arr[0])
 	end_seq := time.Since(start_seq)
 
 	// Parallel
 	start_par := time.Now()
-	resultP := make([]int32, 1)
-	resultP[0] = Par(arr[0])
+	resultP := Par(arr[0])
 	end_par := time.Since(start_par)
 
 	// Write the result to the file

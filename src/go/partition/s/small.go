@@ -11,14 +11,12 @@ import (
 func Small(arr [][]int, verbose bool, outS string, outP string) {
 	// Sequential
 	start_seq := time.Now()
-	resultS := make([]int32, len(arr))
-	resultS = Seq(arr)
+	resultS := Seq(arr)
 	end_seq := time.Since(start_seq)
 
 	// Parallel
 	start_par := time.Now()
-	resultP := make([]int32, len(arr))
-	resultP = Par(arr)
+	resultP := Par(arr)
 	end_par := time.Since(start_par)
 
 	// Write the result to the file
