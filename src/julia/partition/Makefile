@@ -1,6 +1,6 @@
 .PHONY: all clean run
 
-OUTPUTS = **/*.json
+OUTPUTS = **/*.json **/*.txt
 
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
@@ -17,13 +17,17 @@ run:
 	@for case in $(TESTD)/$(LARGE)/$(TESTF); do \
 		outs=l/s$$(basename $$case .json).json; \
 		outp=l/p$$(basename $$case .json).json; \
-		julia main.jl -t $$case -x $$outs -y $$outp -v true -l true; \
+		timeseq=l/s$$(basename $$case .json)t.txt; \
+		timepar=l/p$$(basename $$case .json)t.txt; \
+		julia main.jl -t $$case -x $$outs -y $$outp -m $$timeseq -n $$timepar -v true -l true; \
 	done
 
 	@for case in $(TESTD)/$(SMALL)/$(TESTF); do \
 		outs=s/s$$(basename $$case .json).json; \
 		outp=s/p$$(basename $$case .json).json; \
-		julia main.jl -t $$case -x $$outs -y $$outp -v true; \
+		timeseq=s/s$$(basename $$case .json)t.txt; \
+		timepar=s/p$$(basename $$case .json)t.txt; \
+		julia main.jl -t $$case -x $$outs -y $$outp -m $$timeseq -n $$timepar -v true; \
 	done
 ### --- --- --- ###
 

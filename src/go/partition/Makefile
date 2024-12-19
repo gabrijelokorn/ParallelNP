@@ -39,7 +39,6 @@ run: $(TARGET)
 		timepar=s/p$$(basename $$case .json)t.txt; \
 		./$(TARGET) -t=$$case -x=$$outs -y=$$outp -m $$timeseq -n $$timepar -v; \
 	done
-
 ### --- --- --- ###
 
 

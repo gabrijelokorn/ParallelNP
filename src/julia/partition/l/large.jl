@@ -4,19 +4,25 @@ include("./seq.jl")
 using .Seq
 include("../partitions2json.jl")
 using .Partitions2Json
+include("../../common/write.jl")
+using .Write
+using Dates
 
 export large
-function large(arr::Vector{Vector{Int64}}, verbose::Bool, outS::String, outP::String)
+function large(arr::Vector{Vector{Int64}}, verbose::Bool, outS::String, outP::String, outST::String, outPT::String)
     # Sequential
-    resultS = fill(false, length(arr))
-    for i in 1:length(arr)
-        resultS[i] = Seq.seq(arr[i])
-    end
+    start_seq = Dates.now()
+    resultS = Seq.large_seq(arr[1])
+    end_seq = Dates.now()
 
     if verbose
-        file = open(outS, "w")
-        partitions2json(file, resultS)
-        close(file)
+        fileS = open(outS, "w")
+        partitions2json(fileS, resultS)
+        close(fileS)
+        timeS = open(outST, "w")
+        writeTime(timeS, end_seq - start_seq)
+        close(timeS)
+
     end
 
 end # large

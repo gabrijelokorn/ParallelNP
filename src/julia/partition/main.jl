@@ -28,6 +28,14 @@ function main()
         help = "Path to the parallel output file"
         arg_type = String
 
+        "-m"
+        help = "Path to the time output file for sequential"
+        arg_type = String
+
+        "-n"
+        help = "Path to the time output file for parallel"
+        arg_type = String
+
         "-v"
         help = "Enable verbose output"
         arg_type = Bool
@@ -44,6 +52,8 @@ function main()
     test = get(parsed_args, "t", "")
     outS = get(parsed_args, "x", "")
     outP = get(parsed_args, "y", "")
+    outST = get(parsed_args, "m", "")
+    outPT = get(parsed_args, "n", "")
     verbose = get(parsed_args, "v", false)
     l = get(parsed_args, "l", false)
 
@@ -52,9 +62,9 @@ function main()
     arr = json2partitions(data)
 
     if l
-        Large.large(arr, verbose, outS, outP)
+        Large.large(arr, verbose, outS, outP, outST, outPT)
     else
-        Small.small(arr, verbose, outS, outP)
+        Small.small(arr, verbose, outS, outP, outST, outPT)
     end
 end
 

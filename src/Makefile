@@ -17,7 +17,7 @@ compile_go:
 	$(MAKE) -C go compile
 compile_julia:
 	$(MAKE) -C julia compile
-compile: compile_c compile_julia compile_go
+compile: compile_c  compile_go compile_julia
 ### --- ### --- ### --- ###
 
 

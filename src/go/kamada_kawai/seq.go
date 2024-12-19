@@ -175,13 +175,13 @@ func (kk *KamadaKawai) Seq() [][]Coord {
 				break
 			}
 		}
-		state := make([]Coord, kk.N)
-		copy(state, kk.Coords)
-		states = append(states, state)
 
 		deltas = calculate_deltas_seq(kk)
 		max_delta_m_seq_index = get_max_delta_m_index_seq(deltas, kk.Epsilon)
 	}
+	state := make([]Coord, kk.N)
+	copy(state, kk.Coords)
+	states = append(states, state)
 
 	return states
 }

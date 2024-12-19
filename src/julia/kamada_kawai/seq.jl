@@ -155,12 +155,12 @@ function seq(kk::KamadaKawai)
 
             deltas[max_delta_m_index] = calculate_delta(kk, max_delta_m_index)
         end # while
-        push!(states, deepcopy(kk.coords))
-
+        
         deltas = calculate_deltas(kk)
         max_delta_m_index = get_max_delta_m_index(deltas, kk.epsilon)
-
+        
     end # while
+    push!(states, deepcopy(kk.coords))
 
     return states
 end # seq
