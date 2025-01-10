@@ -8,7 +8,7 @@ TESTF = *.json
 LARGE = partition/l
 SMALL = partition/s
 
-
+export JULIA_NUM_THREADS := $(shell nproc)
 
 ### --- RUN --- ###
 run:

@@ -6,10 +6,13 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
+export JULIA_NUM_THREADS := $(shell nproc)
+
 ### --- RUN --- ###
 run:
 	@echo "  |- $(WD)"
-	
+	@export JULIA_NUM_THREADS=$(nproc)  # For Linux
+
 	@for case in $(TESTD)/$(WD)/$(TESTF); do \
 		outs=s$$(basename $$case .json).csv; \
 		outp=p$$(basename $$case .json).csv; \
