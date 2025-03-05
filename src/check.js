@@ -62,21 +62,6 @@ async function fileExists(filepath) {
     }
 }
 
-async function compareFiles(file1, file2) {
-    const ext = file1.split('.').pop();
-    try {
-        const data1 = ext === 'json' ? await readJson(file1) : await readCsv(file1);
-        const data2 = ext === 'json' ? await readJson(file2) : await readCsv(file2);
-
-        if (data1 && data2) {
-            return JSON.stringify(data1) === JSON.stringify(data2);
-        }
-    } catch (err) {
-        console.error("Error comparing files", err);
-    }
-
-}
-
 function readTests(algorithm) {
     return fs.readdir(`../tests/${algorithm}`)
         .then(files => {
@@ -90,6 +75,21 @@ function readTests(algorithm) {
         .catch(err => {
             console.error("Error reading tests", err);
         });
+}
+
+async function compareFiles(file1, file2) {
+    const ext = file1.split('.').pop();
+    try {
+        const data1 = ext === 'json' ? await readJson(file1) : await readCsv(file1);
+        const data2 = ext === 'json' ? await readJson(file2) : await readCsv(file2);
+
+        if (data1 && data2) {
+            return JSON.stringify(data1) === JSON.stringify(data2);
+        }
+    } catch (err) {
+        console.error("Error comparing files", err);
+    }
+
 }
 
 async function compare(l, t, a, sa, n, filename, solutionFilename, timefilename) {
