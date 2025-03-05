@@ -1,4 +1,5 @@
 .PHONY: all clean compile run
+all: clean compile run
 
 TARGET = main
 SOURCES = main.go
@@ -9,6 +10,8 @@ WD = $(notdir $(CURDIR))
 TESTF = *.json
 LARGE = partition/l
 SMALL = partition/s
+
+
 
 ### --- COMPILE --- ###
 compile: $(TARGET)
@@ -45,5 +48,6 @@ run: $(TARGET)
 
 ### --- CLEAN --- ###
 clean:
+	@echo "  |- $(WD)"
 	rm -f $(TARGET) $(OUTPUTS)
 ### --- ----- --- ###

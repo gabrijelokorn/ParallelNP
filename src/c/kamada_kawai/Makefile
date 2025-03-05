@@ -16,6 +16,9 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
+
+
+
 ### --- COMPILE --- ###
 compile: $(TARGET)
 
@@ -43,5 +46,6 @@ run: $(TARGET)
 
 ### --- CLEAN --- ###
 clean:
+	@echo "  |- $(WD)"
 	rm -f $(TARGET) $(OBJECTS) $(OUTPUTS)
 ### --- ----- --- ###

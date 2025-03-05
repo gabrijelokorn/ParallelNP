@@ -6,9 +6,11 @@
 # ############################################################# #
 
 .PHONY: all clean compile run c julia go check
-all: compile run check
+all: clean compile run check
 
 export OMP_CANCELLATION=true
+
+
 
 ### --- COMPILE --- ###
 compile_c:
@@ -34,10 +36,22 @@ run: run_c run_julia run_go
 
 
 
+### --- CLEAN --- ###
+clean_c:
+	$(MAKE) -C c clean
+clean_go:
+	$(MAKE) -C go clean
+clean_julia:
+	$(MAKE) -C julia clean
+clean: clean_c clean_go clean_julia
+### --- ### --- ### --- ###
+
+
+
 ### --- ### LANGUAGES ### --- ###
-c: compile_c run_c
-go: compile_go run_go
-julia: compile_julia run_julia
+c: clean_c compile_c run_c
+go: clean_go compile_go run_go
+julia: clean_julia compile_julia run_julia
 ### --- ### ######### ### --- ###
 
 
@@ -63,12 +77,3 @@ kamada_kawai:
 		matlab -nodisplay -nosplash -nodesktop -r "addpath('.'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
 	done
 ### --- ### --- ### --- ###
-
-
-
-### --- ### Clean the program in all languages ### --- ###
-clean:
-	$(MAKE) -C c clean
-	$(MAKE) -C go clean
-	$(MAKE) -C julia clean
-### --- ### --- ### --- ### --- ### --- ### --- ###

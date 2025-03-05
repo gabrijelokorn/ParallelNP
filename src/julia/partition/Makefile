@@ -1,4 +1,5 @@
 .PHONY: all clean run
+all: clean run
 
 OUTPUTS = **/*.json **/*.txt
 
@@ -9,6 +10,8 @@ LARGE = partition/l
 SMALL = partition/s
 
 export JULIA_NUM_THREADS := $(shell nproc)
+
+
 
 ### --- RUN --- ###
 run:
@@ -35,5 +38,6 @@ run:
 
 ### --- CLEAN --- ###
 clean:
+	@echo "  |- $(WD)"
 	rm -f $(OUTPUTS)
 ### --- ----- --- ###

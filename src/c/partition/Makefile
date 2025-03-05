@@ -1,5 +1,5 @@
 .PHONY: all clean compile run
-all: compile run
+all: clean compile run
 
 TARGET = main.out
 SOURCES = main.c\
@@ -21,6 +21,8 @@ LARGE = partition/l
 SMALL = partition/s
 
 export OMP_CANCELLATION=true
+
+
 
 ### --- COMPILE --- ###
 compile: $(TARGET)
@@ -57,5 +59,6 @@ run: $(TARGET)
 
 ### --- CLEAN --- ###
 clean:
+	@echo "  |- $(WD)"
 	rm -f $(TARGET) **/$(OUTPUTS)
 ### --- ------ --- ###

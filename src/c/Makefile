@@ -1,6 +1,5 @@
 .PHONY: all clean compile run
-
-all: compile run
+all: clean compile run
 
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
@@ -19,6 +18,8 @@ run:
 	@echo ""
 
 clean:
+	@echo "### ### ### >>> Cleaning $(WD) <<< ### ### ###"
 	rm -rf lib/*.o
 	$(MAKE) -C partition clean
 	$(MAKE) -C kamada_kawai clean
+	@echo ""

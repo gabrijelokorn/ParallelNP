@@ -1,4 +1,5 @@
 .PHONY: all clean run
+all: clean run
 
 OUTPUTS = *.csv *.txt
 
@@ -7,6 +8,8 @@ WD = $(notdir $(CURDIR))
 TESTF = *.json
 
 export JULIA_NUM_THREADS := $(shell nproc)
+
+
 
 ### --- RUN --- ###
 run:
@@ -26,5 +29,6 @@ run:
 
 ### --- CLEAN --- ###
 clean:
+	@echo "  |- $(WD)"
 	rm -f $(OUTPUTS)
 ### --- ----- --- ###

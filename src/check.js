@@ -35,6 +35,31 @@ const result = {
     }
 };
 
+
+async function readTests(algorithm) {
+    return fs.readdir(`../tests/${algorithm}`)
+        .then(files => {
+            const prefixes = files.filter(file => file.endsWith(".json"));
+            const filenames = prefixes.map(file => {
+                return file.split(".")[0];
+            });
+
+            return filenames;
+        })
+        .catch(err => {
+            console.error("Error reading tests", err);
+        });
+}
+
+async function fileExists(filepath) {
+    try {
+        await fs.access(filepath, constants.F_OK);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 async function readJson(filename) {
     return fs.readFile(filename, 'utf8')
         .then(data => JSON.parse(data))
@@ -52,31 +77,6 @@ async function readCsv(filename) {
             console.log("Error reading csv", err);
         });
 }
-
-async function fileExists(filepath) {
-    try {
-        await fs.access(filepath, constants.F_OK);
-        return true;
-    } catch (error) {
-        return false;
-    }
-}
-
-function readTests(algorithm) {
-    return fs.readdir(`../tests/${algorithm}`)
-        .then(files => {
-            const prefixes = files.filter(file => file.endsWith(".json"));
-            const filenames = prefixes.map(file => {
-                return file.split(".")[0];
-            });
-
-            return filenames;
-        })
-        .catch(err => {
-            console.error("Error reading tests", err);
-        });
-}
-
 async function compareFiles(file1, file2) {
     const ext = file1.split('.').pop();
     try {
@@ -158,7 +158,6 @@ async function iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests) {
         }
     }
 }
-
 
 async function test() {
     const l_partitionTests = await readTests("partition/l");
