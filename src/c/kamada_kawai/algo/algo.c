@@ -13,19 +13,19 @@ void rewindVertices(KamadaKawai *kamadaKawai, Vertices *result)
     }
 }
 
-void echo(KamadaKawai *kamadaKawai, Vertices *result, double elapsed, char *algo, char *testcase, bool verbose)
+void echo(KamadaKawai *kamadaKawai, Vertices *result, double elapsed, char *algo, char *num, bool verbose)
 {
     if (!verbose)
         return;
 
-    char *algoresult = parseFilename(algo, testcase, "csv");
+    char *algoresult = parseFilename(algo, num, "csv");
     writeVertices(result, kamadaKawai->n, algoresult);
 
-    char *algotime = parseFilename(algo, testcase, "txt");
+    char *algotime = parseFilename(algo, num, "txt");
     writeTime(elapsed, algotime);
 }
 
-void algo(KamadaKawai *kamadaKawai, char *testcase, bool verbose)
+void algo(KamadaKawai *kamadaKawai, char *num, bool verbose)
 {
     double start;
     Vertices *result;
@@ -34,13 +34,13 @@ void algo(KamadaKawai *kamadaKawai, char *testcase, bool verbose)
     start = omp_get_wtime();
     result = seq(kamadaKawai);
     end = omp_get_wtime();
-    echo(kamadaKawai, result, end - start, "seq", testcase, verbose);
+    echo(kamadaKawai, result, end - start, "seq", num, verbose);
     rewindVertices(kamadaKawai, result);
 
     start = omp_get_wtime();
     result = par(kamadaKawai);
     end = omp_get_wtime();
-    echo(kamadaKawai, result, end - start, "par", testcase, verbose);
+    echo(kamadaKawai, result, end - start, "par", num, verbose);
     rewindVertices(kamadaKawai, result);
 
     return;

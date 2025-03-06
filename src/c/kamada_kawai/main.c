@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 {
     bool verbose = false;
     char *test;
-    char *testcase;
+    char *num;
     bool help = false;
 
     int opt;
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
             verbose = true;
             break;
         case 'x':
-            testcase = optarg;
+            num = optarg;
             break;
         case ':':
         case '?':
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     free(buffer);
     
     // Run the algorithm
-    algo(kamadaKawai, testcase, verbose);
+    algo(kamadaKawai, num, verbose);
     free(kamadaKawai);
     
     return 0;

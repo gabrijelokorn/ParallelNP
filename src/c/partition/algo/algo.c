@@ -5,19 +5,19 @@
 #include "../../common/parallelNP.h"
 #include "algo.h"
 
-void echo(Partitions *p, bool *result, double elapsed, char *algo, char *testcase, bool verbose)
+void echo(Partitions *p, bool *result, double elapsed, char *algo, char *num, bool verbose)
 {
     if (!verbose)
         return;
 
-    char *algoresult = parseFilename(algo, testcase, "json");
+    char *algoresult = parseFilename(algo, num, "json");
     writePartitions(result, p->rows, algoresult);
 
-    char *algotime = parseFilename(algo, testcase, "txt");
+    char *algotime = parseFilename(algo, num, "txt");
     writeTime(elapsed, algotime);
 }
 
-void algo(Partitions *p, int **arr, char *testcase, bool verbose)
+void algo(Partitions *p, int **arr, char *num, bool verbose)
 {
     double start;
     bool *result;
@@ -26,12 +26,12 @@ void algo(Partitions *p, int **arr, char *testcase, bool verbose)
     start = omp_get_wtime();
     result = seq(p, arr);
     end = omp_get_wtime();
-    echo(p, result, end - start, "seq", testcase, verbose);
+    echo(p, result, end - start, "seq", num, verbose);
     
     start = omp_get_wtime();
     result = par(p, arr);
     end = omp_get_wtime();
-    echo(p, result, end - start, "par", testcase, verbose);
+    echo(p, result, end - start, "par", num, verbose);
 
     return;
 }

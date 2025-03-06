@@ -8,16 +8,15 @@ SOURCES = main.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./json2partitions.c partitions2json.c
 
-CC = gcc
-CFLAGS = -ljson-c 	# -ljson-c is needed for json-c library
-CFLAGS += -lm 		# -lm is needed for math library
-CFLAGS += -fopenmp 	# -fopenmp is needed for OpenMP library
-
 ALGO = algo
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
+CC = gcc
+CFLAGS = -ljson-c 	# -ljson-c is needed for json-c library
+CFLAGS += -lm 		# -lm is needed for math library
+CFLAGS += -fopenmp 	# -fopenmp is needed for OpenMP library
 export OMP_CANCELLATION=true
 
 
@@ -39,7 +38,6 @@ run: $(TARGET)
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t $$case -x $$num -v; \
 	done
-
 ### --- --- --- ###
 
 

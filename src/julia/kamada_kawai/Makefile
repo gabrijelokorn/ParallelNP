@@ -1,8 +1,9 @@
-.PHONY: all clean run
-all: clean run
+.PHONY: all clean compile run
+all: clean compile run
 
 OUTPUTS = *.csv *.txt
 
+ALGO = algo
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
@@ -14,14 +15,10 @@ export JULIA_NUM_THREADS := $(shell nproc)
 ### --- RUN --- ###
 run:
 	@echo "  |- $(WD)"
-	@export JULIA_NUM_THREADS=$(nproc)  # For Linux
 
 	@for case in $(TESTD)/$(WD)/$(TESTF); do \
-		outs=s$$(basename $$case .json).csv; \
-		outp=p$$(basename $$case .json).csv; \
-		timeseq=s$$(basename $$case .json)t.txt; \
-		timepar=p$$(basename $$case .json)t.txt; \
-		julia main.jl -t $$case -x $$outs -y $$outp -m $$timeseq -n $$timepar -v true; \
+		num=$$(basename $$case .json); \
+		julia main.jl -t $$case -x $$num -v true; \
 	done
 ### --- --- --- ###
 

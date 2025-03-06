@@ -24,19 +24,7 @@ function main()
         required = true
 
         "-x"
-        help = "Path to the sequential output file"
-        arg_type = String
-
-        "-m"
-        help = "Path to the time output file for sequential"
-        arg_type = String
-
-        "-n"
-        help = "Path to the time output file for parallel"
-        arg_type = String
-
-        "-y"
-        help = "Path to the parallel output file"
+        help = "Enumeration of testcase"
         arg_type = String
 
         "-v"
@@ -48,10 +36,7 @@ function main()
     parsed_args = parse_args(ARGS, s)
 
     test = get(parsed_args, "t", "")
-    outS = get(parsed_args, "x", "")
-    outP = get(parsed_args, "y", "")
-    outST = get(parsed_args, "m", "")
-    outPT = get(parsed_args, "n", "")
+    num = get(parsed_args, "x", "")
     verbose = get(parsed_args, "v", false)
 
     data = JSON.parsefile(test)

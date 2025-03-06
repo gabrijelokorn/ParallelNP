@@ -130,7 +130,9 @@ async function test(partitionTests, kamada_kawaiTests) {
         // partition
         {
             const problemDir = "partition";
-            const algos = await readAlgos(l, problemDir, `.${l}`);
+            const langPostfix = `.${l}`;
+            if (l === "julia") langPostfix = ".jl";
+            const algos = await readAlgos(l, problemDir, `.${langPostfix}`);
 
             for (let test of partitionTests) {
                 for (let algoName of algos) {
@@ -147,8 +149,10 @@ async function test(partitionTests, kamada_kawaiTests) {
         // kamada_kawai
         {
             const problemDir = "kamada_kawai";
-            const algos = await readAlgos(l, problemDir, `.${l}`);
-
+            const langPostfix = `.${l}`;
+            if (l === "julia") langPostfix = ".jl";
+            const algos = await readAlgos(l, problemDir, `.${langPostfix}`);
+            
             for (let test of kamada_kawaiTests) {
                 for (let algoName of algos) {
 
