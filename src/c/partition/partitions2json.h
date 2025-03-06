@@ -3,6 +3,6 @@
 
 # include <stdlib.h>
 
-void writePartitions(FILE* fp, bool* result, int n);
+void writePartitions(bool* result, int n, char *outFile);
 
 # endif

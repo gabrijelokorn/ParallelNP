@@ -18,24 +18,19 @@
 #include "../common/parallelNP.h"
 
 #include "./partition.h"
-#include "./s/small.h"
-#include "./l/large.h"
+#include "./algo/algo.h"
 
 #include "./json2partitions.h"
 
 int main(int argc, char *argv[])
 {
     bool verbose = false;
-    bool l = false;
     char *test;
-    char *outS;
-    char *outP;
-    char *outST;
-    char *outPT;
+    char *testcase;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":vlt:x:y:m:n:")) != -1)
+    while ((opt = getopt(argc, argv, ":vt:x:")) != -1)
     {
         switch (opt)
         {
@@ -45,23 +40,10 @@ int main(int argc, char *argv[])
         case 'v':
             verbose = true;
             break;
-        case 'l':
-            l = true;
-            break;
         case 'x':
-            outS = optarg;
-            break;
-        case 'y':
-            outP = optarg;
-            break;
-        case 'm':   
-            outST = optarg;
-            break;
-        case 'n':
-            outPT = optarg;
+            testcase = optarg;
             break;
         case ':':
-            help = true;
         case '?':
             help = true;
             break;
@@ -76,25 +58,17 @@ int main(int argc, char *argv[])
     // Read the input file
     FILE *testF = openFile(test, "r");
     char *buffer = readFile(testF);
-
+    fclose(testF);
+    
     // json -> partitions
     Partitions *p = get_partitions(buffer);
     // partitions -> array
     int **arr = json2partitions(buffer, p);
-
-
-    if (l)
-    {
-        large(arr, p, verbose, outS, outP, outST, outPT);
-    }
-    else
-    {
-        small(arr, p, verbose, outS, outP, outST, outPT);
-    }
-
     free(buffer);
+    
+    // Run the algorithm
+    algo(p, arr, testcase, verbose);
     free(arr);
-    fclose(testF);
 
     return 0;
 }

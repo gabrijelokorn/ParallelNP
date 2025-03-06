@@ -10,6 +10,7 @@
 #include "../common/parallelNP.h"
 
 #include "./kamada_kawai.h"
+#include "./algo/algo.h"
 
 #include "./kamada_kawai2csv.h"
 #include "./json2kamada_kawai.h"
@@ -18,10 +19,7 @@ int main(int argc, char *argv[])
 {
     bool verbose = false;
     char *test;
-    char *outS;
-    char *outP;
-    char *outST;
-    char *outPT;
+    char *testcase;
     bool help = false;
 
     int opt;
@@ -36,16 +34,7 @@ int main(int argc, char *argv[])
             verbose = true;
             break;
         case 'x':
-            outS = optarg;
-            break;
-        case 'y':
-            outP = optarg;
-            break;
-        case 'm':
-            outST = optarg;
-            break;
-        case 'n':
-            outPT = optarg;
+            testcase = optarg;
             break;
         case ':':
         case '?':
@@ -65,50 +54,15 @@ int main(int argc, char *argv[])
     // Read the input file
     FILE *testF = openFile(test, "r");
     char *buffer = readFile(testF);
+    fclose(testF);
 
     // json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
-
-    // Sequential
-    double start_seq = omp_get_wtime();
-    Vertices *resultS = seq(kamadaKawai);
-    double end_seq = omp_get_wtime();
-
-    // Reassign the coordinates
-    for (int i = 0; i < kamadaKawai->n; i++)
-    {
-        kamadaKawai->coords[i].x = resultS->coords[i].x;
-        kamadaKawai->coords[i].y = resultS->coords[i].y;
-    }
-
-    // Parallel
-    double start_par = omp_get_wtime();
-    Vertices *resultP = par(kamadaKawai);
-    double end_par = omp_get_wtime();
-
-    // Write the output files
-    if (verbose)
-    {
-        FILE *fileS = fopen(outS, "w");
-        writeVertices(fileS, resultS, kamadaKawai->n);
-        fclose(fileS);
-        FILE *timeS = fopen(outST, "w");
-        writeTime(timeS, end_seq - start_seq);
-        fclose(timeS);
-
-        FILE *fileP = fopen(outP, "w");
-        writeVertices(fileP, resultP, kamadaKawai->n);
-        fclose(fileP);
-        FILE *timeP = fopen(outPT, "w");
-        writeTime(timeP, end_par - start_par);
-        fclose(timeP);
-    }
-
     free(buffer);
+    
+    // Run the algorithm
+    algo(kamadaKawai, testcase, verbose);
     free(kamadaKawai);
-
-    free(resultS);
-    fclose(testF);
-
+    
     return 0;
 }

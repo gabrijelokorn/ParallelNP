@@ -3,6 +3,14 @@
 
 #include "file.h"
 
+char *parseFilename(char *algo, char *out, char *ext)
+{
+    char *filename = (char *)malloc(100 * sizeof(char));
+    sprintf(filename, "algo/%s%s.%s", algo, out, ext);
+    
+    return filename;
+}
+
 FILE *openFile(char *filename, char *mode)
 {
     FILE *fp = fopen(filename, mode);

@@ -110,37 +110,24 @@ async function compare(l, t, a, sa, n, filename, solutionFilename, timefilename)
     }
 }
 
-async function iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests) {
+async function test(partitionTests, kamada_kawaiTests) {
     // Iterate over all languages
     for (let l of languages) {
         // For both program types
         for (let t of programTypes) {
             // Iterate over all algorithms
 
-            // l_partition
-            for (let test of l_partitionTests) {
-                const algoDir = "partition/l";
+            // partition
+            for (let test of partitionTests) {
+                const algoDir = "partition";
                 const algoName = "partition";
                 const subAlgo = "l"
 
-                const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
-                const filename = `${l}/${algoDir}/${t}${test}.json`;
-                const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
+                // const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
+                // const testfilename = `${l}/${algoDir}/${t}${test}.json`;
+                // const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
 
-                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename, timefilename);
-            }
-
-            // s_partition
-            for (let test of s_partitionTests) {
-                const algoDir = "partition/s";
-                const algoName = "partition";
-                const subAlgo = "s";
-
-                const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
-                const filename = `${l}/${algoDir}/${t}${test}.json`;
-                const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
-
-                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename, timefilename);
+                // await compare(l, t, algoName, subAlgo, test, testfilename, solutionFilename, timefilename);
             }
 
             // kamada_kawai
@@ -149,25 +136,27 @@ async function iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests) {
                 const algoName = "kamada_kawai";
                 const subAlgo = "n";
 
-                const solutionFilename = `../tests/${algoDir}/solutions/coords${test}.csv`;
-                const filename = `${l}/${algoDir}/${t}${test}.csv`;
-                const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
+                // const solutionFilename = `../tests/${algoDir}/solutions/coords${test}.csv`;
+                // const testfilename = `${l}/${algoDir}/${t}${test}.csv`;
+                // const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
 
-                await compare(l, t, algoName, subAlgo, test, filename, solutionFilename, timefilename);
+                // await compare(l, t, algoName, subAlgo, test, testfilename, solutionFilename, timefilename);
             }
         }
     }
 }
 
-async function test() {
-    const l_partitionTests = await readTests("partition/l");
-    const s_partitionTests = await readTests("partition/s");
+async function main() {
+    // Read the names of the tests
+    const partitionTests = await readTests("partition");
     const kamada_kawaiTests = await readTests("kamada_kawai");
 
-    await iterate(l_partitionTests, s_partitionTests, kamada_kawaiTests);
+    // Run the tests
+    await test(partitionTests, kamada_kawaiTests);
 
+    // Create the checks.js file
     const output = `const results = ${JSON.stringify(result)};`;
     fs.writeFile('../views/assets/checks.js', output);
 }
 
-test();
+main();

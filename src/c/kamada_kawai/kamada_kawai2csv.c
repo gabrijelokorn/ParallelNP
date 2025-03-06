@@ -4,8 +4,9 @@
 
 #include "./kamada_kawai2csv.h"
 
-void writeVertices(FILE *fp, Vertices *vertices, int n)
+void writeVertices(Vertices *vertices, int n, char *resultFile)
 {
+    FILE *fp = fopen(resultFile, "w");
     while (vertices != NULL)
     {
         for (int i = 0; i < n; i++)
@@ -15,4 +16,5 @@ void writeVertices(FILE *fp, Vertices *vertices, int n)
         vertices = vertices->next;
         fprintf(fp, "\n");
     }
+    fclose(fp);
 }

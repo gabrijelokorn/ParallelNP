@@ -2,23 +2,21 @@
 all: clean compile run
 
 TARGET = main.out
+OUTPUTS = *.json **/*.txt
 SOURCES = main.c\
-./s/small.c ./s/seq.c ./s/par.c\
-./l/large.c ./l/seq.c ./l/par.c\
+./algo/algo.c ./algo/seq.c ./algo/par.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./json2partitions.c partitions2json.c
-OUTPUTS = *.json **/*.txt
 
 CC = gcc
-CFLAGS = -ljson-c # -ljson-c is needed for json-c library
-CFLAGS += -lm # -lm is needed for math library
-CFLAGS += -fopenmp # -fopenmp is needed for OpenMP library
+CFLAGS = -ljson-c 	# -ljson-c is needed for json-c library
+CFLAGS += -lm 		# -lm is needed for math library
+CFLAGS += -fopenmp 	# -fopenmp is needed for OpenMP library
 
+ALGO = algo
 TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
-LARGE = partition/l
-SMALL = partition/s
 
 export OMP_CANCELLATION=true
 
@@ -37,22 +35,11 @@ $(TARGET):
 ### --- RUN --- ###
 run: $(TARGET)
 	@echo "  |- $(WD)"
-
-	@for case in $(TESTD)/$(LARGE)/$(TESTF); do \
-		outs=l/s$$(basename $$case .json).json; \
-		outp=l/p$$(basename $$case .json).json; \
-		timeseq=l/s$$(basename $$case .json)t.txt; \
-		timepar=l/p$$(basename $$case .json)t.txt; \
-		./$(TARGET) -t $$case -x $$outs -y $$outp -m $$timeseq -n $$timepar -v -l; \
+	@for case in $(TESTD)/$(WD)/$(TESTF); do \
+		num=$$(basename $$case .json); \
+		./$(TARGET) -t $$case -x $$num -v; \
 	done
 
-	@for case in $(TESTD)/$(SMALL)/$(TESTF); do \
-		outs=s/s$$(basename $$case .json).json; \
-		outp=s/p$$(basename $$case .json).json; \
-		timeseq=s/s$$(basename $$case .json)t.txt; \
-		timepar=s/p$$(basename $$case .json)t.txt; \
-		./$(TARGET) -t $$case -x $$outs -y $$outp -m $$timeseq -n $$timepar -v; \
-	done
 ### --- --- --- ###
 
 

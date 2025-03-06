@@ -1,6 +1,7 @@
 # include <stdio.h>
 # include <json-c/json.h>
 # include <stdbool.h>
+#include "../common/parallelNP.h"
 
 #include "./partitions2json.h"
 
@@ -28,6 +29,10 @@ void writeJsonArray(FILE *fp, bool *result, int n)
     writeJsonObject(fp, jobj);
 }
 
-void writePartitions(FILE* fp, bool* result, int n) {
-    writeJsonArray(fp, result, n);    
+void writePartitions(bool* result, int n, char *resultFile) {
+    FILE *file = openFile(resultFile, "w");
+
+    writeJsonArray(file, result, n);    
+
+    fclose(file);
 }

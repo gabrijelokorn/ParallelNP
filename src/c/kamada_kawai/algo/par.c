@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <omp.h>
 
-#include "./kamada_kawai.h"
+#include "../kamada_kawai.h"
 
 float derivaitve_x_m_par(KamadaKawai *kk, int index)
 {

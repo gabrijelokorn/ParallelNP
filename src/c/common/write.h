@@ -4,6 +4,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void *writeTime(FILE *fp, double time);
+void *writeTime(double time, char* timeFile);
 
 #endif

@@ -1,8 +1,8 @@
 #include <stdbool.h>
 
-#include "small.h"
+#include "algo.h"
 
-int small_sum_seq(int *arr, int size, unsigned long long int index)
+int sum_seq(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
     for (int i = 0; i < size; i++)
@@ -15,7 +15,7 @@ int small_sum_seq(int *arr, int size, unsigned long long int index)
     return sum;
 }
 
-bool *small_seq(int **arr, Partitions *p)
+bool *seq(Partitions *p, int **arr)
 {
     bool *result = (bool *)malloc(p->rows * sizeof(bool));
 
@@ -29,14 +29,14 @@ bool *small_seq(int **arr, Partitions *p)
         unsigned long long int combs = 1 << (size - 1);
         unsigned long long int all = ((unsigned long long int)1 << size) - 1;
 
-        int problem_sum = small_sum_seq(row, size, all);
+        int problem_sum = sum_seq(row, size, all);
         if (problem_sum % 2 != 0)
             continue;
         int half_sum = problem_sum / 2;
 
         for (int j = 0; j < combs; j++)
         {
-            int sum = small_sum_seq(row, size, j);
+            int sum = sum_seq(row, size, j);
             if (sum == half_sum)
             {
                 result[i] = true;
