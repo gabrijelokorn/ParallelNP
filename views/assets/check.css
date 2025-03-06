@@ -24,14 +24,14 @@ table {
     width: fit-content;
 }
 
-.algos {
+.problems {
     width: fit-content;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
 }
 
-.algo {
+.problem {
     background-color:#2d2f39;
     border: dotted rgb(115, 107, 118);
     padding: 0 0.5rem 0.5rem 0.5rem;

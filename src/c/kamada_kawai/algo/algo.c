@@ -18,7 +18,7 @@ void echo(KamadaKawai *kamadaKawai, Vertices *result, double elapsed, char *algo
     if (!verbose)
         return;
 
-    char *algoresult = parseFilename(algo, testcase, "json");
+    char *algoresult = parseFilename(algo, testcase, "csv");
     writeVertices(result, kamadaKawai->n, algoresult);
 
     char *algotime = parseFilename(algo, testcase, "txt");

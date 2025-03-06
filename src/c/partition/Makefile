@@ -2,7 +2,7 @@
 all: clean compile run
 
 TARGET = main.out
-OUTPUTS = *.json **/*.txt
+OUTPUTS = **/*.json **/*.txt
 SOURCES = main.c\
 ./algo/algo.c ./algo/seq.c ./algo/par.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\

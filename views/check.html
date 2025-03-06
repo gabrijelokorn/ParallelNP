@@ -30,72 +30,71 @@
                 const lang = document.createElement('div');
                 lang.classList.add('lang');
 
-                const algos = document.createElement('div');
-                algos.classList.add('algos');
+                const problems = document.createElement('div');
+                problems.classList.add('problems');
 
-                for (let a in results[l]) {
-                    const algo = document.createElement('div');
-                    algo.classList.add('algo');
+                for (let p in results[l]) {
+                    const problem = document.createElement('div');
+                    problem.classList.add('problem');
 
                     const algoTitle = document.createElement('h4');
-                    algoTitle.classList.add('algo-title');
-                    if (a === "partition") algoTitle.innerText = "Partitioning Problem";
-                    else algoTitle.innerText = "Kamada Kawai";
+                    algoTitle.classList.add('problem-title');
+                    algoTitle.innerText = p
 
-                    algo.appendChild(algoTitle);
+                    problem.appendChild(algoTitle);
 
                     const tableDiv = document.createElement('div');
                     tableDiv.classList.add('tableDiv');
 
-                    for (let sa in results[l][a]) {
-                        const algorithmTable = document.createElement('table');
-                        algorithmTable.classList.add('algorithmTable');
+                    const problemTable = document.createElement('table');
+                    problemTable.classList.add('problemTable');
 
-                        const headerRow = document.createElement('tr');
-                        const headNum = document.createElement('th');
-                        headNum.innerText = "Test";
-                        headerRow.appendChild(headNum);
-                        const headSeq = document.createElement('th');
-                        headSeq.innerText = "Sequential";
-                        headerRow.appendChild(headSeq);
-                        const headPar = document.createElement('th');
-                        headPar.innerText = "Parallel";
-                        headerRow.appendChild(headPar);
+                    const headerRow = document.createElement('tr');
+                    const headNum = document.createElement('th');
+                    headNum.innerText = "Test";
+                    headerRow.appendChild(headNum);
 
-                        algorithmTable.appendChild(headerRow);
-
-                        for (let n in results[l][a][sa]) {
-                            const caseRow = document.createElement('tr');
-
-                            const caseNum = document.createElement('td');
-                            caseNum.innerText = n;
-                            caseRow.appendChild(caseNum);
-                            
-                            for (let t in results[l][a][sa][n]) {
-                                console.log(results[l][a][sa][n][t]);
-                                const caseTTime = document.createElement('td');
-                                caseTTime.innerText = results[l][a][sa][n][t].time;
-
-                                caseRow.appendChild(caseTTime);
-
-                                if (results[l][a][sa][n][t].correct) {
-                                    caseTTime.classList.add('correct');
-                                } else {
-                                    caseTTime.classList.add('incorrect');
-                                }
-                            }
-
-                            algorithmTable.appendChild(caseRow);
+                    for (let n in results[l][p]) {
+                        for (let a in results[l][p][n]) {
+                            const headAlgo = document.createElement('th');
+                            headAlgo.innerText = a;
+                            headerRow.appendChild(headAlgo);
+                            problemTable.appendChild(headerRow);
                         }
-                        
-                        tableDiv.appendChild(algorithmTable);
+                        break;
                     }
 
-                    algo.appendChild(tableDiv);
-                    algos.appendChild(algo);
+                    for (let n in results[l][p]) {
+                        const caseRow = document.createElement('tr');
+                        const caseNum = document.createElement('td');
+                        caseNum.innerText = n;
+                        caseRow.appendChild(caseNum);
+
+                        for (let a in results[l][p][n]) {
+                            // for (let t in results[l][p][n][a]) {
+                            const caseTTime = document.createElement('td');
+                            if (!results[l][p][n][a].time) {
+                                caseTTime.innerText = "?";
+                            } else
+                                caseTTime.innerText = results[l][p][n][a].time;
+
+                            if (results[l][p][n][a].correct) {
+                                caseTTime.classList.add('correct');
+                            } else {
+                                caseTTime.classList.add('incorrect');
+                            }
+                            caseRow.appendChild(caseTTime);
+                            // }
+                        }
+                        problemTable.appendChild(caseRow);
+                    }
+                    tableDiv.appendChild(problemTable);
+                    problem.appendChild(tableDiv);
+
+                    problems.appendChild(problem);
                 }
 
-                lang.appendChild(algos);
+                lang.appendChild(problems);
 
                 container.appendChild(title);
                 container.appendChild(lang);

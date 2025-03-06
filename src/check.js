@@ -2,39 +2,45 @@ const fs = require('fs').promises;
 const { constants } = require('fs');
 const { parse } = require('csv-parse');
 
-const languages = ["c", "julia", "go"];
-const programTypes = ["s", "p"];
+const languages = ["c"]
+// const languages = ["c", "julia", "go"];
 
 const result = {
     c: {
         partition: {
-            l: {},
-            s: {}
         },
         kamada_kawai: {
-            n: {}
         }
     },
     julia: {
         partition: {
-            l: {},
-            s: {}
         },
         kamada_kawai: {
-            n: {}
         }
     },
     go: {
         partition: {
-            l: {},
-            s: {}
         },
         kamada_kawai: {
-            n: {}
         }
     }
 };
 
+
+async function readAlgos(lang, algo, postfix) {
+    return fs.readdir(`./${lang}/${algo}/algo`)
+        .then(files => {
+            const prefixes = files.filter(file => file.endsWith(postfix)).filter(file => !file.startsWith("algo"));
+            const filenames = prefixes.map(file => {
+                return file.split(".")[0];
+            });
+
+            return filenames;
+        })
+        .catch(err => {
+            console.error("Error reading tests", err);
+        });
+}
 
 async function readTests(algorithm) {
     return fs.readdir(`../tests/${algorithm}`)
@@ -92,55 +98,66 @@ async function compareFiles(file1, file2) {
 
 }
 
-async function compare(l, t, a, sa, n, filename, solutionFilename, timefilename) {
-    if (! await fileExists(filename) || ! await fileExists(solutionFilename)) return;
-
-    if (!result[l][a][sa][n]) result[l][a][sa][n] = {};
-    result[l][a][sa][n][t] = {
+async function compare(lang, problemDir, algoName, test, solutionFilename, resultfilename, timefilename) {
+    // Create an object for the algorithm
+    if (!result[lang][problemDir][test]) result[lang][problemDir][test] = {};
+    
+    // Create an object for the test
+    if (!result[lang][problemDir][test][algoName]) result[lang][problemDir][test][algoName] = {};
+    result[lang][problemDir][test][algoName] = {
         time: 0,
         correct: false
     };
-
+    
+    if (! await fileExists(resultfilename) || ! await fileExists(solutionFilename)) return;
+    
+    // Insert the time
     const time = await readCsv(timefilename);
-    result[l][a][sa][n][t]["time"] = time;
+    result[lang][problemDir][test][algoName]["time"] = time;
 
-    if (await compareFiles(filename, solutionFilename)) {
+    // Insert the correct flag
+    if (await compareFiles(resultfilename, solutionFilename)) {
         // Read the time.json file
-        result[l][a][sa][n][t]["correct"] = true;
+        result[lang][problemDir][test][algoName]["correct"] = true;
     }
 }
 
 async function test(partitionTests, kamada_kawaiTests) {
     // Iterate over all languages
     for (let l of languages) {
-        // For both program types
-        for (let t of programTypes) {
-            // Iterate over all algorithms
+        // Iterate over all problems
 
-            // partition
+        // partition
+        {
+            const problemDir = "partition";
+            const algos = await readAlgos(l, problemDir, `.${l}`);
+
             for (let test of partitionTests) {
-                const algoDir = "partition";
-                const algoName = "partition";
-                const subAlgo = "l"
+                for (let algoName of algos) {
 
-                // const solutionFilename = `../tests/${algoDir}/solutions/${test}.json`;
-                // const testfilename = `${l}/${algoDir}/${t}${test}.json`;
-                // const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
-
-                // await compare(l, t, algoName, subAlgo, test, testfilename, solutionFilename, timefilename);
+                    const solutionFilename = `../tests/${problemDir}/solutions/${test}.json`;
+                    const resultfilename = `${l}/${problemDir}/algo/${algoName}${test}.json`;
+                    const timefilename = `${l}/${problemDir}/algo/${algoName}${test}.txt`;
+    
+                    await compare(l, problemDir, algoName, test, solutionFilename, resultfilename, timefilename);
+                }
             }
+        }
 
-            // kamada_kawai
+        // kamada_kawai
+        {
+            const problemDir = "kamada_kawai";
+            const algos = await readAlgos(l, problemDir, `.${l}`);
+
             for (let test of kamada_kawaiTests) {
-                const algoDir = "kamada_kawai";
-                const algoName = "kamada_kawai";
-                const subAlgo = "n";
+                for (let algoName of algos) {
 
-                // const solutionFilename = `../tests/${algoDir}/solutions/coords${test}.csv`;
-                // const testfilename = `${l}/${algoDir}/${t}${test}.csv`;
-                // const timefilename = `${l}/${algoDir}/${t}${test}t.txt`;
-
-                // await compare(l, t, algoName, subAlgo, test, testfilename, solutionFilename, timefilename);
+                    const solutionFilename = `../tests/${problemDir}/solutions/coords${test}.csv`;
+                    const resultfilename = `${l}/${problemDir}/algo/${algoName}${test}.csv`;
+                    const timefilename = `${l}/${problemDir}/algo/${algoName}${test}.txt`;
+    
+                    await compare(l, problemDir, algoName, test, solutionFilename, resultfilename, timefilename);
+                }
             }
         }
     }
