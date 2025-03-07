@@ -6,7 +6,9 @@ import (
 	"os"
 )
 
-func WritePartitions(file *os.File, result []int32) {
+func WritePartitions(result []int32, resultFile string) {
+	file, _ := os.Create(resultFile)
+
 	// Convert to bool array
 	var resultBool []bool
 	for _, v := range result {

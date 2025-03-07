@@ -7,12 +7,11 @@ include("./kamada_kawai2csv.jl")
 using .Kamada_Kawai2csv
 include("../common/write.jl")
 using .Write
-using Dates
 
-include("seq.jl")
-using .Seq
-include("par.jl")
-using .Par
+include("algo/algo.jl")
+using .Algo
+
+using Dates
 
 function main()
     # Define the arguments you expect
@@ -49,31 +48,7 @@ function main()
         Float64(data["display"])
     )
 
-    # Sequential
-    start_seq = Base.time_ns()
-    resultS = seq(kk)
-    end_seq = Base.time_ns()
-    
-    # Parallel
-    start_par = Base.time_ns()
-    resultP = Par.par(kk)
-    end_par = Base.time_ns()
-
-    if verbose
-        fileS = open(outS, "w")
-        WriteVertices(fileS, resultS)
-        close(fileS)
-        timeS = open(outST, "w")
-        writeTime(timeS, (end_seq - start_seq) / 1e9) # Convert to seconds
-        close(timeS)
-
-        fileP = open(outP, "w")
-        WriteVertices(fileP, resultP)
-        close(fileP)
-        timeP = open(outPT, "w")
-        writeTime(timeP, (end_par - start_par) / 1e9) # Convert to seconds
-        close(timeP)
-    end
+    algo(kk, num, verbose)
 end
 
 # Run the main function

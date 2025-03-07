@@ -3,10 +3,10 @@
 
 #include "file.h"
 
-char *parseFilename(char *algo, char *out, char *ext)
+char *parseFilename(char *algo, char *num, char *ext)
 {
     char *filename = (char *)malloc(100 * sizeof(char));
-    sprintf(filename, "algo/%s%s.%s", algo, out, ext);
+    sprintf(filename, "algo/%s%s.%s", algo, num, ext);
     
     return filename;
 }

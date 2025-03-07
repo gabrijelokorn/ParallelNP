@@ -3,8 +3,7 @@ all: clean compile run
 
 TARGET = main
 OUTPUTS = *.csv *.json *.txt
-SOURCES = main.go seq.go par.go\
-kamada_kawai.go kamada_kawai2csv.go
+SOURCES = main.go
 
 ALGO = algo
 TESTD = ../../../tests

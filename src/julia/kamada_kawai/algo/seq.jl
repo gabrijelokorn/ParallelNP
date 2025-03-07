@@ -2,7 +2,7 @@ module Seq
 
 export seq
 
-using ..Kamada_Kawai
+using ...Kamada_Kawai
 
 function derivative_x_m_seq(kk::KamadaKawai, index::Int)
     sum = 0.0

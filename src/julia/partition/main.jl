@@ -2,10 +2,8 @@
 using ArgParse
 using JSON
 
-include("l/large.jl")
-using .Large
-include("s/small.jl")
-using .Small
+include("algo/algo.jl")
+using .Algo
 include("partitions2json.jl")
 using .Partitions2Json
 include("json2partitions.jl")
@@ -40,11 +38,7 @@ function main()
     data = JSON.parsefile(test)
     arr = json2partitions(data)
 
-    if l
-        Large.large(arr, verbose, outS, outP, outST, outPT)
-    else
-        Small.small(arr, verbose, outS, outP, outST, outPT)
-    end
+    algo(arr, num, verbose)
 end
 
 # Run the main function

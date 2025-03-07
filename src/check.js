@@ -2,7 +2,12 @@ const fs = require('fs').promises;
 const { constants } = require('fs');
 const { parse } = require('csv-parse');
 
-const languages = ["c"]
+const languages = ["c", "julia"]
+const languageExtensions = new Map([
+    ["c", ".c"],
+    ["julia", ".jl"],
+    // ["go", ".go"]
+  ]);
 // const languages = ["c", "julia", "go"];
 
 const result = {
@@ -125,18 +130,16 @@ async function compare(lang, problemDir, algoName, test, solutionFilename, resul
 async function test(partitionTests, kamada_kawaiTests) {
     // Iterate over all languages
     for (let l of languages) {
+        
         // Iterate over all problems
-
+        
         // partition
         {
             const problemDir = "partition";
-            const langPostfix = `.${l}`;
-            if (l === "julia") langPostfix = ".jl";
-            const algos = await readAlgos(l, problemDir, `.${langPostfix}`);
-
+            const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
+            
             for (let test of partitionTests) {
                 for (let algoName of algos) {
-
                     const solutionFilename = `../tests/${problemDir}/solutions/${test}.json`;
                     const resultfilename = `${l}/${problemDir}/algo/${algoName}${test}.json`;
                     const timefilename = `${l}/${problemDir}/algo/${algoName}${test}.txt`;
@@ -145,13 +148,11 @@ async function test(partitionTests, kamada_kawaiTests) {
                 }
             }
         }
-
+        
         // kamada_kawai
         {
             const problemDir = "kamada_kawai";
-            const langPostfix = `.${l}`;
-            if (l === "julia") langPostfix = ".jl";
-            const algos = await readAlgos(l, problemDir, `.${langPostfix}`);
+            const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
             
             for (let test of kamada_kawaiTests) {
                 for (let algoName of algos) {

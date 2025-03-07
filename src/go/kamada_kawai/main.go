@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	parallelNP "golang/common"
+	algo "golang/kamada_kawai/algo"
 	"io/ioutil"
 	"os"
 	"time"
@@ -13,19 +14,13 @@ func main() {
 
 	// Define flags
 	t := flag.String("t", "test", "Name of the test file")
-	s := flag.String("x", "unknonw_sequential_file", "Name of the output file for the sequential program")
-	p := flag.String("y", "unknonw_parallel_file", "Name of the output file for the parallel program")
-	m := flag.String("m", "unknown_seq_time_file", "File to store the length of the sequential program")
-	n := flag.String("n", "unknown_par_time_file", "File to store the length of the parallel program")
+	x := flag.String("x", "unknonw_testcase", "Test case id")
 	v := flag.Bool("v", false, "Verbose mode")
 	flag.Parse()
 
 	test := *t
+	num := *x
 	verbose := *v
-	outS := *s
-	outP := *p
-	outST := *m
-	outPT := *n
 
 	// Read the file
 	data, err := ioutil.ReadFile(test)
@@ -34,7 +29,7 @@ func main() {
 	}
 
 	// json -> KamadaKawai struct
-	var kk KamadaKawai
+	var kk kamada_kawai.KamadaKawai
 	err = json.Unmarshal(data, &kk)
 	if err != nil {
 		parallelNP.UnmarshalError("main.go", "Error unmarshalling the JSON", err)
@@ -43,7 +38,7 @@ func main() {
 
 	// Sequential
 	start_seq := time.Now()
-	var resultS [][]Coord = kk.Seq()
+	var resultS [][]kamada_kawai.Coord = kk.Seq()
 	end_seq := time.Since(start_seq)
 
 	// Reassign the initial positions

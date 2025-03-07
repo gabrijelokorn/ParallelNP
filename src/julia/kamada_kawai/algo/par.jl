@@ -2,7 +2,7 @@ module Par
 
 export par
 
-using ..Kamada_Kawai
+using ...Kamada_Kawai
 
 function derivative_x_m_par(kk::KamadaKawai, index::Int)
     sum = 0.0

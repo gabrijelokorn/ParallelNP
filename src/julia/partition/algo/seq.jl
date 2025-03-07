@@ -1,8 +1,8 @@
-module Par
+module Seq
 
-export small_par
+export small_seq
 
-function small_sum_par(arr::Vector{Int64}, size::Int, index::Int64) 
+function sum_seq(arr::Vector{Int64}, size::Int, index::Int64) 
     sum = 0;
 
     for i in 1:size
@@ -12,27 +12,27 @@ function small_sum_par(arr::Vector{Int64}, size::Int, index::Int64)
     end
 
     return sum
-end # small_sum_par
+end # sum_seq
 
-function small_par(arr::Vector{Vector{Int64}})
+function seq(arr::Vector{Vector{Int64}})
     # an array of bools
     result = Vector{Bool}(undef, length(arr))
 
-    Threads.@threads for i in 1:length(arr)
+    for i in 1:length(arr)
         result[i] = false
         size = length(arr[i])
 
         combs = 1 << (size - 1)
         all = (1 << size) - 1
 
-        problem_sum = small_sum_par(arr[i], size, all)
+        problem_sum = sum_seq(arr[i], size, all)
         if problem_sum % 2 != 0
             continue
         end
         half_sum = problem_sum / 2
 
         for j in 1:combs
-            sum = small_sum_par(arr[i], size, j)
+            sum = sum_seq(arr[i], size, j)
             if sum == half_sum
                 result[i] = true
                 break
@@ -42,5 +42,6 @@ function small_par(arr::Vector{Vector{Int64}})
 
     return result
 end
+
 
 end # module

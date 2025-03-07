@@ -8,5 +8,10 @@ function partitions2json(file, arr::Vector{Bool})
     write(file, jsonString)
 end # partitions2json
 
+export writePartitions
+function writePartitions(file, arr::Vector{Bool})
+    partitions2json(file, arr)
+end
+
 end # module
 

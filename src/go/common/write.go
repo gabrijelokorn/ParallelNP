@@ -5,9 +5,12 @@ import (
 	"time"
 )
 
-func WriteTime(file *os.File, t time.Duration) {
-	_, err := file.WriteString(t.String())
+func WriteTime(t time.Duration, timeFile string) {
+	file, err := os.Create(timeFile)
+
 	if err != nil {
-		IOError("write.go", "Error writing the time to the file", err)
+		IOError("write.go", "Error creating the file", err)
 	}
+
+	file.WriteString(t.String())
 }
