@@ -7,7 +7,7 @@ import (
 )
 
 func echo(result []int32, elapsed time.Duration, algo, num string, verbose bool) {
-	if verbose {
+	if !verbose {
 		return
 	}
 

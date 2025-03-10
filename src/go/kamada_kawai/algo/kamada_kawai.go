@@ -1,4 +1,4 @@
-package main
+package algo
 
 type Coord struct {
 	X float64 `json:"x"`
