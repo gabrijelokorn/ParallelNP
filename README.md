@@ -11,7 +11,7 @@ Reševali jih bomo v treh različnih programskih jezikih. To so
 - Julia in 
 - Golang. 
 
-Za vsakega izmed jezikov pa bomo rešitev implementirali tako v **zaporednem** kot tudi v **vzporednem** programu.
+Za vsakega izmed jezikov pa bomo rešitev implementirali tako v **zaporednem** kot tudi v **vzporednem** programu - na različne načine.
 
 
 ## Predstavitev problemov
@@ -22,14 +22,14 @@ V vseh prihodnjih podanih primerih bo `<xy>` predstavljal zaporedno identifikaci
 Partition problem spada v teorijo števil in računalniških znanosti, kjer je cilj ugotoviti, če za dano množico pozitivnih števil S, obstajata taki podmnožici _S1_ in _S2_, da so seštevki števil množice _S1_ in množice _S2_ enaki.
 Uporabili bomo eno samo množico, na kateri bomo izvedli ta algoritem.
 
-Primer testne datoteke `/tests/partition/l/<xy>.json`:
+Primer testne datoteke `/tests/partition/<xy>.json`:
 ```json
 {
     "1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1]
 }
 ```
 
-Primer rešitve `/tests/partition/l/solutions/<xy>.json`:
+Primer rešitve `/tests/partition/solutions/<xy>.json`:
 ```json
 [ true ]
 ```
@@ -39,7 +39,7 @@ Primer rešitve `/tests/partition/l/solutions/<xy>.json`:
 Partition problem spada v teorijo števil in računalniških znanosti, kjer je cilj ugotoviti, če za dano množico pozitivnih števil S, obstajata taki podmnožici _S1_ in _S2_, da so seštevki števil množice _S1_ in množice _S2_ enaki.
 Uporabili bomo hkrati več majhnih množic, na katerih bomo izvedli ta algoritem.
 
-Primer testne datoteke `/tests/partition/s/<xy>.json`:
+Primer testne datoteke `/tests/partition/<xy>.json`:
 ```json
 {
     "1": [1, 2, 3, 4, 5],
@@ -48,7 +48,7 @@ Primer testne datoteke `/tests/partition/s/<xy>.json`:
     "4": [6, 7, 8, 9, 10]
 }
 ```
-Primer rešitve `/tests/partition/s/solutions/<xy>.json`:
+Primer rešitve `/tests/partition/solutions/<xy>.json`:
 ```json
 [ false, false, true, false ]
 ```
@@ -101,8 +101,8 @@ V sledečih datotekah so prikazani rezultati izvajanja:
 `/tests/kamada_kawai/solutions/coords<xy>.csv`:
 ```csv
 1,1 // vozlišče A v prvem koraku
-2,1 
-3,1
+2,1 // vozlišče B v prvem koraku
+3,1 // vozlišče C v prvem koraku
 
 1,2
 2,2
@@ -129,12 +129,13 @@ make
 ```
 je ekvivalentno:
 ```make
-make compile run check
+make clean compile run check
 ```
 
 Na voljo pa imamo tudi nekaj drugih možnosti:
 | Ukaz | Efekt |
 | --- | --- |
+| `make clean` | _Izbriše vse datoteke, ki so nastale ob izvajanju programov._ |
 | `make compile` | _Prevede vse programe v vseh jezikih._ |
 | `make run` | _Vse programe zažene, pri čemer se v datoteke izpišejo rezultati izvajanja in časi izvajanja._ |
 | `make check` | _Preveri izide izvajanja programov in jih zapiše v datoteko `/views/checks.js`._ |
@@ -146,9 +147,9 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 
 
 ## Delovanje programja
-- Programi v vseh jezikih in obeh pristopih (zaporedno in vzporedno) berejo iste testne datoteke.
+- Programi v vseh jezikih in vseh pristopih (različne implementacije) berejo iste testne datoteke.
 - Testne datoteke so shranjene v direktorijih `tests/partition`, in `tests/kamada_kawai`.
-- Vsak program v svoj direktorij zapisuje rezultate v datoteko `s<xy>.csv` / `s<xy>.json` za zaporedne programe in `p<xy>.csv` / `p<xy>.json` za vzporedne programe.
+- Vsak program v svoj direktorij zapisuje rezultate v datoteke `<xy>.csv` / `<xy>.json`
 - Z izbiro `make check` se rezultati izvajanja preverijo na podlagi rešitev v `tests/<algoritem>/solutions`.
 - Po izvedbi `make check` lahko rezultate vidimo v datoteki `views/check.html`.
 - V `views` najdemo tudi ostale izide izvajanja - videe, ki prikazujejo izvajanje Kamada-Kawai algoritma.
