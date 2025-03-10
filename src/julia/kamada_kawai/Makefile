@@ -1,7 +1,7 @@
 .PHONY: all clean compile run
 all: clean compile run
 
-OUTPUTS = *.csv *.txt
+OUTPUTS = **/*.txt **/*.csv
 
 ALGO = algo
 TESTD = ../../../tests

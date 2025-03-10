@@ -2,7 +2,7 @@
 all: clean compile run
 
 TARGET = main
-OUTPUTS = *.csv *.json *.txt
+OUTPUTS = **/*.txt **/*.csv
 SOURCES = main.go
 
 ALGO = algo
