@@ -45,5 +45,5 @@ run: $(TARGET)
 ### --- CLEAN --- ###
 clean:
 	@echo "  |- $(WD)"
-	rm -f $(TARGET) **/$(OUTPUTS)
+	rm -f $(TARGET) $(OUTPUTS)
 ### --- ------ --- ###

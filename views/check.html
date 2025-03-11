@@ -11,97 +11,145 @@
     <h1>Preverjanje rezultatov</h1>
     <i>Pravilnost posameznih programov je določena na podlagi rešitev v <b>tests&lt;algoritem&gt;/solutions</b></i>
 
+    <!-- <div id="page" class="page"> -->
     <div id="results"></div>
+    <!-- <div id="file" class="file-view">aaaaaa</div>
+    </div> -->
 
     <script src="assets/checks.js"></script>
     <script>
+
         // Function to display data
         window.onload = function displayData() {
+            // Partition problem
             const result = document.getElementById('results');
+            for (let x in results) {
+                const problemTable = document.createElement('table');
+                problemTable.classList.add('problem-table');
 
-            for (let l in results) {
-                const container = document.createElement('div');
-                container.classList.add('container');
+                const problemTableHead = document.createElement('thead');
+                const problemTestcaseHead = document.createElement('tr');
 
-                const title = document.createElement('h2');
-                title.classList.add('lang-title');
-                title.innerText = l;
+                const langHead = document.createElement('th');
+                langHead.colSpan = 2;
+                langHead.innerText = 'Lang';
 
-                const lang = document.createElement('div');
-                lang.classList.add('lang');
+                const algoHead = document.createElement('th');
+                algoHead.colSpan = 2;
+                algoHead.innerText = 'Algo';
 
-                const problems = document.createElement('div');
-                problems.classList.add('problems');
+                problemTestcaseHead.appendChild(langHead);
+                problemTestcaseHead.appendChild(algoHead);
+                problemTableHead.appendChild(problemTestcaseHead);
 
-                for (let p in results[l]) {
-                    const problem = document.createElement('div');
-                    problem.classList.add('problem');
+                if (x === 'partition') {
+                    for (let y of partition) {
+                        const testcase = document.createElement('th');
 
-                    const algoTitle = document.createElement('h4');
-                    algoTitle.classList.add('problem-title');
-                    algoTitle.innerText = p
-
-                    problem.appendChild(algoTitle);
-
-                    const tableDiv = document.createElement('div');
-                    tableDiv.classList.add('tableDiv');
-
-                    const problemTable = document.createElement('table');
-                    problemTable.classList.add('problemTable');
-
-                    const headerRow = document.createElement('tr');
-                    const headNum = document.createElement('th');
-                    headNum.innerText = "Test";
-                    headerRow.appendChild(headNum);
-
-                    for (let n in results[l][p]) {
-                        for (let a in results[l][p][n]) {
-                            const headAlgo = document.createElement('th');
-                            headAlgo.innerText = a;
-                            headerRow.appendChild(headAlgo);
-                            problemTable.appendChild(headerRow);
-                        }
-                        break;
+                        const linkToDoc = document.createElement('a');
+                        linkToDoc.target = '_blank';
+                        linkToDoc.href = `../tests/${x}/${y}.json`;
+                        linkToDoc.innerText = `${y}`;
+                        
+                        testcase.appendChild(linkToDoc);
+                        
+                        problemTestcaseHead.appendChild(testcase);
                     }
+                } else if (x === 'kamada_kawai') {
+                    for (let y of kamada_kawai) {
+                        const testcase = document.createElement('th');
+                        
+                        const linkToDoc = document.createElement('a');
+                        linkToDoc.target = '_blank';
+                        linkToDoc.href = `../tests/${x}/${y}.json`;
+                        linkToDoc.innerText = `${y}`;
 
-                    for (let n in results[l][p]) {
-                        const caseRow = document.createElement('tr');
-                        const caseNum = document.createElement('td');
-                        caseNum.innerText = n;
-                        caseRow.appendChild(caseNum);
+                        testcase.appendChild(linkToDoc);
 
-                        for (let a in results[l][p][n]) {
-                            // for (let t in results[l][p][n][a]) {
-                            const caseTTime = document.createElement('td');
-                            if (!results[l][p][n][a].time) {
-                                caseTTime.innerText = "X";
-                            } else
-                                caseTTime.innerText = results[l][p][n][a].time;
-
-                            if (results[l][p][n][a].correct) {
-                                caseTTime.classList.add('correct');
-                            } else {
-                                caseTTime.classList.add('incorrect');
-                            }
-                            caseRow.appendChild(caseTTime);
-                            // }
-                        }
-                        problemTable.appendChild(caseRow);
+                        problemTestcaseHead.appendChild(testcase);
                     }
-                    tableDiv.appendChild(problemTable);
-                    problem.appendChild(tableDiv);
-
-                    problems.appendChild(problem);
                 }
 
-                lang.appendChild(problems);
+                problemTable.appendChild(problemTableHead);
 
-                container.appendChild(title);
-                container.appendChild(lang);
+                const problemTestcaseBody = document.createElement('tbody');
 
-                result.appendChild(container);
+                for (let l in results[x]) {
+                    const langRow = document.createElement('tr');
+                    langRow.classList.add('lang-row');
+
+                    const langCell = document.createElement('td');
+                    langCell.classList.add('lang-cell');
+                    langCell.rowSpan = Object.keys(results[x][l]).length;
+                    langCell.colSpan = 2;
+                    langCell.innerText = l;
+
+                    langRow.appendChild(langCell);
+                    problemTestcaseBody.appendChild(langRow);
+
+                    let firstAlgo = true;
+
+                    for (let a in results[x][l]) {
+                        const algoRow = document.createElement('tr');
+
+                        const algoCell = document.createElement('td');
+                        algoCell.classList.add('algo-cell');
+                        algoCell.rowSpan = 1;
+                        algoCell.colSpan = 2;
+                        algoCell.innerText = a;
+
+                        if (firstAlgo) {
+                            langRow.appendChild(algoCell);
+                        } else {
+                            algoRow.appendChild(algoCell);
+                        }
+
+                        for (let t in results[x][l][a]) {
+                            const testcaseCell = document.createElement('td');
+                            testcaseCell.classList.add('testcase');
+
+                            const testCaseLink = document.createElement('a');
+                            testCaseLink.target = '_blank';
+                            let posfix = 'json';
+                            if (x === 'kamada_kawai') {
+                                posfix = 'csv';
+                            }
+                            testCaseLink.href = `../src/${l}/${x}/algo/${a}${t}.${posfix}`;
+                            testCaseLink.innerText = `${results[x][l][a][t].time}`;
+
+                            testcaseCell.appendChild(testCaseLink);
+
+                            const scale = results[x][l][a][t].score * 120;
+                            testcaseCell.style.backgroundColor = `hsl(${scale}, 35%, 35%)`;
+
+                            if (firstAlgo) {
+                                langRow.appendChild(testcaseCell);
+                            } else {
+                                algoRow.appendChild(testcaseCell);
+                            }
+                        }
+
+                        if (!firstAlgo) {
+                            problemTestcaseBody.appendChild(algoRow);
+                        }
+
+                        firstAlgo = false;
+                    }
+                }
+
+                if (x === 'partition') {
+                    const title = document.createElement('h2');
+                    title.innerText = 'Partition';
+                    result.appendChild(title);
+                } else if (x === 'kamada_kawai') {
+                    const title = document.createElement('h2');
+                    title.innerText = 'Kamada Kawai';
+                    result.appendChild(title);
+                }
+
+                problemTable.appendChild(problemTestcaseBody);
+                result.appendChild(problemTable);
             }
-
         };
     </script>
 </body>

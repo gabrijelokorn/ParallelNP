@@ -1,6 +1,5 @@
 const fs = require('fs').promises;
 const { constants } = require('fs');
-const { parse } = require('csv-parse');
 
 const languages = ["c", "julia", "go"]
 const languageExtensions = new Map([
@@ -15,24 +14,6 @@ const filesToIgnore = [
 ]
 
 const result = {
-    c: {
-        partition: {
-        },
-        kamada_kawai: {
-        }
-    },
-    julia: {
-        partition: {
-        },
-        kamada_kawai: {
-        }
-    },
-    go: {
-        partition: {
-        },
-        kamada_kawai: {
-        }
-    }
 };
 
 
@@ -111,12 +92,17 @@ async function compareFiles(file1, file2) {
 }
 
 async function compare(lang, problemDir, algoName, test, solutionFilename, resultfilename, timefilename) {
-    // Create an object for the algorithm
-    if (!result[lang][problemDir][test]) result[lang][problemDir][test] = {};
-
     // Create an object for the test
-    if (!result[lang][problemDir][test][algoName]) result[lang][problemDir][test][algoName] = {};
-    result[lang][problemDir][test][algoName] = {
+    if (!result[problemDir]) result[problemDir] = {};
+
+    // Create an object for the problem
+    if (!result[problemDir][lang]) result[problemDir][lang] = {};
+
+    // Create an object for the language
+    if (!result[problemDir][lang][algoName]) result[problemDir][lang][algoName] = {};
+
+    // Create an object for the algorithm
+    if (!result[problemDir][lang][algoName][test]) result[problemDir][lang][algoName][test] = {
         time: 0,
         correct: false
     };
@@ -125,12 +111,12 @@ async function compare(lang, problemDir, algoName, test, solutionFilename, resul
 
     // Insert the time
     const time = await readCsv(timefilename);
-    result[lang][problemDir][test][algoName]["time"] = time;
+    result[problemDir][lang][algoName][test]["time"] = time;
 
     // Insert the correct flag
     if (await compareFiles(resultfilename, solutionFilename)) {
         // Read the time.json file
-        result[lang][problemDir][test][algoName]["correct"] = true;
+        result[problemDir][lang][algoName][test]["correct"] = true;
     }
 }
 
@@ -175,6 +161,58 @@ async function test(partitionTests, kamada_kawaiTests) {
     }
 }
 
+async function evaluateResults(partitionTests, kamada_kawaiTests) {
+    // Iterate over all languages and test cases and define the best time
+
+    {
+        const problemDir = "partition";
+        for (let x of partitionTests) {
+            let bestTime = Number.MAX_VALUE;
+            for (let l of languages) {
+                const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
+                for (let a of algos) {
+                    // console.log(result[problemDir][l][a][x]);
+                    if (result[problemDir][l][a][x].time < bestTime) {
+                        bestTime = result[problemDir][l][a][x].time;
+                    }
+                }
+
+            }
+            // normalize and give each algorithm a score based on the best time (the fastest algorithm gets 1 and the rest get a score between 0 and 1)
+            for (let l of languages) {
+                const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
+                for (let a of algos) {
+                    result[problemDir][l][a][x]["score"] = bestTime / result[problemDir][l][a][x].time;
+                }
+            }
+        }
+    }
+
+    {
+        const problemDir = "kamada_kawai";
+        for (let x of kamada_kawaiTests) {
+            let bestTime = Number.MAX_VALUE;
+            for (let l of languages) {
+                const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
+                for (let a of algos) {
+                    // console.log(result[problemDir][l][a][x]);
+                    if (result[problemDir][l][a][x].time < bestTime) {
+                        bestTime = result[problemDir][l][a][x].time;
+                    }
+                }
+
+            }
+            // normalize and give each algorithm a score based on the best time (the fastest algorithm gets 1 and the rest get a score between 0 and 1)
+            for (let l of languages) {
+                const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
+                for (let a of algos) {
+                    result[problemDir][l][a][x]["score"] = bestTime / result[problemDir][l][a][x].time;
+                }
+            }
+        }
+    }
+}
+
 async function main() {
     // Read the names of the tests
     const partitionTests = await readTests("partition");
@@ -183,9 +221,18 @@ async function main() {
     // Run the tests
     await test(partitionTests, kamada_kawaiTests);
 
+    // Evaluate the results
+    await evaluateResults(partitionTests, kamada_kawaiTests);
+
     // Create the checks.js file
     const output = `const results = ${JSON.stringify(result)};`;
+
+    const partitionTestsString = `const partition = ${JSON.stringify(partitionTests)};`;
+    const kamada_kawaiTestsString = `const kamada_kawai = ${JSON.stringify(kamada_kawaiTests)};`;
+
     fs.writeFile('../views/assets/checks.js', output);
+    fs.appendFile('../views/assets/checks.js', partitionTestsString);
+    fs.appendFile('../views/assets/checks.js', kamada_kawaiTestsString);
 }
 
 main();

@@ -10,7 +10,7 @@ void *writeTime(double time, char* timeFile) {
         return NULL;
     }
 
-    fprintf(file, "%lf\n", time);
+    fprintf(file, "%.9f\n", time);
 
     return NULL;
 }
