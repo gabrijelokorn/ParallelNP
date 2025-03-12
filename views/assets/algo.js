@@ -2,7 +2,8 @@ const algoDetail = {
     "partition": {
         "c": {
             "seq": "Sequential program",
-            "par": "Static scheduling with small chunk size",
+            "mlt_stc": "Multiple problems are being solved in parallel using static schedule.",
+            "mlt_dyn": "Multiple problems are being solved in parallel using dynamic schedule.",
         },
         "go": {
             "seq": "Sequential program",

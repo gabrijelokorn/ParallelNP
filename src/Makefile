@@ -61,7 +61,7 @@ check:
 	@echo "Check out the results in views/check.html"
 	@echo ""
 	@node check.js
-	@xdg-open ../views/check.html
+# @xdg-open ../views/check.html
 ### --- ### --- ### --- ###
 
 

@@ -14,17 +14,22 @@ export JULIA_NUM_THREADS := $(shell nproc)
 
 ### --- RUN --- ###
 run:
-	@echo "  |- $(WD)"
-	@for case in $(TESTD)/$(WD)/$(TESTF); do \
+	@start=$$(date +%s.%N); \
+	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		julia main.jl -t $$case -x $$num -v true; \
-	done
+	done; \
+	end=$$(date +%s.%N); \
+	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"
 ### --- --- --- ###
 
 
 
 ### --- CLEAN --- ###
 clean:
-	@echo "  |- $(WD)"
-	rm -f $(OUTPUTS)
-### --- ----- --- ###
+	@start=$$(date +%s.%N); \
+	rm -f $(TARGET) $(OUTPUTS); \
+	end=$$(date +%s.%N); \
+	echo "          |"; \
+	echo "          |-> $(WD)      +++++   $$(echo "$$end - $$start" | bc) seconds"
+### --- ------ --- ###

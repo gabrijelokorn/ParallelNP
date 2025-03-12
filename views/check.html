@@ -9,7 +9,8 @@
 
 <body>
     <h1>Preverjanje rezultatov</h1>
-    <i>Pravilnost posameznih programov je določena na podlagi rešitev v <b>tests/&lt;algoritem&gt;/solutions/&lt;xy&gt;.json</b></i>
+    <i>Pravilnost posameznih programov je določena na podlagi rešitev v
+        <b>tests/&lt;algoritem&gt;/solutions/&lt;xy&gt;.json</b></i>
 
     <div id="results"></div>
 
@@ -50,15 +51,15 @@
                         linkToDoc.target = '_blank';
                         linkToDoc.href = `../tests/${x}/${y}.json`;
                         linkToDoc.innerText = `${y}`;
-                        
+
                         testcase.appendChild(linkToDoc);
-                        
+
                         problemTestcaseHead.appendChild(testcase);
                     }
                 } else if (x === 'kamada_kawai') {
                     for (let y of kamada_kawai) {
                         const testcase = document.createElement('th');
-                        
+
                         const linkToDoc = document.createElement('a');
                         linkToDoc.target = '_blank';
                         linkToDoc.href = `../tests/${x}/${y}.json`;
@@ -109,9 +110,13 @@
                             algoRow.appendChild(algoDetailCell);
                         }
 
-                        
+                        const sortedKeys = Object.keys(results[x][l][a])
+                            .map(Number)
+                            .sort((a, b) => a - b)
+                            .map(num => num.toString().padStart(2, '0'));
 
-                        for (let t in results[x][l][a]) {
+
+                        for (let t of sortedKeys) {
                             const testcaseCell = document.createElement('td');
                             testcaseCell.classList.add('testcase');
 
@@ -127,7 +132,11 @@
                             testcaseCell.appendChild(testCaseLink);
 
                             const scale = results[x][l][a][t].score * 120;
-                            testcaseCell.style.backgroundColor = `hsl(${scale}, 35%, 35%)`;
+                            if (results[x][l][a][t].time === 0) {
+                                testcaseCell.style.backgroundColor = 'hsl(0, 0%, 0%)';
+                            } else {
+                                testcaseCell.style.backgroundColor = `hsl(${scale}, 35%, 35%)`;
+                            }
 
                             if (firstAlgo) {
                                 langRow.appendChild(testcaseCell);

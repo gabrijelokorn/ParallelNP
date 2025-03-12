@@ -4,7 +4,7 @@ all: clean compile run
 TARGET = main.out
 OUTPUTS = **/*.json **/*.txt
 SOURCES = main.c\
-./algo/algo.c ./algo/seq.c ./algo/par.c\
+./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./json2partitions.c partitions2json.c
 
@@ -25,25 +25,32 @@ export OMP_CANCELLATION=true
 compile: $(TARGET)
 
 $(TARGET):
-	@echo "  |- $(WD)"
-	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
+	@start=$$(date +%s.%N); \
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES); \
+	end=$$(date +%s.%N); \
+	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###
 
 
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@echo "  |- $(WD)"
-	@for case in $(TESTD)/$(WD)/$(TESTF); do \
+	@start=$$(date +%s.%N); \
+	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t $$case -x $$num -v; \
-	done
+	done; \
+	end=$$(date +%s.%N); \
+	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"
 ### --- --- --- ###
 
 
 
 ### --- CLEAN --- ###
 clean:
-	@echo "  |- $(WD)"
-	rm -f $(TARGET) $(OUTPUTS)
+	@start=$$(date +%s.%N); \
+	rm -f $(TARGET) $(OUTPUTS); \
+	end=$$(date +%s.%N); \
+	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###
+

@@ -25,25 +25,32 @@ export OMP_CANCELLATION=true
 compile: $(TARGET)
 
 $(TARGET):
-	@echo "  |- $(WD)"
-	@$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES)
+	@start=$$(date +%s.%N); \
+	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES); \
+	end=$$(date +%s.%N); \
+	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###
 
 
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@echo "  |- $(WD)"
-	@for case in $(TESTD)/$(WD)/$(TESTF); do \
+	@start=$$(date +%s.%N); \
+	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t $$case -x $$num -v; \
-	done
+	done; \
+	end=$$(date +%s.%N); \
+	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- --- --- ###
 
 
 
 ### --- CLEAN --- ###
 clean:
-	@echo "  |- $(WD)"
-	rm -f $(TARGET) $(OUTPUTS)
-### --- ----- --- ###
+	@start=$$(date +%s.%N); \
+	rm -f $(TARGET) $(OUTPUTS); \
+	end=$$(date +%s.%N); \
+	echo "          |"; \
+	echo "          |-> $(WD)      $$(echo "$$end - $$start" | bc) seconds"
+### --- ------ --- ###

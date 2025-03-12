@@ -56,11 +56,11 @@ V primeru, da se julia ne namesti uspešno, lahko sledite navodilom:
     ```
 2)  Razpakiranje
     ```bash
-    tar -xzf julia-1.11.1-linux-x86_64.tar.gz
+    tar -xzf julia-1.11.4-linux-x86_64.tar.gz
     ```
 3)  Premik razpakirane vsebine v direktorij `/usr/local/julia`
     ```bash
-    sudo mv julia-1.11.1 /usr/local/julia
+    sudo mv julia-1.11.4 /usr/local/julia
     ```
 4)  Dodajanje poti v PATH v `/~.bashrc`
     ```bash

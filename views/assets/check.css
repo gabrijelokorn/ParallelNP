@@ -70,6 +70,7 @@ a {
     padding: 0.25rem;
     min-width: 10rem;
     max-width: 10rem;
+    border: solid white 0.1rem;
 }
 
 .file-view {

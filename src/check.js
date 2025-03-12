@@ -107,12 +107,13 @@ async function compare(lang, problemDir, algoName, test, solutionFilename, resul
         correct: false
     };
 
-    if (! await fileExists(resultfilename) || ! await fileExists(solutionFilename)) return;
+    if (! await fileExists(resultfilename)) return;
 
     // Insert the time
     const time = await readCsv(timefilename);
     result[problemDir][lang][algoName][test]["time"] = time;
 
+    if (! await fileExists(solutionFilename)) return;
     // Insert the correct flag
     if (await compareFiles(resultfilename, solutionFilename)) {
         // Read the time.json file
@@ -172,7 +173,7 @@ async function evaluateResults(partitionTests, kamada_kawaiTests) {
                 const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
                 for (let a of algos) {
                     // console.log(result[problemDir][l][a][x]);
-                    if (result[problemDir][l][a][x].time < bestTime) {
+                    if (result[problemDir][l][a][x].time < bestTime && result[problemDir][l][a][x].time > 0) {
                         bestTime = result[problemDir][l][a][x].time;
                     }
                 }
@@ -196,7 +197,7 @@ async function evaluateResults(partitionTests, kamada_kawaiTests) {
                 const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
                 for (let a of algos) {
                     // console.log(result[problemDir][l][a][x]);
-                    if (result[problemDir][l][a][x].time < bestTime) {
+                    if (result[problemDir][l][a][x].time < bestTime && result[problemDir][l][a][x].time > 0) {
                         bestTime = result[problemDir][l][a][x].time;
                     }
                 }

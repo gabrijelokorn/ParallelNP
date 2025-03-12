@@ -9,6 +9,7 @@
 
 void algo(Partitions *p, int **arr, char *testcase, bool verbose);
 bool* seq(Partitions *p, int **arr);
-bool* par(Partitions *p, int **arr);
+bool* mlt_stc(Partitions *p, int **arr);
+bool* mlt_dyn(Partitions *p, int **arr);
 
 #endif

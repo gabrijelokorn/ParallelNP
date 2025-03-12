@@ -29,9 +29,14 @@ void algo(Partitions *p, int **arr, char *num, bool verbose)
     echo(p, result, end - start, "seq", num, verbose);
     
     start = omp_get_wtime();
-    result = par(p, arr);
+    result = mlt_stc(p, arr);
     end = omp_get_wtime();
-    echo(p, result, end - start, "par", num, verbose);
+    echo(p, result, end - start, "mlt_stc", num, verbose);
+
+    start = omp_get_wtime();
+    result = mlt_dyn(p, arr);
+    end = omp_get_wtime();
+    echo(p, result, end - start, "mlt_dyn", num, verbose);
 
     return;
 }

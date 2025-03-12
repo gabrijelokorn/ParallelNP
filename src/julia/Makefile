@@ -6,13 +6,14 @@ WD = $(notdir $(CURDIR))
 TESTF = *.json
 
 run:
-	@echo "### ### ### >>> Running $(WD) <<< ### ### ###"
+	@echo -e "##########################################\n    |-> RUNNING $(WD)"
 	$(MAKE) -C partition run
 	$(MAKE) -C kamada_kawai run
-	@echo ""
+	@echo -e "\n##########################################\n\n\n"
 
 clean:
-	@echo "### ### ### >>> Cleaning $(WD) <<< ### ### ###"
+	@echo -e "##########################################\n    |-> CLEANING $(WD)"
+	rm -rf lib/*.o
 	$(MAKE) -C partition clean
 	$(MAKE) -C kamada_kawai clean
-	@echo ""
+	@echo -e "\n##########################################\n\n\n"

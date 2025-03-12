@@ -2,7 +2,7 @@
 
 #include "algo.h"
 
-int sum_par(int *arr, int size, unsigned long long int index)
+int sum_mlt_stc(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
     for (int i = 0; i < size; i++)
@@ -15,14 +15,13 @@ int sum_par(int *arr, int size, unsigned long long int index)
     return sum;
 }
 
-bool *par(Partitions *p, int **arr)
+bool *mlt_stc(Partitions *p, int **arr)
 {
     bool *result = (bool *)malloc(p->rows * sizeof(bool));
-    bool paddedResult[p->rows][128];
 
-#pragma omp parallel default(none) shared(arr, p, result, paddedResult)
+#pragma omp parallel default(none) shared(arr, p, result)
     {
-#pragma omp for
+#pragma omp for schedule(static, 5)
         for (int i = 0; i < p->rows; i++)
         {
             result[i] = false;
@@ -33,14 +32,14 @@ bool *par(Partitions *p, int **arr)
             unsigned long long int combs = 1 << (size - 1);
             unsigned long long int all = ((unsigned long long int)1 << size) - 1;
 
-            int problem_sum = sum_par(row, size, all);
+            int problem_sum = sum_mlt_stc(row, size, all);
             if (problem_sum % 2 != 0)
                 continue;
             int half_sum = problem_sum / 2;
 
             for (int j = 0; j < combs; j++)
             {
-                int sum = sum_par(row, size, j);
+                int sum = sum_mlt_stc(row, size, j);
                 if (sum == half_sum)
                 {
                     result[i] = true;
