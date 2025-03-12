@@ -1,12 +1,12 @@
 module File
 
-export parseFilename
+export generateFilename
 
-function parseFilename(algo::String, num::String, postfix::String)
+function generateFilename(algo::String, num::String, postfix::String)
     filename = "algo/" * algo * num * "." * postfix
 
     return filename
-end # parseFilename
+end # generateFilename
 
 end # module
 

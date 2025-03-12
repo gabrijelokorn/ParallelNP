@@ -3,7 +3,7 @@
 
 #include "file.h"
 
-char *parseFilename(char *algo, char *num, char *ext)
+char *generateFilename(char *algo, char *num, char *ext)
 {
     char *filename = (char *)malloc(100 * sizeof(char));
     sprintf(filename, "algo/%s%s.%s", algo, num, ext);

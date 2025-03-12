@@ -230,9 +230,9 @@ async function main() {
     const partitionTestsString = `const partition = ${JSON.stringify(partitionTests)};`;
     const kamada_kawaiTestsString = `const kamada_kawai = ${JSON.stringify(kamada_kawaiTests)};`;
 
-    fs.writeFile('../views/assets/checks.js', output);
-    fs.appendFile('../views/assets/checks.js', partitionTestsString);
-    fs.appendFile('../views/assets/checks.js', kamada_kawaiTestsString);
+    await fs.writeFile('../views/assets/checks.js', output);
+    await fs.appendFile('../views/assets/checks.js', partitionTestsString);
+    await fs.appendFile('../views/assets/checks.js', kamada_kawaiTestsString);
 }
 
 main();

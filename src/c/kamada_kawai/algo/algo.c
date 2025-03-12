@@ -18,10 +18,10 @@ void echo(KamadaKawai *kk, Vertices *result, double elapsed, char *algo, char *n
     if (!verbose)
         return;
 
-    char *algoresult = parseFilename(algo, num, "csv");
+    char *algoresult = generateFilename(algo, num, "csv");
     writeVertices(result, kk->n, algoresult);
 
-    char *algotime = parseFilename(algo, num, "txt");
+    char *algotime = generateFilename(algo, num, "txt");
     writeTime(elapsed, algotime);
 }
 

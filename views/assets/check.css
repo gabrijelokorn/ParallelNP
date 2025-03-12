@@ -65,6 +65,13 @@ a {
     text-align: center;
 }
 
+.algo-detail-cell {
+    text-align: left;
+    padding: 0.25rem;
+    min-width: 10rem;
+    max-width: 10rem;
+}
+
 .file-view {
     background-color: #595b61;
     width: 100%;

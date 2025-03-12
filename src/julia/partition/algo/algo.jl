@@ -18,10 +18,10 @@ function echo(result::Vector{Bool}, elapsed::Float64, algo::String, num::String,
         return
     end
 
-    algoresult = parseFilename(algo, num, "json")
+    algoresult = generateFilename(algo, num, "json")
     writePartitions(algoresult, result)
 
-    time = parseFilename(algo, num, "txt")
+    time = generateFilename(algo, num, "txt")
     writeTime(time, elapsed)
     
 end # echo

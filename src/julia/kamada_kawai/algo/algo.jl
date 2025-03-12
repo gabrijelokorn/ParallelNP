@@ -20,10 +20,10 @@ function echo(result::Vector{Vector{Coord}}, elapsed::Float64, algo::String, num
         return
     end
 
-    algoresult = parseFilename(algo, num, "csv")
+    algoresult = generateFilename(algo, num, "csv")
     writeVertices(result, algoresult)
 
-    time = parseFilename(algo, num, "txt")
+    time = generateFilename(algo, num, "txt")
     writeTime(time, elapsed)
 
 end # echo

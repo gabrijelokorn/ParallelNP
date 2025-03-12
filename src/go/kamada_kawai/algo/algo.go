@@ -17,10 +17,10 @@ func echo (kk *KamadaKawai, result [][]Coord, elapsed time.Duration, algo, num s
 		return
 	}
 
-	algoresult := parallelNP.ParseFilename(algo, num, "csv")
+	algoresult := parallelNP.GenerateFilename(algo, num, "csv")
 	WriteVertices(result, algoresult)
 
-	algotime := parallelNP.ParseFilename(algo, num, "txt")
+	algotime := parallelNP.GenerateFilename(algo, num, "txt")
 	parallelNP.WriteTime(elapsed, algotime)
 }
 

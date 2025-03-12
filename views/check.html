@@ -9,14 +9,12 @@
 
 <body>
     <h1>Preverjanje rezultatov</h1>
-    <i>Pravilnost posameznih programov je določena na podlagi rešitev v <b>tests&lt;algoritem&gt;/solutions</b></i>
+    <i>Pravilnost posameznih programov je določena na podlagi rešitev v <b>tests/&lt;algoritem&gt;/solutions/&lt;xy&gt;.json</b></i>
 
-    <!-- <div id="page" class="page"> -->
     <div id="results"></div>
-    <!-- <div id="file" class="file-view">aaaaaa</div>
-    </div> -->
 
     <script src="assets/checks.js"></script>
+    <script src="assets/algo.js"></script>
     <script>
 
         // Function to display data
@@ -31,15 +29,17 @@
                 const problemTestcaseHead = document.createElement('tr');
 
                 const langHead = document.createElement('th');
-                langHead.colSpan = 2;
                 langHead.innerText = 'Lang';
 
                 const algoHead = document.createElement('th');
-                algoHead.colSpan = 2;
                 algoHead.innerText = 'Algo';
+
+                const algoDescription = document.createElement('th');
+                algoDescription.innerText = 'Description';
 
                 problemTestcaseHead.appendChild(langHead);
                 problemTestcaseHead.appendChild(algoHead);
+                problemTestcaseHead.appendChild(algoDescription);
                 problemTableHead.appendChild(problemTestcaseHead);
 
                 if (x === 'partition') {
@@ -81,7 +81,6 @@
                     const langCell = document.createElement('td');
                     langCell.classList.add('lang-cell');
                     langCell.rowSpan = Object.keys(results[x][l]).length;
-                    langCell.colSpan = 2;
                     langCell.innerText = l;
 
                     langRow.appendChild(langCell);
@@ -95,14 +94,22 @@
                         const algoCell = document.createElement('td');
                         algoCell.classList.add('algo-cell');
                         algoCell.rowSpan = 1;
-                        algoCell.colSpan = 2;
                         algoCell.innerText = a;
+
+                        const algoDetailCell = document.createElement('td');
+                        algoDetailCell.classList.add('algo-detail-cell');
+                        algoDetailCell.rowSpan = 1;
+                        algoDetailCell.innerHTML = algoDetail[x][l][a] ? algoDetail[x][l][a] : '/';
 
                         if (firstAlgo) {
                             langRow.appendChild(algoCell);
+                            langRow.appendChild(algoDetailCell);
                         } else {
                             algoRow.appendChild(algoCell);
+                            algoRow.appendChild(algoDetailCell);
                         }
+
+                        
 
                         for (let t in results[x][l][a]) {
                             const testcaseCell = document.createElement('td');

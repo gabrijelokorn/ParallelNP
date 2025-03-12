@@ -11,10 +11,10 @@ func echo(result []int32, elapsed time.Duration, algo, num string, verbose bool)
 		return
 	}
 
-	algoresult := parallelNP.ParseFilename(algo, num, "json")
+	algoresult := parallelNP.GenerateFilename(algo, num, "json")
 	partition.WritePartitions(result, algoresult)
 
-	algotime := parallelNP.ParseFilename(algo, num, "txt")
+	algotime := parallelNP.GenerateFilename(algo, num, "txt")
 	parallelNP.WriteTime(elapsed, algotime)
 }
 

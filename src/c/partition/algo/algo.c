@@ -10,10 +10,10 @@ void echo(Partitions *p, bool *result, double elapsed, char *algo, char *num, bo
     if (!verbose)
         return;
 
-    char *algoresult = parseFilename(algo, num, "json");
+    char *algoresult = generateFilename(algo, num, "json");
     writePartitions(result, p->rows, algoresult);
 
-    char *algotime = parseFilename(algo, num, "txt");
+    char *algotime = generateFilename(algo, num, "txt");
     writeTime(elapsed, algotime);
 }
 

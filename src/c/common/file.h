@@ -5,6 +5,6 @@
 #include <stdlib.h>
 
 FILE *openFile(char *filename, char *mode);
-char *parseFilename(char *algo, char *out, char *ext);
+char *generateFilename(char *algo, char *out, char *ext);
 
 #endif
