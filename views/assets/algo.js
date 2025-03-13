@@ -1,32 +1,33 @@
 const algoDetail = {
     "partition": {
         "c": {
-            "seq": "Sequential program",
-            "mlt_stc": "Multiple problems are being solved in parallel using static schedule.",
-            "mlt_dyn": "Multiple problems are being solved in parallel using dynamic schedule.",
-            "sgl_dyn": "One problem at a time is being solved in parallel using dynamic schedule.",
+            "seq": "Zaporedni program",
+            "mlt_stc": "Več problemov se rešuje hkrati z nastavitvijo 'schedule(static)'",
+            "mlt_dyn": "Več problemov se rešuje hkrati z nastavitvijo 'schedule(dynamic)'",
+            "sgl_dyn": "En problem se rešuje hkrati z nastavitvijo 'schedule(dynamic)'",
+            "sgl_stc": "En problem se rešuje hkrati z nastavitvijo 'schedule(static)'",
         },
         "go": {
-            "seq": "Sequential program",
-            "par": "Parallel program",
+            "seq": "Zaporedni program",
+            "par": "Paralelni program",
         },
         "julia": {
-            "seq": "Sequential program",
-            "par": "Parallel program",
+            "seq": "Zaporedni program",
+            "par": "Paralelni program",
         },
     },
     "kamada_kawai": {
         "c": {
-            "seq": "Sequential program",
-            "par": "Parallel program",
+            "seq": "Zaporedni program",
+            "par": "Paralelni program",
         },
         "go": {
-            "seq": "Sequential program",
-            "par": "Parallel program",
+            "seq": "Zaporedni program",
+            "par": "Paralelni program",
         },
         "julia": {
-            "seq": "Sequential program",
-            "par": "Parallel program",
+            "seq": "Zaporedni program",
+            "par": "Paralelni program",
         },
     },
 }

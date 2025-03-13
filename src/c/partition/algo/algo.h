@@ -13,5 +13,6 @@ bool* seq(Partitions *p, int **arr);
 bool* mlt_stc(Partitions *p, int **arr);
 bool* mlt_dyn(Partitions *p, int **arr);
 bool* sgl_dyn(Partitions *p, int **arr);
+bool* sgl_stc(Partitions *p, int **arr);
 
 #endif

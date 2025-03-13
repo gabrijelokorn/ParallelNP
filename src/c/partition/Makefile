@@ -6,7 +6,7 @@ OUTPUTS = **/*.json **/*.txt
 SOURCES = main.c\
 ./json2partitions.c partitions2json.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c ./algo/sgl_dyn.c
+./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c ./algo/sgl_dyn.c ./algo/sgl_stc.c
 
 ALGO = algo
 TESTD = ../../../tests

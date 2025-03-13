@@ -50,7 +50,7 @@
                         const linkToDoc = document.createElement('a');
                         linkToDoc.target = '_blank';
                         linkToDoc.href = `../tests/${x}/${y}.json`;
-                        linkToDoc.innerText = `${y}`;
+                        linkToDoc.innerText = `${y}.json`;
 
                         testcase.appendChild(linkToDoc);
 
@@ -63,7 +63,7 @@
                         const linkToDoc = document.createElement('a');
                         linkToDoc.target = '_blank';
                         linkToDoc.href = `../tests/${x}/${y}.json`;
-                        linkToDoc.innerText = `${y}`;
+                        linkToDoc.innerText = `${y}.json`;
 
                         testcase.appendChild(linkToDoc);
 
@@ -121,26 +121,31 @@
                             testcaseCell.classList.add('testcase');
 
                             const testCaseLink = document.createElement('a');
-                            testCaseLink.target = '_blank';
                             let posfix = 'json';
                             if (x === 'kamada_kawai') {
                                 posfix = 'csv';
                             }
-                            testCaseLink.href = `../src/${l}/${x}/algo/${a}${t}.${posfix}`;
-                            testCaseLink.innerText = `${results[x][l][a][t].time}`;
-
-                            testcaseCell.appendChild(testCaseLink);
-
+                            
                             const scale = results[x][l][a][t].score * 120;
+                            
                             if (results[x][l][a][t].time === 0) {
-                                testcaseCell.style.backgroundColor = 'hsl(0, 0%, 0%)';
+                                testCaseLink.innerText = '/';
                             } else {
                                 testcaseCell.style.backgroundColor = `hsl(${scale}, 35%, 35%)`;
+                                testCaseLink.target = '_blank';
+                                testCaseLink.href = `../src/${l}/${x}/algo/${a}${t}.${posfix}`;
+                                testCaseLink.innerText = `${results[x][l][a][t].time}`;
                             }
 
                             if (!results[x][l][a][t].correct) {
                                 testcaseCell.style.backgroundColor = "#941e86";
                             }
+
+                            if (results[x][l][a][t].time === 0) {
+                                testcaseCell.style.backgroundColor = "#1f2226";
+                            }
+                            
+                            testcaseCell.appendChild(testCaseLink);
 
                             if (firstAlgo) {
                                 langRow.appendChild(testcaseCell);

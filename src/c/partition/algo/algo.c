@@ -43,5 +43,10 @@ void algo(Partitions *p, int **arr, char *num, bool verbose)
     end = omp_get_wtime();
     echo(p, result, end - start, "sgl_dyn", num, verbose);
 
+    start = omp_get_wtime();
+    result = sgl_stc(p, arr);
+    end = omp_get_wtime();
+    echo(p, result, end - start, "sgl_stc", num, verbose);
+
     return;
 }

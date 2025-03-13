@@ -7,14 +7,15 @@ Programje v celoti lahko uprabljamo z ukazi `make`, kar je naknadno opisano v [d
 
 ## Namestitev
 Za zaganjanje programja, je najprej potrebno [namestiti zahtevano programsko opremo](./docs/SETUP.md). \
+![alt text](image.png)![alt text](image.png)
 Dodatna razlaga o delovanju programja je na voljo v [dokumentaciji](./docs/EXPLAIN.md).
 
 ## Primer Izvajanja
 Spodnja tabela prikazuje rezultate izvajanja algoritmov za reševanje problema **Partition**.\
 Časovno ugodnejše rešitve so označene z zeleno barvo, medtem ko so časovno manj ugodne rešitve označene z rdečo barvo.
+V primeru, da rešitev ni pravilna, je to označeno s svetlo vijolično barvo.
 ![Test](./docs/partition_output.png)
 Spodnja tabela prikazuje rezultate izvajanja algoritmov za reševanje problema **Kamada Kawai**.\
-V primeru, da rešitev ni pravilna, je to označeno s svetlo vijolično barvo.
 ![Test](./docs/kk_output.png)
 
 ## Vprašanja
