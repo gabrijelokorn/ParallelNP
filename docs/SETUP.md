@@ -1,7 +1,8 @@
 # Namestitev programske opreme
 
-## Avtomatska namestitev
+## Avtomatska namestitev - C, Golang, Julia
 
+---
 ### Debian, Ubuntu
 - Namestitev programskih jezikov Golang, Julia in knjižnice `libjson-c-dev`:
     ```bash
@@ -23,6 +24,7 @@
     Pkg.add("JSON")
     ```
 
+---
 ### Fedora, RHEL, and CentOS
 - Namestitev programskega jezika Golang, Julia in knjižnice `json-c-devel`:
     ```bash
@@ -45,7 +47,7 @@
     Pkg.add("Dates")
     ```
 
-
+---
 ## ? Neuspešna namestitev programskega jezika Julia ?
 V primeru, da se julia ne namesti uspešno, lahko sledite navodilom:
 
