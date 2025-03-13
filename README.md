@@ -7,7 +7,6 @@ Programje v celoti lahko uprabljamo z ukazi `make`, kar je naknadno opisano v [d
 
 ## Namestitev
 Za zaganjanje programja, je najprej potrebno [namestiti zahtevano programsko opremo](./docs/SETUP.md). \
-![alt text](image.png)![alt text](image.png)
 Dodatna razlaga o delovanju programja je na voljo v [dokumentaciji](./docs/EXPLAIN.md).
 
 ## Primer Izvajanja

@@ -21,7 +21,7 @@ bool *mlt_stc(Partitions *p, int **arr)
 
 #pragma omp parallel default(none) shared(arr, p, result)
     {
-#pragma omp for schedule(static)
+#pragma omp for schedule(static, 10)
         for (int i = 0; i < p->rows; i++)
         {
             result[i] = false;

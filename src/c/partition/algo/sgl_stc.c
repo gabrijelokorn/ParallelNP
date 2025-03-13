@@ -37,7 +37,7 @@ bool *sgl_stc(Partitions *p, int **arr)
         {
             bool found = false;
             #pragma omp parallel default(none) shared(row, size, combs, half_sum, result, i, found)
-            #pragma omp for schedule(static, 5)
+            #pragma omp for schedule(static, 15)
             for (int j = 0; j < combs; j++)
             {
                 if (found)
