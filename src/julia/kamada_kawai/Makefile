@@ -30,5 +30,5 @@ clean:
 	@start=$$(date +%s.%N); \
 	rm -f $(TARGET) $(OUTPUTS); \
 	end=$$(date +%s.%N); \
-	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
+	echo -e "          |\n          |-> $(WD)      $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###

@@ -9,5 +9,12 @@ Programje v celoti lahko uprabljamo z ukazi `make`, kar je naknadno opisano v [d
 Za zaganjanje programja, je najprej potrebno [namestiti zahtevano programsko opremo](./docs/SETUP.md). \
 Dodatna razlaga o delovanju programja je na voljo v [dokumentaciji](./docs/EXPLAIN.md).
 
+## Primer uporabe
+![Test](./docs/partition_output.png)
+Tabela prikazuje rezultate izvajanja programa za reševanje problema **Partition**.\
+Časovno ugodnejše rešitve so označene z zeleno barvo, medtem ko so časovno manj ugodne rešitve označene z rdečo barvo.
+![Test](./docs/kk_output.png)
+V primeru, da rešitev ni pravilna, je to označeno s svetlo vijolično barvo
+
 ## Vprašanja
 Časovno merjenje - po threadih ali stenski uri?

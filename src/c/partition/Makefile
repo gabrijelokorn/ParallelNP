@@ -4,9 +4,9 @@ all: clean compile run
 TARGET = main.out
 OUTPUTS = **/*.json **/*.txt
 SOURCES = main.c\
-./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c\
+./json2partitions.c partitions2json.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./json2partitions.c partitions2json.c
+./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c ./algo/sgl_dyn.c
 
 ALGO = algo
 TESTD = ../../../tests

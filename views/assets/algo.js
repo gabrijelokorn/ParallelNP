@@ -4,6 +4,7 @@ const algoDetail = {
             "seq": "Sequential program",
             "mlt_stc": "Multiple problems are being solved in parallel using static schedule.",
             "mlt_dyn": "Multiple problems are being solved in parallel using dynamic schedule.",
+            "sgl_dyn": "One problem at a time is being solved in parallel using dynamic schedule.",
         },
         "go": {
             "seq": "Sequential program",

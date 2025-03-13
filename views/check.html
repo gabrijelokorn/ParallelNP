@@ -138,6 +138,10 @@
                                 testcaseCell.style.backgroundColor = `hsl(${scale}, 35%, 35%)`;
                             }
 
+                            if (!results[x][l][a][t].correct) {
+                                testcaseCell.style.backgroundColor = "#941e86";
+                            }
+
                             if (firstAlgo) {
                                 langRow.appendChild(testcaseCell);
                             } else {

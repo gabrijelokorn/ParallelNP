@@ -23,4 +23,3 @@ Na voljo pa imamo tudi nekaj drugih možnosti:
 | `make julia` | _Zažene programe napisane v jeziku Julia._ |
 | `make clean` | _Izbriše vse datoteke, ki so nastale ob izvajanju programov._ |
 | `make kamada_kawai` | _Generira videe za Kamada-Kawai algoritem._ |
-
