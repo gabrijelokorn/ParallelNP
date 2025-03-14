@@ -19,9 +19,9 @@ bool *mlt_dyn(Partitions *p, int **arr)
 {
     bool *result = (bool *)malloc(p->rows * sizeof(bool));
 
-#pragma omp parallel default(none) shared(arr, p, result)
     {
-#pragma omp for schedule(dynamic)
+#pragma omp parallel default(none) shared(arr, p, result)
+#pragma omp for schedule(dynamic, 5)
         for (int i = 0; i < p->rows; i++)
         {
             result[i] = false;

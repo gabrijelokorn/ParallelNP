@@ -6,7 +6,7 @@ OUTPUTS = **/*.json **/*.txt
 SOURCES = main.c\
 ./json2partitions.c partitions2json.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c ./algo/sgl_dyn.c ./algo/sgl_stc.c
+./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c ./algo/sgl_dyn.c ./algo/sgl_stc.c ./algo/nested.c
 
 ALGO = algo
 TESTD = ../../../tests
@@ -35,7 +35,8 @@ $(TARGET):
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@start=$$(date +%s.%N); \
+	@export OMP_NESTED=TRUE; \
+	start=$$(date +%s.%N); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t $$case -x $$num -v; \

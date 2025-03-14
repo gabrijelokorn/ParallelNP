@@ -5,6 +5,7 @@
 int sum_sgl_stc(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
+
     for (int i = 0; i < size; i++)
     {
         if (index & (1 << i))
@@ -37,7 +38,7 @@ bool *sgl_stc(Partitions *p, int **arr)
         {
             bool found = false;
             #pragma omp parallel default(none) shared(row, size, combs, half_sum, result, i, found)
-            #pragma omp for schedule(static, 15)
+            #pragma omp for 
             for (int j = 0; j < combs; j++)
             {
                 if (found)

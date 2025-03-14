@@ -6,6 +6,7 @@ const algoDetail = {
             "mlt_dyn": "Več problemov se rešuje hkrati z nastavitvijo 'schedule(dynamic)'",
             "sgl_dyn": "En problem se rešuje hkrati z nastavitvijo 'schedule(dynamic)'",
             "sgl_stc": "En problem se rešuje hkrati z nastavitvijo 'schedule(static)'",
+            "nested": "Gnezdeni paralelizem - več problemov se izvaja vzporedno 'schedule(dynamic)', pri čemer se tudi vsak posamičen problem izvaja vzporedno 'schedule(static)'",
         },
         "go": {
             "seq": "Zaporedni program",

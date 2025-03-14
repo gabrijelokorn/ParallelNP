@@ -1,8 +1,9 @@
 #include <stdbool.h>
+#include <omp.h>
 
 #include "algo.h"
 
-int sum_sgl_dyn(int *arr, int size, unsigned long long int index)
+int sum_nested(int *arr, int size, unsigned long long int index)
 {
     int sum = 0;
     for (int i = 0; i < size; i++)
@@ -15,10 +16,14 @@ int sum_sgl_dyn(int *arr, int size, unsigned long long int index)
     return sum;
 }
 
-bool *sgl_dyn(Partitions *p, int **arr)
+bool *nested(Partitions *p, int **arr)
 {
+    omp_set_nested(1);
+
     bool *result = (bool *)malloc(p->rows * sizeof(bool));
 
+#pragma omp parallel default(none) shared(arr, p, result)
+#pragma omp for schedule(dynamic, 5)
     for (int i = 0; i < p->rows; i++)
     {
         result[i] = false;
@@ -29,7 +34,7 @@ bool *sgl_dyn(Partitions *p, int **arr)
         unsigned long long int combs = 1 << (size - 1);
         unsigned long long int all = ((unsigned long long int)1 << size) - 1;
 
-        int problem_sum = sum_sgl_dyn(row, size, all);
+        int problem_sum = sum_nested(row, size, all);
         if (problem_sum % 2 != 0)
             continue;
         int half_sum = problem_sum / 2;
@@ -37,12 +42,12 @@ bool *sgl_dyn(Partitions *p, int **arr)
         {
             bool found = false;
             #pragma omp parallel default(none) shared(row, size, combs, half_sum, result, i, found)
-            #pragma omp for schedule(dynamic, 10)
+            #pragma omp for schedule(static, 5)
             for (int j = 0; j < combs; j++)
             {
                 if (found)
                     continue;
-                int sum = sum_sgl_dyn(row, size, j);
+                int sum = sum_nested(row, size, j);
                 if (sum == half_sum)
                 {
                     result[i] = true;
