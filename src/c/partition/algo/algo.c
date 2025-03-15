@@ -34,7 +34,7 @@ bool *run_with_timeout(bool *(*func)(Partitions *, int **), Partitions *p, int *
     bool *result = func(p, arr);
     double end = omp_get_wtime();
 
-    alarm(0);  // Cancel the alarm
+    alarm(0); 
     echo(p, result, end - start, name, num, verbose);
 }
 

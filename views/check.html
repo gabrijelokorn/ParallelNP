@@ -36,7 +36,11 @@
                 algoHead.innerText = 'Algo';
 
                 const algoDescription = document.createElement('th');
-                algoDescription.innerText = 'Description';
+                const linkToDescription = document.createElement('a');
+                linkToDescription.target = '_blank';
+                linkToDescription.href = `./assets/algo.js`;
+                linkToDescription.innerText = 'Description';
+                algoDescription.appendChild(linkToDescription);
 
                 problemTestcaseHead.appendChild(langHead);
                 problemTestcaseHead.appendChild(algoHead);
@@ -138,7 +142,7 @@
                             }
 
                             if (!results[x][l][a][t].correct) {
-                                testcaseCell.style.backgroundColor = "#941e86";
+                                // testcaseCell.style.backgroundColor = "#941e86";
                             }
 
                             if (results[x][l][a][t].time === 0) {

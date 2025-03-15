@@ -1,15 +1,24 @@
 #include <stdbool.h>
 #include <omp.h>
 #include <time.h>
+#include <signal.h>
+#include <unistd.h>
 
+#include "../kamada_kawai.h"
 #include "algo.h"
 
-void rewindVertices(KamadaKawai *kk, Vertices *result)
+void timeout_handler(int signum)
+{
+    printf("Timeout reached!\n");
+    exit(0);
+}
+
+void rewindVertices(KamadaKawai *kk, Coord *original)
 {
     for (int i = 0; i < kk->n; i++)
     {
-        kk->coords[i].x = result->coords[i].x;
-        kk->coords[i].y = result->coords[i].y;
+        kk->coords[i].x = original[i].x;
+        kk->coords[i].y = original[i].y;
     }
 }
 
@@ -25,23 +34,34 @@ void echo(KamadaKawai *kk, Vertices *result, double elapsed, char *algo, char *n
     writeTime(elapsed, algotime);
 }
 
+Vertices *run_with_timeout(Vertices *(*func)(KamadaKawai *), KamadaKawai *kk, char *name, char* num, int verbose)
+{
+    signal(SIGALRM, timeout_handler);
+    alarm(25); 
+
+    double start = omp_get_wtime();
+    Vertices *result = func(kk);
+    double end = omp_get_wtime();
+
+    alarm(0); 
+    echo(kk, result, end - start, name, num, verbose);
+
+    return result;
+}
+
 void algo(KamadaKawai *kk, char *num, bool verbose)
 {
-    double start;
-    Vertices *result;
-    double end;
+    Coord *original = malloc(kk->n * sizeof(Coord));
+    copyCoords(kk->coords, original, kk->n);
 
-    start = omp_get_wtime();
-    result = seq(kk);
-    end = omp_get_wtime();
-    echo(kk, result, end - start, "seq", num, verbose);
-    rewindVertices(kk, result);
+    run_with_timeout(seq, kk, "seq", num, verbose);
+    rewindVertices(kk, original);
+    run_with_timeout(par, kk, "par", num, verbose);
+    rewindVertices(kk, original);
+    run_with_timeout(nested, kk, "nested", num, verbose);
+    rewindVertices(kk, original);
 
-    start = omp_get_wtime();
-    result = par(kk);
-    end = omp_get_wtime();
-    echo(kk, result, end - start, "par", num, verbose);
-    rewindVertices(kk, result);
+    free(original);
 
     return;
 }

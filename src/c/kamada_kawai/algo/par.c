@@ -149,20 +149,11 @@ float calculate_delta_x_par(float derivaitve_x_m, float derivaitve_y_m, float de
     return (-(derivaitve_y_m) - (derivaitve_yy_m * delta_y)) / derivaitve_xy_m;
 }
 
-void copyCoords_par(Coord *kk_coords, Coord *v_coords, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        v_coords[i].x = kk_coords[i].x;
-        v_coords[i].y = kk_coords[i].y;
-    }
-}
-
 Vertices *par(KamadaKawai *kk)
 {
     Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
     vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
-    copyCoords_par(kk->coords, vertices->coords, kk->n);
+    copyCoords(kk->coords, vertices->coords, kk->n);
 
     Vertices *vertices_head = vertices;
 
@@ -175,31 +166,27 @@ Vertices *par(KamadaKawai *kk)
         {
             float d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m;
 
-#pragma omp parallel default(none) shared(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m, kk, max_delta_m_index, deltas)
+#pragma omp parallel sections default(none) shared(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m, kk, max_delta_m_index, deltas)
             {
-
-#pragma omp sections
+#pragma omp section
                 {
+                    d_x_m = derivaitve_x_m_par(kk, max_delta_m_index);
+                }
 #pragma omp section
-                    {
-                        d_x_m = derivaitve_x_m_par(kk, max_delta_m_index);
-                    }
+                {
+                    d_y_m = derivaitve_y_m_par(kk, max_delta_m_index);
+                }
 #pragma omp section
-                    {
-                        d_y_m = derivaitve_y_m_par(kk, max_delta_m_index);
-                    }
+                {
+                    d_xx_m = derivaitve_xx_m_par(kk, max_delta_m_index);
+                }
 #pragma omp section
-                    {
-                        d_xx_m = derivaitve_xx_m_par(kk, max_delta_m_index);
-                    }
+                {
+                    d_yy_m = derivaitve_yy_m_par(kk, max_delta_m_index);
+                }
 #pragma omp section
-                    {
-                        d_yy_m = derivaitve_yy_m_par(kk, max_delta_m_index);
-                    }
-#pragma omp section
-                    {
-                        d_xy_m = derivaitve_xy_m_par(kk, max_delta_m_index);
-                    }
+                {
+                    d_xy_m = derivaitve_xy_m_par(kk, max_delta_m_index);
                 }
             }
 
@@ -227,9 +214,10 @@ Vertices *par(KamadaKawai *kk)
         deltas = calculate_delatas_par(kk);
         max_delta_m_index = get_max_delta_m_index_par(kk, deltas);
     }
+
     vertices->next = (Vertices *)malloc(sizeof(Vertices));
     vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
-    copyCoords_par(kk->coords, vertices->next->coords, kk->n);
+    copyCoords(kk->coords, vertices->next->coords, kk->n);
     vertices = vertices->next;
     vertices->next = NULL;
 

@@ -52,7 +52,7 @@ Primer rešitve `/tests/partition/solutions/<xy>.json`:
 ## 3. Kamada-Kawai algoritem
 ---
 Obravani grafi so povezani grafi, katerih vozlišča niso omejena (ležijo prosto, kjerkoli v ravnini) in robovi predstavljeni s polnimi črtami. V našem modelu ravnovesje predstavlja kvadratni sum razlik med željenimi razdaljami in dejanskimi razdaljami med vozlišči.\
-Algoritem je podrobno opisan v [znanstvenem članku](./docs/document.pdf).\
+Algoritem je podrobno opisan v [znanstvenem članku](./kamada_kawai.pdf).\
 _Simetrični graf odraža simetrične sisteme vzmeti._
 
 Primer testne datoteke `/tests/kamada_kawai/<xy>.json`:

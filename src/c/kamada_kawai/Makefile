@@ -4,9 +4,9 @@ all: clean compile run
 TARGET = main.out
 OUTPUTS = **/*.txt **/*.csv
 SOURCES = main.c\
-./algo/algo.c ./algo/seq.c ./algo/par.c\
+./json2kamada_kawai.c ./kamada_kawai2csv.c ./kamada_kawai.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./json2kamada_kawai.c ./kamada_kawai2csv.c
+./algo/algo.c ./algo/seq.c ./algo/par.c ./algo/nested.c
 
 ALGO = algo
 TESTD = ../../../tests
@@ -17,7 +17,6 @@ CC = gcc
 CFLAGS = -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
-export OMP_CANCELLATION=true
 
 
 
@@ -35,7 +34,8 @@ $(TARGET):
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@start=$$(date +%s.%N); \
+	@export OMP_NESTED=TRUE; \
+	start=$$(date +%s.%N); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t $$case -x $$num -v; \

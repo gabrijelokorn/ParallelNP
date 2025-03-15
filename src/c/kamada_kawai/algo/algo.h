@@ -10,7 +10,9 @@
 #include "../kamada_kawai2csv.h"
 
 void algo(KamadaKawai *kamadaKawai, char *testcase, bool verbose);
+
 Vertices *seq(KamadaKawai *kamadaKawai);
 Vertices *par(KamadaKawai *kamadaKawai);
+Vertices *nested(KamadaKawai *kamadaKawai);
 
 #endif

@@ -39,4 +39,6 @@ typedef struct Vertices
 Vertices *seq(KamadaKawai *kk);
 Vertices *par(KamadaKawai *kk);
 
+void copyCoords(Coord *kk_coords, Coord *v_coords, int n);
+
 #endif

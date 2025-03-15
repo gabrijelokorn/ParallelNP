@@ -21,6 +21,7 @@ const algoDetail = {
         "c": {
             "seq": "Zaporedni program",
             "par": "Paralelni program",
+            "nested": "Gnezdeni paralelizem - vzporedno se računajo tako delte kot tudi razdalje",
         },
         "go": {
             "seq": "Zaporedni program",

@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include <omp.h>
+#include <inttypes.h>
 
 #include "algo.h"
 
@@ -18,11 +20,11 @@ int sum_sgl_stc(int *arr, int size, unsigned long long int index)
 
 bool *sgl_stc(Partitions *p, int **arr)
 {
-    bool *result = (bool *)malloc(p->rows * sizeof(bool));
+    bool *result = (bool *)malloc(p->rows * sizeof(bool) * 1);
 
     for (int i = 0; i < p->rows; i++)
     {
-        result[i] = false;
+        result[i * 1] = false;
 
         int *row = arr[i];
         int size = p->cols[i];
@@ -46,7 +48,7 @@ bool *sgl_stc(Partitions *p, int **arr)
                 int sum = sum_sgl_stc(row, size, j);
                 if (sum == half_sum)
                 {
-                    result[i] = true;
+                    result[i * 1] = true;
                     found = true;
                 }
             }
