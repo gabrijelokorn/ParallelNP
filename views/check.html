@@ -129,13 +129,46 @@
                             if (x === 'kamada_kawai') {
                                 posfix = 'csv';
                             }
+
+                            // const scale = results[x][l][a][t].score * 120;
+                            const score = results[x][l][a][t].score;
+
+                            // do scale from 0 to 255 
+                            // 0 for red 
+                            // 255 for green
+                            // based on score
+
+
+                            const hue = Math.round(score * 2.125);
+                            let r = Math.round(255 - score * 255);
+                            let g = Math.round(score * 255);
+
                             
-                            const scale = results[x][l][a][t].score * 120;
+                            r *= 0.6;
+                            g *= 0.6;
                             
+                            if (score === 1) {
+                                r = 255;
+                                g = 255;
+                                r *= 0.75;
+                                g *= 0.75;
+                            }
+
+                            if (score === 0) {
+                                r = 255;
+                                g = 0;
+                                r *= 0.75;
+                                g *= 0.75;
+                            }
+                            
+
                             if (results[x][l][a][t].time === 0) {
                                 testCaseLink.innerText = '/';
                             } else {
-                                testcaseCell.style.backgroundColor = `hsl(${scale}, 35%, 35%)`;
+                                testcaseCell.style.backgroundColor = `rgb(${r}, ${g}, 0)`;
+                                if (score === 1) {
+                                    testCaseLink.style.color = 'black';
+                                }
                                 testCaseLink.target = '_blank';
                                 testCaseLink.href = `../src/${l}/${x}/algo/${a}${t}.${posfix}`;
                                 testCaseLink.innerText = `${results[x][l][a][t].time}`;
@@ -148,7 +181,7 @@
                             if (results[x][l][a][t].time === 0) {
                                 testcaseCell.style.backgroundColor = "#1f2226";
                             }
-                            
+
                             testcaseCell.appendChild(testCaseLink);
 
                             if (firstAlgo) {

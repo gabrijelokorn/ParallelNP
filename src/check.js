@@ -169,12 +169,17 @@ async function evaluateResults(partitionTests, kamada_kawaiTests) {
         const problemDir = "partition";
         for (let x of partitionTests) {
             let bestTime = Number.MAX_VALUE;
+            let worstTime = 0;
             for (let l of languages) {
                 const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
                 for (let a of algos) {
-                    // console.log(result[problemDir][l][a][x]);
-                    if (result[problemDir][l][a][x].time < bestTime && result[problemDir][l][a][x].time > 0) {
-                        bestTime = result[problemDir][l][a][x].time;
+                    if (result[problemDir][l][a][x].time > 0) {
+                        if (result[problemDir][l][a][x].time < bestTime) {
+                            bestTime = result[problemDir][l][a][x].time;
+                        }
+                        if (result[problemDir][l][a][x].time > worstTime) {
+                            worstTime = result[problemDir][l][a][x].time;
+                        }
                     }
                 }
 
@@ -183,7 +188,18 @@ async function evaluateResults(partitionTests, kamada_kawaiTests) {
             for (let l of languages) {
                 const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
                 for (let a of algos) {
-                    result[problemDir][l][a][x]["score"] = bestTime / result[problemDir][l][a][x].time;
+                    if (result[problemDir][l][a][x].time === 0) {
+                        continue;
+                    }
+                    if (bestTime === result[problemDir][l][a][x].time) {
+                        result[problemDir][l][a][x]["score"] = 1;
+                        continue;
+                    }
+                    if (worstTime === result[problemDir][l][a][x].time) {
+                        result[problemDir][l][a][x]["score"] = 0;
+                        continue;
+                    }
+                    result[problemDir][l][a][x]["score"] = (worstTime - result[problemDir][l][a][x].time) / (worstTime - bestTime);
                 }
             }
         }
@@ -193,12 +209,17 @@ async function evaluateResults(partitionTests, kamada_kawaiTests) {
         const problemDir = "kamada_kawai";
         for (let x of kamada_kawaiTests) {
             let bestTime = Number.MAX_VALUE;
+            let worstTime = 0;
             for (let l of languages) {
                 const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
                 for (let a of algos) {
-                    // console.log(result[problemDir][l][a][x]);
-                    if (result[problemDir][l][a][x].time < bestTime && result[problemDir][l][a][x].time > 0) {
-                        bestTime = result[problemDir][l][a][x].time;
+                    if (result[problemDir][l][a][x].time > 0) {
+                        if (result[problemDir][l][a][x].time < bestTime) {
+                            bestTime = result[problemDir][l][a][x].time;
+                        }
+                        if (result[problemDir][l][a][x].time > worstTime) {
+                            worstTime = result[problemDir][l][a][x].time;
+                        }
                     }
                 }
 
@@ -207,7 +228,18 @@ async function evaluateResults(partitionTests, kamada_kawaiTests) {
             for (let l of languages) {
                 const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
                 for (let a of algos) {
-                    result[problemDir][l][a][x]["score"] = bestTime / result[problemDir][l][a][x].time;
+                    if (result[problemDir][l][a][x].time === 0) {
+                        continue;
+                    }
+                    if (bestTime === result[problemDir][l][a][x].time) {
+                        result[problemDir][l][a][x]["score"] = 1;
+                        continue;
+                    }
+                    if (worstTime === result[problemDir][l][a][x].time) {
+                        result[problemDir][l][a][x]["score"] = 0;
+                        continue;
+                    }
+                    result[problemDir][l][a][x]["score"] = (worstTime - result[problemDir][l][a][x].time) / (worstTime - bestTime);
                 }
             }
         }
