@@ -70,5 +70,18 @@ Na STUDISU moram izpolniti obrazec za prijavo diplomske naloge, kjer označim me
 
     Dobra ugotovitev za bralca bi bila na primer, da mu predlagam v kakšne namene je bolje uporabiti en ali drug jezik.
 
-.08.2024; ura
+17.03.2025; 11:00
 ---
+S profesorjem sva pogledala kaj sem naredil do sedaj - delovanje programja je zadovoljivo. Obdelala sva naslednje problematike: 
+- Profesor je predlagal, da dodam možnost za izbiro števila niti, ki jih program uporabi. Odločil sem se, da bom to implementiral v `Makefile`. Namen tega je, da testiramo delovanje z uporabo števila niti, ki je enako številu jeder na procesorju.
+- Pri merjenju časa je zaželjeno, da merim čas izvajanja algoritma po "stenski uri", saj tako dobimo najboljši rezultat časovnih meritev - kako jeziki (compiler-ji) in njihovi urniki obvladujejo vzporedne progame. 
+    - Je zaradi vmesnih morebitnih prekinitev in preklapljanj med niti (kontekstov) in podobno takšno merejenje nezanesljivo?\
+    Ne, saj se prekinitve in preklapljanja med niti dogajajo med merjenjem vseh algoritmov (vpliva na vse enako (v povprečju)), poleg tega pa bomo meritev naredili več, vzeli povprečje in tako v povprečju dobili zanesljive rezultate.
+- Pri reševanju problemov imam veliko izbire za logično predstavitev problemov v vsakem jezikih (v kakšnih strukturah hranim podatke problemov). Odločili smo se, da bom podatke za posamezne probleme hranil v več dimenzionalnih poljih (arrayih).
+    - Lahko zaradi tega pride do nepravičnih primerjav med jeziki, saj bi lahko kateri jezik uporabljal bolj optimalne strukture podatkov?\
+    Do tega sicer lahko pride (težko), vendar so polja (arrayi) in matrike na področju superračunalnišva in vzporednega programiranja poglavitnega pomena in jih je smiselno uporabiti.
+- Profesor bo priskrbel dotop do superračunalnika z velikim številom jeder, na katerem bom lahko zaganjal svoje programe
+- Po zaganjanju vseh progrmaov lahko začnem že kar pisati diplomsko nalogo
+- Ker seveda ne obstajajo metode, ki bi enolično pokazale, kateri jezik je boljši, bom moral uporabiti več metod primerjave in tako bralcu olajšati izbiro na podlagi le njegovih potreb. V delu bom primerjal:
+    - numerično - primerjal bom čase izvajanja algoritmov na izbranih problemih
+    - analitično (vsako rešitev) - vsakega jezika bom primerjal z rešitvami drugih jezikov

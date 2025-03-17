@@ -5,6 +5,9 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
+parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
+export parallelNPThreads
+
 compile:
 	@echo -e "##########################################\n    |-> COMPILING $(WD)"
 	$(MAKE) -C partition compile

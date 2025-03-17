@@ -13,32 +13,25 @@ using .File
 
 export algo
 
-function echo(result::Vector{Bool}, elapsed::Float64, algo::String, num::String, verbose::Bool)
+function run_with_timeout(arr::Vector{Vector{Int64}}, f::Function, nThreads::Int, verbose::Bool, name::String, num::String)
+    start = Base.time_ns()
+    result = f(arr)
+    elapsed = (Base.time_ns() - start) / 1e9
+    
     if !verbose
         return
     end
 
-    algoresult = generateFilename(algo, num, "json")
+    algoresult = generateFilename(name, num, "json")
     writePartitions(algoresult, result)
 
-    time = generateFilename(algo, num, "txt")
-    writeTime(time, elapsed)
-    
-end # echo
+    algotime = generateFilename(name, num, "txt")
+    writeTime(algotime, elapsed)
+end
 
-function algo(arr::Vector{Vector{Int64}}, num::String, verbose::Bool)
-    # Sequential
-    start_seq = Base.time_ns()
-    result = Seq.seq(arr)
-    end_seq = Base.time_ns()
-    echo(result, (end_seq - start_seq) / 1e9, "seq", num, verbose)
-    
-    # Parallel
-    start_par = Base.time_ns()
-    resultP = Par.par(arr)
-    end_par = Base.time_ns()
-    echo(resultP, (end_par - start_par) / 1e9, "par", num, verbose)
-
-end # Algo
+function algo(arr::Vector{Vector{Int64}}, nThreads::Int, verbose::Bool, num::String)
+    run_with_timeout(arr, Seq.seq, nThreads, verbose, "seq", num)
+    run_with_timeout(arr, Par.par, nThreads, verbose, "par", num)
+end # algo
 
 end # module

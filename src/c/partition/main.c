@@ -26,22 +26,26 @@ int main(int argc, char *argv[])
 {
     bool verbose = false;
     char *test;
+    char *nThreadsStr;
     char *num;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":vt:x:")) != -1)
+    while ((opt = getopt(argc, argv, ":vt:x:n:")) != -1)
     {
         switch (opt)
         {
         case 't':
             test = optarg;
             break;
-        case 'v':
-            verbose = true;
-            break;
         case 'x':
             num = optarg;
+            break;
+        case 'n':
+            nThreadsStr = optarg;
+            break;
+        case 'v':
+            verbose = true;
             break;
         case ':':
         case '?':
@@ -55,19 +59,24 @@ int main(int argc, char *argv[])
     if (help)
         error_args(argv[0]);
 
+    // Set the number of threads
+    int nThreads = atoi(nThreadsStr);
+    if (nThreads < 1)
+        error_args(argv[0]);
+
     // Read the input file
     FILE *testF = openFile(test, "r");
     char *buffer = readFile(testF);
     fclose(testF);
-    
+
     // json -> partitions
     Partitions *p = get_partitions(buffer);
     // partitions -> array
     int **arr = json2partitions(buffer, p);
     free(buffer);
-    
+
     // Run the algorithm
-    algo(p, arr, num, verbose);
+    algo(arr, p, nThreads, verbose, num);
     free(arr);
 
     return 0;

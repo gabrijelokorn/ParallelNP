@@ -5,6 +5,9 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
+parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
+export parallelNPThreads
+
 run:
 	@echo -e "##########################################\n    |-> RUNNING $(WD)"
 	$(MAKE) -C partition run

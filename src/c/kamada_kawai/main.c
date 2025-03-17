@@ -19,22 +19,26 @@ int main(int argc, char *argv[])
 {
     bool verbose = false;
     char *test;
+    char *nThreadsStr;
     char *num;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":t:x:y:m:n:v")) != -1)
+    while ((opt = getopt(argc, argv, ":t:x:n:v")) != -1)
     {
         switch (opt)
         {
         case 't':
             test = optarg;
             break;
-        case 'v':
-            verbose = true;
-            break;
         case 'x':
             num = optarg;
+            break;
+        case 'n':
+            nThreadsStr = optarg;
+            break;
+        case 'v':
+            verbose = true;
             break;
         case ':':
         case '?':
@@ -48,6 +52,11 @@ int main(int argc, char *argv[])
     if (help)
         error_args(argv[0]);
 
+    // Set the number of threads
+    int nThreads = atoi(nThreadsStr);
+    if (nThreads < 1)
+        error_args(argv[0]);
+
     int n;
     float k;
 
@@ -59,10 +68,10 @@ int main(int argc, char *argv[])
     // json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
     free(buffer);
-    
+
     // Run the algorithm
-    algo(kamadaKawai, num, verbose);
+    algo(kamadaKawai, nThreads, verbose, num);
     free(kamadaKawai);
-    
+
     return 0;
 }

@@ -13,39 +13,34 @@ void timeout_handler(int signum)
     exit(0);
 }
 
-void echo(Partitions *p, bool *result, double elapsed, char *algo, char *num, bool verbose)
-{
-    if (!verbose)
-        return;
-
-    char *algoresult = generateFilename(algo, num, "json");
-    writePartitions(result, p->rows, algoresult);
-
-    char *algotime = generateFilename(algo, num, "txt");
-    writeTime(elapsed, algotime);
-}
-
-bool *run_with_timeout(bool *(*func)(Partitions *, int **), Partitions *p, int **arr, char *name, char *num, int verbose)
+bool *run_with_timeout(int **arr,  Partitions *p, bool *(*func)(Partitions *, int **), int nThreads, int verbose, char *name, char *num)
 {
     signal(SIGALRM, timeout_handler);
     alarm(25); 
-
+    
     double start = omp_get_wtime();
     bool *result = func(p, arr);
     double end = omp_get_wtime();
-
+    
     alarm(0); 
-    echo(p, result, end - start, name, num, verbose);
+
+    if (!verbose)
+        return NULL;
+    char *algoresult = generateFilename(name, num, "json");
+    writePartitions(result, p->rows, algoresult);
+    
+    char *algotime = generateFilename(name, num, "txt");
+    writeTime(end - start, algotime);
 }
 
-void algo(Partitions *p, int **arr, char *num, bool verbose)
+void algo(int **arr, Partitions *p, int nThreads, bool verbose, char *num)
 {
-    run_with_timeout(seq, p, arr, "seq", num, verbose);
-    run_with_timeout(mlt_stc, p, arr, "mlt_stc", num, verbose);
-    run_with_timeout(mlt_dyn, p, arr, "mlt_dyn", num, verbose);
-    run_with_timeout(sgl_dyn, p, arr, "sgl_dyn", num, verbose);
-    run_with_timeout(sgl_stc, p, arr, "sgl_stc", num, verbose);
-    run_with_timeout(nested, p, arr, "nested", num, verbose);
+    run_with_timeout(arr, p, seq, nThreads, verbose, "seq", num);
+    run_with_timeout(arr, p, mlt_stc, nThreads, verbose, "mlt_stc", num);
+    run_with_timeout(arr, p, mlt_dyn, nThreads, verbose, "mlt_dyn", num);
+    run_with_timeout(arr, p, sgl_dyn, nThreads, verbose, "sgl_dyn", num);
+    run_with_timeout(arr, p, sgl_stc, nThreads, verbose, "sgl_stc", num);
+    run_with_timeout(arr, p, nested, nThreads, verbose, "nested", num);
 
     return;
 }

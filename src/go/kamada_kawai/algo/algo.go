@@ -12,34 +12,26 @@ func rewindVertices(kk *KamadaKawai, result [][]Coord) {
 	}
 }
 
-func echo (kk *KamadaKawai, result [][]Coord, elapsed time.Duration, algo, num string, verbose bool) {
+func run_with_timeout(kk *KamadaKawai, algoFunc(func() [][]Coord), nThreads int, verbose bool, name string, num string) {
+	start := time.Now()
+	result := algoFunc()
+	elapsed := time.Since(start)
+	
+	rewindVertices(kk, result)
+	
 	if !verbose {
 		return
 	}
-
-	algoresult := parallelNP.GenerateFilename(algo, num, "csv")
+	algoresult := parallelNP.GenerateFilename(name, num, "csv")
 	WriteVertices(result, algoresult)
-
-	algotime := parallelNP.GenerateFilename(algo, num, "txt")
+	
+	algotime := parallelNP.GenerateFilename(name, num, "txt")
 	parallelNP.WriteTime(elapsed, algotime)
 }
 
-func (kk *KamadaKawai) Algo(num string, verbose bool) error {
-
-	// Sequential
-	start := time.Now()
-	var result [][]Coord = kk.Seq()
-	end := time.Since(start)
-	echo(kk, result, end, "seq", num, verbose)
-	rewindVertices(kk, result)
-
-	// Parallel
-	start = time.Now()
-	result = kk.Par()
-	end = time.Since(start)
-	echo(kk, result, end, "par", num, verbose)
-	rewindVertices(kk, result)
-
-	return nil
+func (kk *KamadaKawai) Algo(num string, nThreads int, verbose bool) error {
+	run_with_timeout(kk, kk.Seq, nThreads, verbose, "seq", num)
+	run_with_timeout(kk, kk.Par, nThreads, verbose, "par", num)
+	return nil 
 }
 	

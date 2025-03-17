@@ -8,8 +8,8 @@
 .PHONY: all clean compile run c julia go check
 all: clean compile run check
 
-export OMP_CANCELLATION=true
-
+parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
+export parallelNPThreads
 
 
 ### --- COMPILE --- ###

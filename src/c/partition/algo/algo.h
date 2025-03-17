@@ -7,7 +7,7 @@
 #include "../partition.h"
 #include "../partitions2json.h"
 
-void algo(Partitions *p, int **arr, char *testcase, bool verbose);
+void algo(int **arr, Partitions *p, int nThreads, bool verbose, char *num);
 
 bool* seq(Partitions *p, int **arr);
 bool* mlt_stc(Partitions *p, int **arr);

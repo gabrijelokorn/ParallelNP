@@ -6,7 +6,7 @@ import (
 	partition "golang/partition/lib"
 )
 
-func Par(arr [][]int) []int32 {
+func Pool(arr [][]int) []int32 {
 	var result []int32 = make([]int32, len(arr))
 
 	threads := runtime.NumCPU()

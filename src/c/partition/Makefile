@@ -18,6 +18,9 @@ CFLAGS = -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
 
+parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
+export parallelNPThreads
+
 
 
 ### --- COMPILE --- ###
@@ -38,7 +41,7 @@ run: $(TARGET)
 	start=$$(date +%s.%N); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
-		./$(TARGET) -t $$case -x $$num -v; \
+		./$(TARGET) -t $$case -x $$num -n $$parallelNPThreads -v; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"

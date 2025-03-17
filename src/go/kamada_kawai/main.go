@@ -13,11 +13,13 @@ func main() {
 	// Define flags
 	t := flag.String("t", "test", "Name of the test file")
 	x := flag.String("x", "unknonw_testcase", "Test case id")
+	n := flag.Int("n", 1, "Number of threads")
 	v := flag.Bool("v", false, "Verbose mode")
 	flag.Parse()
 
 	test := *t
 	num := *x
+	nThreads := *n
 	verbose := *v
 
 	// Read the file
@@ -34,5 +36,5 @@ func main() {
 	}
 	kk.Init()
 
-	kk.Algo(num, verbose)
+	kk.Algo(num, nThreads, verbose)
 }

@@ -15,31 +15,25 @@ using .File
 
 export algo
 
-function echo(result::Vector{Vector{Coord}}, elapsed::Float64, algo::String, num::String, verbose::Bool)
+function run_with_timeout(kk::KamadaKawai, f::Function, nThreads::Int, verbose::Bool, name::String, num::String)
+    start = Base.time_ns()
+    result = f(kk)
+    elapsed = (Base.time_ns() - start) / 1e9
+    
     if !verbose
         return
     end
 
-    algoresult = generateFilename(algo, num, "csv")
+    algoresult = generateFilename(name, num, "csv")
     writeVertices(result, algoresult)
 
-    time = generateFilename(algo, num, "txt")
-    writeTime(time, elapsed)
+    algotime = generateFilename(name, num, "txt")
+    writeTime(algotime, elapsed)
+end
 
-end # echo
-
-function algo(kk::KamadaKawai, num::String, verbose::Bool)
-    # Sequential
-    start_seq = Base.time_ns()
-    result = Seq.seq(kk)
-    end_seq = Base.time_ns()
-    echo(result, (end_seq - start_seq) / 1.0e9, "seq", num, verbose)
-
-    # Parallel
-    start_par = Base.time_ns()
-    result = Par.par(kk)
-    end_par = Base.time_ns()
-    echo(result, (end_par - start_par) / 1.0e9, "par", num, verbose)
+function algo(kk::KamadaKawai, nThreads::Int, verbose::Bool, num::String)
+    run_with_timeout(kk, Seq.seq, nThreads, verbose, "seq", num)
+    run_with_timeout(kk, Par.par, nThreads, verbose, "par", num)
 end # algo
 
 end # module

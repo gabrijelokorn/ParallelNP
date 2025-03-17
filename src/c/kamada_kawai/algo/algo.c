@@ -22,43 +22,38 @@ void rewindVertices(KamadaKawai *kk, Coord *original)
     }
 }
 
-void echo(KamadaKawai *kk, Vertices *result, double elapsed, char *algo, char *num, bool verbose)
+void run_with_timeout(KamadaKawai *kk, Vertices *(*func)(KamadaKawai *), int nThreads, int verbose, char *name, char *num)
 {
-    if (!verbose)
-        return;
-
-    char *algoresult = generateFilename(algo, num, "csv");
-    writeVertices(result, kk->n, algoresult);
-
-    char *algotime = generateFilename(algo, num, "txt");
-    writeTime(elapsed, algotime);
-}
-
-Vertices *run_with_timeout(Vertices *(*func)(KamadaKawai *), KamadaKawai *kk, char *name, char* num, int verbose)
-{
+    printf("Running %s with %d threads\n", name, nThreads);
     signal(SIGALRM, timeout_handler);
-    alarm(25); 
+    alarm(25);
 
     double start = omp_get_wtime();
     Vertices *result = func(kk);
     double end = omp_get_wtime();
 
-    alarm(0); 
-    echo(kk, result, end - start, name, num, verbose);
+    alarm(0);
 
-    return result;
+    if (!verbose)
+        return;
+    char *algoresult = generateFilename(name, num, "csv");
+    writeVertices(result, kk->n, algoresult);
+
+    char *algotime = generateFilename(name, num, "txt");
+    writeTime(end - start, algotime);
+
+    return;
 }
 
-void algo(KamadaKawai *kk, char *num, bool verbose)
+void algo(KamadaKawai *kk, int nThreads, bool verbose, char *num)
 {
     Coord *original = malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, original, kk->n);
 
-    run_with_timeout(seq, kk, "seq", num, verbose);
+    run_with_timeout(kk, seq, nThreads, verbose, "seq", num);
     rewindVertices(kk, original);
-    run_with_timeout(par, kk, "par", num, verbose);
-    rewindVertices(kk, original);
-    run_with_timeout(nested, kk, "nested", num, verbose);
+
+    run_with_timeout(kk, par, nThreads, verbose, "par", num);
     rewindVertices(kk, original);
 
     free(original);
