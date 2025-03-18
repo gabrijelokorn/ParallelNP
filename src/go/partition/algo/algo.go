@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func run_with_timeout(arr [][]int, algoFunc(func([][]int) []int32), nThreads int, verbose bool, name string, num string) {
+func run_with_timeout(arr [][]int, algoFunc(func([][]int) []int32), verbose bool, name string, num string) {
 	start := time.Now()
 	result := algoFunc(arr)
 	elapsed := time.Since(start)
@@ -21,8 +21,10 @@ func run_with_timeout(arr [][]int, algoFunc(func([][]int) []int32), nThreads int
 	parallelNP.WriteTime(elapsed, algotime)
 }
 
-func Algo(arr [][]int, num string, nThreads int, verbose bool) {
-	run_with_timeout(arr, Seq, nThreads, verbose, "seq", num)
-	run_with_timeout(arr, Par, nThreads, verbose, "par", num)
-	run_with_timeout(arr, Pool, nThreads, verbose, "pool", num)
+func Algo(arr [][]int, num string, verbose bool) {
+	run_with_timeout(arr, Seq, verbose, "seq", num)
+	run_with_timeout(arr, Par, verbose, "par", num)
+	run_with_timeout(arr, Mlt_dyn, verbose, "mlt_dyn", num)	
+	run_with_timeout(arr, Nested, verbose, "nested", num)	
 }
+

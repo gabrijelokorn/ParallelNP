@@ -30,9 +30,10 @@ $(TARGET): $(SOURCES)
 ### --- RUN --- ###
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
+	export GOMAXPROCS=$$parallelNPThreads; \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
-		./$(TARGET) -t=$$case -x=$$num -n=$$parallelNPThreads -v; \
+		./$(TARGET) -t=$$case -x=$$num -v; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"

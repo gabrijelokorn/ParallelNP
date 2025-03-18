@@ -9,7 +9,7 @@
 #include "../json2kamada_kawai.h"
 #include "../kamada_kawai2csv.h"
 
-void algo(KamadaKawai *kk, int nThreads, bool verbose, char *num);
+void algo(KamadaKawai *kk, bool verbose, char *num);
 
 Vertices *seq(KamadaKawai *kamadaKawai);
 Vertices *par(KamadaKawai *kamadaKawai);

@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":vt:x:n:")) != -1)
+    while ((opt = getopt(argc, argv, ":vt:x:")) != -1)
     {
         switch (opt)
         {
@@ -40,9 +40,6 @@ int main(int argc, char *argv[])
             break;
         case 'x':
             num = optarg;
-            break;
-        case 'n':
-            nThreadsStr = optarg;
             break;
         case 'v':
             verbose = true;
@@ -59,11 +56,6 @@ int main(int argc, char *argv[])
     if (help)
         error_args(argv[0]);
 
-    // Set the number of threads
-    int nThreads = atoi(nThreadsStr);
-    if (nThreads < 1)
-        error_args(argv[0]);
-
     // Read the input file
     FILE *testF = openFile(test, "r");
     char *buffer = readFile(testF);
@@ -76,7 +68,7 @@ int main(int argc, char *argv[])
     free(buffer);
 
     // Run the algorithm
-    algo(arr, p, nThreads, verbose, num);
+    algo(arr, p, verbose, num);
     free(arr);
 
     return 0;

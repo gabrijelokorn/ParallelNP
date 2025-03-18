@@ -12,7 +12,7 @@ func rewindVertices(kk *KamadaKawai, result [][]Coord) {
 	}
 }
 
-func run_with_timeout(kk *KamadaKawai, algoFunc(func() [][]Coord), nThreads int, verbose bool, name string, num string) {
+func run_with_timeout(kk *KamadaKawai, algoFunc(func() [][]Coord), verbose bool, name string, num string) {
 	start := time.Now()
 	result := algoFunc()
 	elapsed := time.Since(start)
@@ -29,9 +29,9 @@ func run_with_timeout(kk *KamadaKawai, algoFunc(func() [][]Coord), nThreads int,
 	parallelNP.WriteTime(elapsed, algotime)
 }
 
-func (kk *KamadaKawai) Algo(num string, nThreads int, verbose bool) error {
-	run_with_timeout(kk, kk.Seq, nThreads, verbose, "seq", num)
-	run_with_timeout(kk, kk.Par, nThreads, verbose, "par", num)
+func (kk *KamadaKawai) Algo(num string, verbose bool) error {
+	run_with_timeout(kk, kk.Seq, verbose, "seq", num)
+	run_with_timeout(kk, kk.Par, verbose, "par", num)
 	return nil 
 }
 	

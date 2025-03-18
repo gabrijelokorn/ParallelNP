@@ -37,11 +37,12 @@ $(TARGET):
 
 ### --- RUN --- ###
 run: $(TARGET)
-	@export OMP_NESTED=TRUE; \
-	start=$$(date +%s.%N); \
+	@start=$$(date +%s.%N); \
+	export OMP_NESTED=TRUE; \
+	export OMP_NUM_THREADS=$(parallelNPThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
-		./$(TARGET) -t $$case -x $$num -n $$parallelNPThreads -v; \
+		./$(TARGET) -t $$case -x $$num -v; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"

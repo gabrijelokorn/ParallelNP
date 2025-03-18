@@ -23,7 +23,6 @@ async function readAlgos(lang, algo, postfix) {
             const prefixes = files
                 .filter(file => file.endsWith(postfix))
                 .filter(file => !filesToIgnore.includes(file.split(".")[0]));
-            // const prefixes = files.filter(file => file.endsWith(postfix)).filter(file => !file.startsWith("algo"));
             const filenames = prefixes.map(file => {
                 return file.split(".")[0];
             });

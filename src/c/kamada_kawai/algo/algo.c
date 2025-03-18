@@ -22,9 +22,8 @@ void rewindVertices(KamadaKawai *kk, Coord *original)
     }
 }
 
-void run_with_timeout(KamadaKawai *kk, Vertices *(*func)(KamadaKawai *), int nThreads, int verbose, char *name, char *num)
+void run_with_timeout(KamadaKawai *kk, Vertices *(*func)(KamadaKawai *), int verbose, char *name, char *num)
 {
-    printf("Running %s with %d threads\n", name, nThreads);
     signal(SIGALRM, timeout_handler);
     alarm(25);
 
@@ -45,15 +44,15 @@ void run_with_timeout(KamadaKawai *kk, Vertices *(*func)(KamadaKawai *), int nTh
     return;
 }
 
-void algo(KamadaKawai *kk, int nThreads, bool verbose, char *num)
+void algo(KamadaKawai *kk, bool verbose, char *num)
 {
     Coord *original = malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, original, kk->n);
 
-    run_with_timeout(kk, seq, nThreads, verbose, "seq", num);
+    run_with_timeout(kk, seq, verbose, "seq", num);
     rewindVertices(kk, original);
 
-    run_with_timeout(kk, par, nThreads, verbose, "par", num);
+    run_with_timeout(kk, par, verbose, "par", num);
     rewindVertices(kk, original);
 
     free(original);

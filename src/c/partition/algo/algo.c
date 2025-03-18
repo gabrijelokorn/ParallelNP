@@ -13,7 +13,7 @@ void timeout_handler(int signum)
     exit(0);
 }
 
-bool *run_with_timeout(int **arr,  Partitions *p, bool *(*func)(Partitions *, int **), int nThreads, int verbose, char *name, char *num)
+bool *run_with_timeout(int **arr,  Partitions *p, bool *(*func)(Partitions *, int **), int verbose, char *name, char *num)
 {
     signal(SIGALRM, timeout_handler);
     alarm(25); 
@@ -33,14 +33,14 @@ bool *run_with_timeout(int **arr,  Partitions *p, bool *(*func)(Partitions *, in
     writeTime(end - start, algotime);
 }
 
-void algo(int **arr, Partitions *p, int nThreads, bool verbose, char *num)
+void algo(int **arr, Partitions *p, bool verbose, char *num)
 {
-    run_with_timeout(arr, p, seq, nThreads, verbose, "seq", num);
-    run_with_timeout(arr, p, mlt_stc, nThreads, verbose, "mlt_stc", num);
-    run_with_timeout(arr, p, mlt_dyn, nThreads, verbose, "mlt_dyn", num);
-    run_with_timeout(arr, p, sgl_dyn, nThreads, verbose, "sgl_dyn", num);
-    run_with_timeout(arr, p, sgl_stc, nThreads, verbose, "sgl_stc", num);
-    run_with_timeout(arr, p, nested, nThreads, verbose, "nested", num);
+    run_with_timeout(arr, p, seq, verbose, "seq", num);
+    run_with_timeout(arr, p, mlt_stc, verbose, "mlt_stc", num);
+    run_with_timeout(arr, p, mlt_dyn, verbose, "mlt_dyn", num);
+    run_with_timeout(arr, p, sgl_dyn, verbose, "sgl_dyn", num);
+    run_with_timeout(arr, p, sgl_stc, verbose, "sgl_stc", num);
+    run_with_timeout(arr, p, nested, verbose, "nested", num);
 
     return;
 }
