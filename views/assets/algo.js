@@ -10,8 +10,9 @@ const algoDetail = {
         },
         "go": {
             "seq": "Zaporedni program",
-            "mlt_all": "Vsak partition problem je dinamično dodeljen svoji goroutine-i. Goroutine-i so sinhronizirani z uporabo kanalov",
-            "mlt_dyn": "Dinamično porazdeljevanje dela med goroutine - z uporabo kanalov. Goroutine-i so sinhronizirani z uporabo kanalov",
+            "mlt_all_chn": "Vsak partition problem je dinamično dodeljen svoji goroutine-i. Goroutine-i so sinhronizirani z uporabo kanalov",
+            "mlt_dyn_chn": "Dinamično porazdeljevanje dela med goroutine - z uporabo kanalov. Goroutine-i so sinhronizirani z uporabo kanalov",
+            "mlt_all": "Vsak partition problem je dinamično dodeljen svoji goroutine-i.",
         },
         "julia": {
             "seq": "Zaporedni program",

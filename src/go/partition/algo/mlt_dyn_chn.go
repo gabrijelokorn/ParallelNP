@@ -6,7 +6,7 @@ import (
 	partition "golang/partition/lib"
 )
 
-func Mlt_dyn(arr [][]int) []int32 {
+func Mlt_dyn_chn(arr [][]int) []int32 {
 	wg := sync.WaitGroup{}
 	nThreads := runtime.GOMAXPROCS(0)
 	
