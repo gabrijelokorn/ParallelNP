@@ -18,8 +18,8 @@ CFLAGS = -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
 
-parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
-export parallelNPThreads
+PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
+export PartitionThreads
 
 
 
@@ -39,7 +39,7 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
-	export OMP_NUM_THREADS=$(parallelNPThreads); \
+	export OMP_NUM_THREADS=$(PartitionThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t $$case -x $$num -v; \

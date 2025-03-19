@@ -2,18 +2,15 @@ package algo
 
 import (
 	"sync"
-	"runtime"
 	partition "golang/partition/lib"
 )
 
-func Mlt_dyn(arr [][]int) []int32 {
-	wg := sync.WaitGroup{}
-	nThreads := runtime.GOMAXPROCS(0)
-	
+func Mlt_all(arr [][]int) []int32 {
 	var result []int32 = make([]int32, len(arr))
-	var partitionsChannel = make(chan partition.Task, nThreads)
+	var partitionsChannel = make(chan partition.Task, len(arr))
 
-	for i := 0; i < nThreads; i++ {
+	wg := sync.WaitGroup{}
+	for i := 0; i < len(arr); i++ {
 		wg.Add(1)
 
 		go func(i int) {
@@ -21,7 +18,6 @@ func Mlt_dyn(arr [][]int) []int32 {
 
 			for task := range partitionsChannel {
 				result[task.Index] = 0
-
 				if partition.SolvePartition(task.Array) {
 					result[task.Index] = 1
 				}

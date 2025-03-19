@@ -10,7 +10,8 @@ const algoDetail = {
         },
         "go": {
             "seq": "Zaporedni program",
-            "par": "Paralelni program",
+            "mlt_all": "Vsak partition problem je dinamično dodeljen svoji goroutine-i",
+            "mlt_dyn": "Dinamično porazdeljevanje dela med goroutine - z uporabo kanalov",
         },
         "julia": {
             "seq": "Zaporedni program",
@@ -21,7 +22,6 @@ const algoDetail = {
         "c": {
             "seq": "Zaporedni program",
             "par": "Paralelni program",
-            "nested": "Gnezdeni paralelizem - vzporedno se računajo tako delte kot tudi razdalje",
         },
         "go": {
             "seq": "Zaporedni program",

@@ -26,15 +26,15 @@ bool *seq(Partitions *p, int **arr)
         int *row = arr[i];
         int size = p->cols[i];
 
-        unsigned long long int combs = 1 << (size - 1);
-        unsigned long long int all = ((unsigned long long int)1 << size) - 1;
+        unsigned long long int numOfCombinations = 1 << (size - 1);
+        unsigned long long int allNumbersMask = ((unsigned long long int)1 << size) - 1;
 
-        int problem_sum = sum_seq(row, size, all);
+        int problem_sum = sum_seq(row, size, allNumbersMask);
         if (problem_sum % 2 != 0)
             continue;
         int half_sum = problem_sum / 2;
 
-        for (int j = 0; j < combs; j++)
+        for (int j = 0; j < numOfCombinations; j++)
         {
             int sum = sum_seq(row, size, j);
             if (sum == half_sum)

@@ -22,16 +22,16 @@ function seq(arr::Vector{Vector{Int64}})
         result[i] = false
         size = length(arr[i])
 
-        combs = 1 << (size - 1)
-        all = (1 << size) - 1
+        numOfCombinations = 1 << (size - 1)
+        allNumbersMask = (1 << size) - 1
 
-        problem_sum = sum_seq(arr[i], size, all)
+        problem_sum = sum_seq(arr[i], size, allNumbersMask)
         if problem_sum % 2 != 0
             continue
         end
         half_sum = problem_sum / 2
 
-        for j in 1:combs
+        for j in 1:numOfCombinations
             sum = sum_seq(arr[i], size, j)
             if sum == half_sum
                 result[i] = true

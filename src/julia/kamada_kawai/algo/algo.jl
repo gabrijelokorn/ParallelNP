@@ -15,7 +15,7 @@ using .File
 
 export algo
 
-function run_with_timeout(kk::KamadaKawai, f::Function, nThreads::Int, verbose::Bool, name::String, num::String)
+function run_with_timeout(kk::KamadaKawai, f::Function, verbose::Bool, name::String, num::String)
     start = Base.time_ns()
     result = f(kk)
     elapsed = (Base.time_ns() - start) / 1e9
@@ -31,9 +31,9 @@ function run_with_timeout(kk::KamadaKawai, f::Function, nThreads::Int, verbose::
     writeTime(algotime, elapsed)
 end
 
-function algo(kk::KamadaKawai, nThreads::Int, verbose::Bool, num::String)
-    run_with_timeout(kk, Seq.seq, nThreads, verbose, "seq", num)
-    run_with_timeout(kk, Par.par, nThreads, verbose, "par", num)
+function algo(kk::KamadaKawai, verbose::Bool, num::String)
+    run_with_timeout(kk, Seq.seq, verbose, "seq", num)
+    run_with_timeout(kk, Par.par, verbose, "par", num)
 end # algo
 
 end # module

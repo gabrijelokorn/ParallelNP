@@ -13,7 +13,7 @@ using .File
 
 export algo
 
-function run_with_timeout(arr::Vector{Vector{Int64}}, f::Function, nThreads::Int, verbose::Bool, name::String, num::String)
+function run_with_timeout(arr::Vector{Vector{Int64}}, f::Function, verbose::Bool, name::String, num::String)
     start = Base.time_ns()
     result = f(arr)
     elapsed = (Base.time_ns() - start) / 1e9
@@ -29,9 +29,9 @@ function run_with_timeout(arr::Vector{Vector{Int64}}, f::Function, nThreads::Int
     writeTime(algotime, elapsed)
 end
 
-function algo(arr::Vector{Vector{Int64}}, nThreads::Int, verbose::Bool, num::String)
-    run_with_timeout(arr, Seq.seq, nThreads, verbose, "seq", num)
-    run_with_timeout(arr, Par.par, nThreads, verbose, "par", num)
+function algo(arr::Vector{Vector{Int64}}, verbose::Bool, num::String)
+    run_with_timeout(arr, Seq.seq, verbose, "seq", num)
+    run_with_timeout(arr, Par.par, verbose, "par", num)
 end # algo
 
 end # module

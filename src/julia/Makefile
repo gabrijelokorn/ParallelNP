@@ -5,8 +5,10 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
-parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
-export parallelNPThreads
+PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
+export PartitionThreads
+KamadaKawaiThreads ?= $(if $(K),$(K),$(shell nproc))
+export KamadaKawaiThreads
 
 run:
 	@echo -e "##########################################\n    |-> RUNNING $(WD)"

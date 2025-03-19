@@ -8,8 +8,10 @@
 .PHONY: all clean compile run c julia go check
 all: clean compile run check
 
-parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
-export parallelNPThreads
+PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
+export PartitionThreads
+KamadaKawaiThreads ?= $(if $(K),$(K),$(shell nproc))
+export KamadaKawaiThreads
 
 
 ### --- COMPILE --- ###

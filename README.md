@@ -18,4 +18,4 @@ Spodnja tabela prikazuje rezultate izvajanja algoritmov za reševanje problema *
 ![Test](./docs/kk_output.png)
 
 ## Vprašanja
-Časovno merjenje - po threadih ali stenski uri?
+V katerih primerih je sploh uporabno imeti več niti, kot jih ponuja procesor?

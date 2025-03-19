@@ -23,8 +23,7 @@ func run_with_timeout(arr [][]int, algoFunc(func([][]int) []int32), verbose bool
 
 func Algo(arr [][]int, num string, verbose bool) {
 	run_with_timeout(arr, Seq, verbose, "seq", num)
-	run_with_timeout(arr, Par, verbose, "par", num)
 	run_with_timeout(arr, Mlt_dyn, verbose, "mlt_dyn", num)	
-	run_with_timeout(arr, Nested, verbose, "nested", num)	
+	run_with_timeout(arr, Mlt_all, verbose, "mlt_all", num)
 }
 

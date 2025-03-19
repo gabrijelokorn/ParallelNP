@@ -10,8 +10,8 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
-parallelNPThreads ?= $(if $(N),$(N),$(shell nproc))
-export parallelNPThreads
+PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
+export PartitionThreads
 
 
 
@@ -30,7 +30,7 @@ $(TARGET): $(SOURCES)
 ### --- RUN --- ###
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
-	export GOMAXPROCS=$$parallelNPThreads; \
+	export GOMAXPROCS=$$PartitionThreads; \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t=$$case -x=$$num -v; \
