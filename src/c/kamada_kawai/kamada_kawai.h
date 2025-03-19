@@ -40,5 +40,10 @@ Vertices *seq(KamadaKawai *kk);
 Vertices *par(KamadaKawai *kk);
 
 void copyCoords(Coord *kk_coords, Coord *v_coords, int n);
+float derivaitve_x_m(KamadaKawai *kk, int index);
+float derivaitve_y_m(KamadaKawai *kk, int index);
+float derivaitve_xx_m(KamadaKawai *kk, int index);
+float derivaitve_yy_m(KamadaKawai *kk, int index);
+float derivaitve_xy_m(KamadaKawai *kk, int index);
 
 #endif

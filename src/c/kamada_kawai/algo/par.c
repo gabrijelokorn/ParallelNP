@@ -1,99 +1,10 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <omp.h>
 
 #include "../kamada_kawai.h"
-
-float derivaitve_x_m_par(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_y_m_par(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_xx_m_par(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (float)pow(dist_y, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_yy_m_par(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (float)pow(dist_x, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_xy_m_par(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * ((kk->l_ij[index][i] * dist_x * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2)));
-    }
-
-    return sum;
-}
 
 int get_max_delta_m_index_par(KamadaKawai *kk, float *deltas)
 {
@@ -120,8 +31,8 @@ float delta_m_par(float derivaitve_x, float derivaitve_y)
 
 float calculate_delta_par(KamadaKawai *kk, int index)
 {
-    float derivaitve_x = derivaitve_x_m_par(kk, index);
-    float derivaitve_y = derivaitve_y_m_par(kk, index);
+    float derivaitve_x = derivaitve_x_m(kk, index);
+    float derivaitve_y = derivaitve_y_m(kk, index);
 
     return delta_m_par(derivaitve_x, derivaitve_y);
 }
@@ -151,6 +62,7 @@ float calculate_delta_x_par(float derivaitve_x_m, float derivaitve_y_m, float de
 
 Vertices *par(KamadaKawai *kk)
 {
+
     Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
     vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
     copyCoords(kk->coords, vertices->coords, kk->n);
@@ -170,23 +82,23 @@ Vertices *par(KamadaKawai *kk)
             {
 #pragma omp section
                 {
-                    d_x_m = derivaitve_x_m_par(kk, max_delta_m_index);
+                    d_x_m = derivaitve_x_m(kk, max_delta_m_index);
                 }
 #pragma omp section
                 {
-                    d_y_m = derivaitve_y_m_par(kk, max_delta_m_index);
+                    d_y_m = derivaitve_y_m(kk, max_delta_m_index);
                 }
 #pragma omp section
                 {
-                    d_xx_m = derivaitve_xx_m_par(kk, max_delta_m_index);
+                    d_xx_m = derivaitve_xx_m(kk, max_delta_m_index);
                 }
 #pragma omp section
                 {
-                    d_yy_m = derivaitve_yy_m_par(kk, max_delta_m_index);
+                    d_yy_m = derivaitve_yy_m(kk, max_delta_m_index);
                 }
 #pragma omp section
                 {
-                    d_xy_m = derivaitve_xy_m_par(kk, max_delta_m_index);
+                    d_xy_m = derivaitve_xy_m(kk, max_delta_m_index);
                 }
             }
 

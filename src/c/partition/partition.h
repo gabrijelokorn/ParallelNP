@@ -8,5 +8,6 @@ typedef struct Partitions
     int *cols;
 } Partitions;
 
+int partition_sum(int *arr, int size, unsigned long long int index);
 
 #endif

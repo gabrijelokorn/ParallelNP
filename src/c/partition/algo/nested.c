@@ -3,19 +3,6 @@
 
 #include "algo.h"
 
-int sum_nested(int *arr, int size, unsigned long long int index)
-{
-    int sum = 0;
-    for (int i = 0; i < size; i++)
-    {
-        if (index & (1 << i))
-        {
-            sum += arr[size - 1 - i];
-        }
-    }
-    return sum;
-}
-
 bool *nested(Partitions *p, int **arr)
 {
     omp_set_nested(1);
@@ -34,7 +21,7 @@ bool *nested(Partitions *p, int **arr)
         unsigned long long int numOfCombinations = 1 << (size - 1);
         unsigned long long int allNumbersMask = ((unsigned long long int)1 << size) - 1;
 
-        int problem_sum = sum_nested(row, size, allNumbersMask);
+        int problem_sum = partition_sum(row, size, allNumbersMask);
         if (problem_sum % 2 != 0)
             continue;
         int half_sum = problem_sum / 2;
@@ -47,7 +34,7 @@ bool *nested(Partitions *p, int **arr)
             {
                 if (found)
                     continue;
-                int sum = sum_nested(row, size, j);
+                int sum = partition_sum(row, size, j);
                 if (sum == half_sum)
                 {
                     result[i] = true;

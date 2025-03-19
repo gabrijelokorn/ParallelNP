@@ -1,5 +1,9 @@
 package algo
 
+import (
+	"math"
+)
+
 type Coord struct {
 	X float64 `json:"x"`
 	Y float64 `json:"y"`
@@ -96,4 +100,90 @@ func (kk *KamadaKawai) Init() {
 		}
 	}
 
+}
+
+
+func (kk *KamadaKawai) derivative_x_m(index int) float64 {
+	var sum float64 = 0.0
+
+	for i := 0; i < kk.N; i++ {
+		if i == index {
+			continue
+		}
+
+		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
+		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
+
+		sum += kk.K_ij[index][i] * (dist_x - ((kk.L_ij[index][i] * dist_x) / (math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(1)/float64(2)))))
+	}
+
+	return sum
+}
+
+func (kk *KamadaKawai) derivative_y_m(index int) float64 {
+	var sum float64 = 0.0
+
+	for i := 0; i < kk.N; i++ {
+		if i == index {
+			continue
+		}
+
+		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
+		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
+
+		sum += kk.K_ij[index][i] * (dist_y - ((kk.L_ij[index][i] * dist_y) / (math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(1)/float64(2)))))
+	}
+
+	return sum
+}
+
+func (kk *KamadaKawai) derivative_xx_m(index int) float64 {
+	var sum float64 = 0.0
+
+	for i := 0; i < kk.N; i++ {
+		if i == index {
+			continue
+		}
+
+		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
+		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
+
+		sum += kk.K_ij[index][i] * (1 - ((kk.L_ij[index][i] * math.Pow(dist_y, 2)) / math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(3)/float64(2))))
+	}
+
+	return sum
+}
+
+func (kk *KamadaKawai) derivative_yy_m(index int) float64 {
+	var sum float64 = 0.0
+
+	for i := 0; i < kk.N; i++ {
+		if i == index {
+			continue
+		}
+
+		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
+		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
+
+		sum += kk.K_ij[index][i] * (1 - ((kk.L_ij[index][i] * math.Pow(dist_x, 2)) / math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(3)/float64(2))))
+	}
+
+	return sum
+}
+
+func (kk *KamadaKawai) derivative_xy_m(index int) float64 {
+	var sum float64 = 0.0
+
+	for i := 0; i < kk.N; i++ {
+		if i == index {
+			continue
+		}
+
+		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
+		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
+
+		sum += kk.K_ij[index][i] * ((kk.L_ij[index][i] * dist_x * dist_y) / math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(3)/float64(2)))
+	}
+
+	return sum
 }

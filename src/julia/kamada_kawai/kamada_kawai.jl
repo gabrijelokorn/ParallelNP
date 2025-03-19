@@ -97,4 +97,78 @@ mutable struct KamadaKawai
     end # KamadaKawai
 
 end # Kamada_Kawai
+
+export derivative_x_m, derivative_y_m, derivative_xx_m,    derivative_yy_m,   derivative_xy_m
+
+function derivative_x_m(kk::KamadaKawai, index::Int)
+    sum = 0.0
+    for i in 1:kk.n
+        if i != index
+            dist_x = kk.coords[index].x - kk.coords[i].x
+            dist_y = kk.coords[index].y - kk.coords[i].y
+
+            sum += kk.k_ij[index, i] * (dist_x - ((kk.l_ij[index, i] * dist_x) / (dist_x^2 + dist_y^2)^(Float64(0.5))))
+        end # if
+    end # for
+    
+    return sum
+end # derivative_x_m
+
+
+function derivative_y_m(kk::KamadaKawai, index::Int)
+    sum = 0.0
+    for i in 1:kk.n
+        if i != index
+            dist_x = kk.coords[index].x - kk.coords[i].x
+            dist_y = kk.coords[index].y - kk.coords[i].y
+
+            sum += kk.k_ij[index, i] * (dist_y - ((kk.l_ij[index, i] * dist_y) / (dist_x^2 + dist_y^2)^(Float64(0.5))))
+        end # if
+    end # for
+    
+    return sum
+end # derivative_y_m
+
+function derivative_xx_m(kk::KamadaKawai, index::Int)
+    sum = 0.0
+    for i in 1:kk.n
+        if i != index
+            dist_x = kk.coords[index].x - kk.coords[i].x
+            dist_y = kk.coords[index].y - kk.coords[i].y
+
+            sum += kk.k_ij[index, i] * (1 - (kk.l_ij[index, i] * dist_y^2) / (dist_x^2 + dist_y^2)^(Float64(1.5)))
+        end # if
+    end # for
+    
+    return sum
+end # derivative_xx_m
+
+function derivative_yy_m(kk::KamadaKawai, index::Int)
+    sum = 0.0
+    for i in 1:kk.n
+        if i != index
+            dist_x = kk.coords[index].x - kk.coords[i].x
+            dist_y = kk.coords[index].y - kk.coords[i].y
+
+            sum += kk.k_ij[index, i] * (1 - (kk.l_ij[index, i] * dist_x^2) / (dist_x^2 + dist_y^2)^(Float64(1.5)))
+        end # if
+    end # for
+    
+    return sum
+end # derivative_yy_m
+
+function derivative_xy_m(kk::KamadaKawai, index::Int)
+    sum = 0.0
+    for i in 1:kk.n
+        if i != index
+            dist_x = kk.coords[index].x - kk.coords[i].x
+            dist_y = kk.coords[index].y - kk.coords[i].y
+
+            sum += kk.k_ij[index, i] * (kk.l_ij[index, i] * dist_x * dist_y) / (dist_x^2 + dist_y^2)^(Float64(1.5))
+        end # if
+    end # for
+    
+    return sum
+end # derivative_xy_m
+
 end # module

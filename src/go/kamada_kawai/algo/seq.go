@@ -4,106 +4,21 @@ import (
 	"math"
 )
 
-func derivative_x_m_seq(kk *KamadaKawai, index int) float64 {
-	var sum float64 = 0.0
-
-	for i := 0; i < kk.N; i++ {
-		if i == index {
-			continue
-		}
-
-		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
-
-		sum += kk.K_ij[index][i] * (dist_x - ((kk.L_ij[index][i] * dist_x) / (math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(1)/float64(2)))))
-	}
-
-	return sum
-}
-
-func derivative_y_m_seq(kk *KamadaKawai, index int) float64 {
-	var sum float64 = 0.0
-
-	for i := 0; i < kk.N; i++ {
-		if i == index {
-			continue
-		}
-
-		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
-
-		sum += kk.K_ij[index][i] * (dist_y - ((kk.L_ij[index][i] * dist_y) / (math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(1)/float64(2)))))
-	}
-
-	return sum
-}
-
-func derivative_xx_m_seq(kk *KamadaKawai, index int) float64 {
-	var sum float64 = 0.0
-
-	for i := 0; i < kk.N; i++ {
-		if i == index {
-			continue
-		}
-
-		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
-
-		sum += kk.K_ij[index][i] * (1 - ((kk.L_ij[index][i] * math.Pow(dist_y, 2)) / math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(3)/float64(2))))
-	}
-
-	return sum
-}
-
-func derivative_yy_m_seq(kk *KamadaKawai, index int) float64 {
-	var sum float64 = 0.0
-
-	for i := 0; i < kk.N; i++ {
-		if i == index {
-			continue
-		}
-
-		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
-
-		sum += kk.K_ij[index][i] * (1 - ((kk.L_ij[index][i] * math.Pow(dist_x, 2)) / math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(3)/float64(2))))
-	}
-
-	return sum
-}
-
-func derivative_xy_m_seq(kk *KamadaKawai, index int) float64 {
-	var sum float64 = 0.0
-
-	for i := 0; i < kk.N; i++ {
-		if i == index {
-			continue
-		}
-
-		var dist_x float64 = kk.Coords[index].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[index].Y - kk.Coords[i].Y
-
-		sum += kk.K_ij[index][i] * ((kk.L_ij[index][i] * dist_x * dist_y) / math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(3)/float64(2)))
-	}
-
-	return sum
-}
-
 func get_delta_y_seq(
-	derivative_x_m_seq float64,
-	derivative_y_m_seq float64,
-	derivative_xx_m_seq float64,
-	derivative_yy_m_seq float64,
-	derivative_xy_m_seq float64) float64 {
-	return (-(derivative_xy_m_seq * derivative_x_m_seq) + (derivative_xx_m_seq * derivative_y_m_seq)) / (-(derivative_xx_m_seq * derivative_yy_m_seq) + (derivative_xy_m_seq * derivative_xy_m_seq))
+	derivative_x_m float64,
+	derivative_y_m float64,
+	derivative_xx_m float64,
+	derivative_yy_m float64,
+	derivative_xy_m float64) float64 {
+	return (-(derivative_xy_m * derivative_x_m) + (derivative_xx_m * derivative_y_m)) / (-(derivative_xx_m * derivative_yy_m) + (derivative_xy_m * derivative_xy_m))
 }
 
 func get_delta_x_seq(
-	derivative_y_m_seq float64,
-	derivative_yy_m_seq float64,
-	derivative_xy_m_seq float64,
+	derivative_y_m float64,
+	derivative_yy_m float64,
+	derivative_xy_m float64,
 	delta_y float64) float64 {
-	return (-(derivative_y_m_seq) - (derivative_yy_m_seq * delta_y)) / (derivative_xy_m_seq)
+	return (-(derivative_y_m) - (derivative_yy_m * delta_y)) / (derivative_xy_m)
 }
 
 func delta_m_seq(derivative_x float64, derivative_y float64) float64 {
@@ -111,8 +26,8 @@ func delta_m_seq(derivative_x float64, derivative_y float64) float64 {
 }
 
 func calculate_delta_seq(kk *KamadaKawai, index int) float64 {
-	derivative_x := derivative_x_m_seq(kk, index)
-	derivative_y := derivative_y_m_seq(kk, index)
+	derivative_x := kk.derivative_x_m(index)
+	derivative_y := kk.derivative_y_m(index)
 
 	return delta_m_seq(derivative_x, derivative_y)
 }
@@ -158,11 +73,11 @@ func (kk *KamadaKawai) Seq() [][]Coord {
 		}
 
 		for {
-			var d_x_m = derivative_x_m_seq(kk, max_delta_m_seq_index)
-			var d_y_m = derivative_y_m_seq(kk, max_delta_m_seq_index)
-			var d_xx_m = derivative_xx_m_seq(kk, max_delta_m_seq_index)
-			var d_yy_m = derivative_yy_m_seq(kk, max_delta_m_seq_index)
-			var d_xy_m = derivative_xy_m_seq(kk, max_delta_m_seq_index)
+			var d_x_m = kk.derivative_x_m(max_delta_m_seq_index)
+			var d_y_m = kk.derivative_y_m(max_delta_m_seq_index)
+			var d_xx_m = kk.derivative_xx_m(max_delta_m_seq_index)
+			var d_yy_m = kk.derivative_yy_m(max_delta_m_seq_index)
+			var d_xy_m = kk.derivative_xy_m(max_delta_m_seq_index)
 
 			var delta_y float64 = get_delta_y_seq(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m)
 			var delta_x float64 = get_delta_x_seq(d_y_m, d_yy_m, d_xy_m, delta_y)

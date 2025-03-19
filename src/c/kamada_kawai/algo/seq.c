@@ -5,96 +5,6 @@
 
 #include "../kamada_kawai.h"
 
-float derivaitve_x_m_seq(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_y_m_seq(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)1 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_xx_m_seq(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (float)pow(dist_y, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_yy_m_seq(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (float)pow(dist_x, 2)) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2))));
-    }
-
-    return sum;
-}
-
-float derivaitve_xy_m_seq(KamadaKawai *kk, int index)
-{
-    float sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        sum += kk->k_ij[index][i] * ((kk->l_ij[index][i] * dist_x * dist_y) / ((float)pow((float)pow(dist_x, 2) + (float)pow(dist_y, 2), (float)3 / 2)));
-    }
-
-    return sum;
-}
-
 int get_max_delta_m_seq_index_seq(KamadaKawai *kk, float *deltas)
 {
     int max_index = -1;
@@ -120,8 +30,8 @@ float delta_m_seq(float derivaitve_x, float derivaitve_y)
 
 float calculate_delta_seq(KamadaKawai *kk, int index)
 {
-    float derivaitve_x = derivaitve_x_m_seq(kk, index);
-    float derivaitve_y = derivaitve_y_m_seq(kk, index);
+    float derivaitve_x = derivaitve_x_m(kk, index);
+    float derivaitve_y = derivaitve_y_m(kk, index);
 
     return delta_m_seq(derivaitve_x, derivaitve_y);
 }
@@ -138,14 +48,14 @@ float *calculate_delatas_seq(KamadaKawai *kk)
     return deltas;
 }
 
-float calculate_delta_seq_y(float derivaitve_x_m_seq, float derivaitve_y_m_seq, float derivaitve_xx_m_seq, float derivaitve_yy_m_seq, float derivaitve_xy_m_seq)
+float calculate_delta_seq_y(float derivaitve_x_m, float derivaitve_y_m, float derivaitve_xx_m, float derivaitve_yy_m, float derivaitve_xy_m)
 {
-    return (-(derivaitve_xy_m_seq * derivaitve_x_m_seq) + (derivaitve_xx_m_seq * derivaitve_y_m_seq)) / (-(derivaitve_xx_m_seq * derivaitve_yy_m_seq) + (derivaitve_xy_m_seq * derivaitve_xy_m_seq));
+    return (-(derivaitve_xy_m * derivaitve_x_m) + (derivaitve_xx_m * derivaitve_y_m)) / (-(derivaitve_xx_m * derivaitve_yy_m) + (derivaitve_xy_m * derivaitve_xy_m));
 }
 
-float calculate_delta_x_seq(float derivaitve_x_m_seq, float derivaitve_y_m_seq, float derivaitve_xx_m_seq, float derivaitve_yy_m_seq, float derivaitve_xy_m_seq, float delta_y)
+float calculate_delta_x_seq(float derivaitve_x_m, float derivaitve_y_m, float derivaitve_xx_m, float derivaitve_yy_m, float derivaitve_xy_m, float delta_y)
 {
-    return (-(derivaitve_y_m_seq) - (derivaitve_yy_m_seq * delta_y)) / derivaitve_xy_m_seq;
+    return (-(derivaitve_y_m) - (derivaitve_yy_m * delta_y)) / derivaitve_xy_m;
 }
 
 Vertices *seq(KamadaKawai *kk)
@@ -162,11 +72,11 @@ Vertices *seq(KamadaKawai *kk)
     {
         while (deltas[max_delta_m_seq_index] > kk->epsilon)
         {
-            float d_x_m = derivaitve_x_m_seq(kk, max_delta_m_seq_index);
-            float d_y_m = derivaitve_y_m_seq(kk, max_delta_m_seq_index);
-            float d_xx_m = derivaitve_xx_m_seq(kk, max_delta_m_seq_index);
-            float d_yy_m = derivaitve_yy_m_seq(kk, max_delta_m_seq_index);
-            float d_xy_m = derivaitve_xy_m_seq(kk, max_delta_m_seq_index);
+            float d_x_m = derivaitve_x_m(kk, max_delta_m_seq_index);
+            float d_y_m = derivaitve_y_m(kk, max_delta_m_seq_index);
+            float d_xx_m = derivaitve_xx_m(kk, max_delta_m_seq_index);
+            float d_yy_m = derivaitve_yy_m(kk, max_delta_m_seq_index);
+            float d_xy_m = derivaitve_xy_m(kk, max_delta_m_seq_index);
 
             float delta_y = calculate_delta_seq_y(
                 d_x_m,

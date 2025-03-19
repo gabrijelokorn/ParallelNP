@@ -15,6 +15,13 @@ using .File
 
 export algo
 
+function rewindVertices(kk:: KamadaKawai, vertices::Vector{Coord})
+    for i in 1:length(vertices)
+        kk.coords[i].x = vertices[i].x
+        kk.coords[i].y = vertices[i].y
+    end
+end # rewindVertices
+
 function run_with_timeout(kk::KamadaKawai, f::Function, verbose::Bool, name::String, num::String)
     start = Base.time_ns()
     result = f(kk)
@@ -32,8 +39,13 @@ function run_with_timeout(kk::KamadaKawai, f::Function, verbose::Bool, name::Str
 end
 
 function algo(kk::KamadaKawai, verbose::Bool, num::String)
+    original = deepcopy(kk.coords)
+    
     run_with_timeout(kk, Seq.seq, verbose, "seq", num)
+    rewindVertices(kk, original)
+
     run_with_timeout(kk, Par.par, verbose, "par", num)
+    rewindVertices(kk, original)
 end # algo
 
 end # module

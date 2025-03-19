@@ -1,18 +1,7 @@
 module Seq
 
-export small_seq
-
-function sum_seq(arr::Vector{Int64}, size::Int, index::Int64) 
-    sum = 0;
-
-    for i in 1:size
-        if index & (1 << (i - 1)) != 0
-            sum += arr[i]
-        end
-    end
-
-    return sum
-end # sum_seq
+include("../partition.jl")
+using .Partition
 
 function seq(arr::Vector{Vector{Int64}})
     # an array of bools
@@ -25,14 +14,14 @@ function seq(arr::Vector{Vector{Int64}})
         numOfCombinations = 1 << (size - 1)
         allNumbersMask = (1 << size) - 1
 
-        problem_sum = sum_seq(arr[i], size, allNumbersMask)
+        problem_sum = partition_sum(arr[i], size, allNumbersMask)
         if problem_sum % 2 != 0
             continue
         end
         half_sum = problem_sum / 2
 
         for j in 1:numOfCombinations
-            sum = sum_seq(arr[i], size, j)
+            sum = partition_sum(arr[i], size, j)
             if sum == half_sum
                 result[i] = true
                 break
@@ -42,6 +31,5 @@ function seq(arr::Vector{Vector{Int64}})
 
     return result
 end
-
 
 end # module

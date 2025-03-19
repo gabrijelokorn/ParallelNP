@@ -3,20 +3,7 @@
 #include <inttypes.h>
 
 #include "algo.h"
-
-int sum_sgl_stc(int *arr, int size, unsigned long long int index)
-{
-    int sum = 0;
-
-    for (int i = 0; i < size; i++)
-    {
-        if (index & (1 << i))
-        {
-            sum += arr[size - 1 - i];
-        }
-    }
-    return sum;
-}
+#include "../partition.h"
 
 bool *sgl_stc(Partitions *p, int **arr)
 {
@@ -32,7 +19,7 @@ bool *sgl_stc(Partitions *p, int **arr)
         unsigned long long int numOfCombinations = 1 << (size - 1);
         unsigned long long int allNumbersMask = ((unsigned long long int)1 << size) - 1;
 
-        int problem_sum = sum_sgl_stc(row, size, allNumbersMask);
+        int problem_sum = partition_sum(row, size, allNumbersMask);
         if (problem_sum % 2 != 0)
             continue;
         int half_sum = problem_sum / 2;
@@ -45,7 +32,7 @@ bool *sgl_stc(Partitions *p, int **arr)
             {
                 if (found)
                     continue;
-                int sum = sum_sgl_stc(row, size, j);
+                int sum = partition_sum(row, size, j);
                 if (sum == half_sum)
                 {
                     result[i * 1] = true;
