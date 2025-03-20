@@ -66,16 +66,28 @@ check:
 # @xdg-open ../views/check.html
 ### --- ### --- ### --- ###
 
-
-
 ### --- Kamada Kawai --- ###
 kamada_kawai:
-	@for case in ../tests/kamada_kawai/*.json; do \
-		inPoints=../tests/kamada_kawai/solutions/points$$(basename $$case .json).csv; \
-		inCoords=../tests/kamada_kawai/solutions/coords$$(basename $$case .json).csv; \
-		inEdges=../tests/kamada_kawai/solutions/edges$$(basename $$case .json).csv; \
-		outVideo=../views/$$(basename $$case .json).avi; \
-		echo "Generating video $$outVideo"; \
-		matlab -nodisplay -nosplash -nodesktop -r "addpath('.'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
-	done
+	@if [ -z "$(S)" ] || [ -z "$(E)" ]; then \
+		echo "Processing all files"; \
+		for case in ../tests/kamada_kawai/*.json; do \
+			inPoints=../tests/kamada_kawai/solutions/points$$(basename $$case .json).csv; \
+			inCoords=../tests/kamada_kawai/solutions/coords$$(basename $$case .json).csv; \
+			inEdges=../tests/kamada_kawai/solutions/edges$$(basename $$case .json).csv; \
+			outVideo=../views/$$(basename $$case .json).avi; \
+			echo "Generating video $$outVideo"; \
+			matlab -nodisplay -nosplash -nodesktop -r "addpath('.'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
+		done; \
+	else \
+		echo "Processing range $(S) to $(E)"; \
+		for i in $(shell seq $(S) $(E)); do \
+			case=../tests/kamada_kawai/$$(printf "%02d" $$i).json; \
+			inPoints=../tests/kamada_kawai/solutions/points$$(printf "%02d" $$i).csv; \
+			inCoords=../tests/kamada_kawai/solutions/coords$$(printf "%02d" $$i).csv; \
+			inEdges=../tests/kamada_kawai/solutions/edges$$(printf "%02d" $$i).csv; \
+			outVideo=../views/$$(printf "%02d" $$i).avi; \
+			echo "Generating video $$outVideo"; \
+			matlab -nodisplay -nosplash -nodesktop -r "addpath('.'); KamadaKawai('$$inPoints', '$$inCoords', '$$inEdges', '$$outVideo'); exit;" | tail -n +11; \
+		done; \
+	fi
 ### --- ### --- ### --- ###

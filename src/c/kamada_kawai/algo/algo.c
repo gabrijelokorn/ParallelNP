@@ -10,7 +10,6 @@
 void timeout_handler(int signum)
 {
     printf("Timeout reached!\n");
-    exit(0);
 }
 
 void rewindVertices(KamadaKawai *kk, Coord *original)
@@ -24,14 +23,14 @@ void rewindVertices(KamadaKawai *kk, Coord *original)
 
 void run_with_timeout(KamadaKawai *kk, Vertices *(*func)(KamadaKawai *), int verbose, char *name, char *num)
 {
-    signal(SIGALRM, timeout_handler);
-    alarm(25);
+    // signal(SIGALRM, timeout_handler);
+    // alarm(25);
 
     double start = omp_get_wtime();
     Vertices *result = func(kk);
     double end = omp_get_wtime();
 
-    alarm(0);
+    // alarm(0);
 
     if (!verbose)
         return;
