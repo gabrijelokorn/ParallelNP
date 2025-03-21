@@ -41,7 +41,7 @@ float *calculate_delatas_par(KamadaKawai *kk)
 {
     float *deltas = (float *)malloc(kk->n * sizeof(float));
 
-#pragma omp parallel for
+#pragma omp parallel for shared(deltas)
     for (int i = 0; i < kk->n; i++)
     {
         deltas[i] = calculate_delta_par(kk, i);
@@ -76,31 +76,13 @@ Vertices *par(KamadaKawai *kk)
     {
         while (deltas[max_delta_m_index] > kk->epsilon)
         {
-            float d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m;
+            float d_x_m = 0;
+            float d_y_m = 0;
+            float d_xx_m = 0;
+            float d_yy_m = 0;
+            float d_xy_m = 0;
 
-#pragma omp parallel sections default(none) shared(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m, kk, max_delta_m_index, deltas)
-            {
-#pragma omp section
-                {
-                    d_x_m = derivaitve_x_m(kk, max_delta_m_index);
-                }
-#pragma omp section
-                {
-                    d_y_m = derivaitve_y_m(kk, max_delta_m_index);
-                }
-#pragma omp section
-                {
-                    d_xx_m = derivaitve_xx_m(kk, max_delta_m_index);
-                }
-#pragma omp section
-                {
-                    d_yy_m = derivaitve_yy_m(kk, max_delta_m_index);
-                }
-#pragma omp section
-                {
-                    d_xy_m = derivaitve_xy_m(kk, max_delta_m_index);
-                }
-            }
+            derivatives_par(kk, max_delta_m_index, &d_x_m, &d_y_m, &d_xx_m, &d_yy_m, &d_xy_m);
 
             float delta_y = calculate_delta_y_par(
                 d_x_m,

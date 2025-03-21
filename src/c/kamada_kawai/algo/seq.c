@@ -72,11 +72,13 @@ Vertices *seq(KamadaKawai *kk)
     {
         while (deltas[max_delta_m_seq_index] > kk->epsilon)
         {
-            float d_x_m = derivaitve_x_m(kk, max_delta_m_seq_index);
-            float d_y_m = derivaitve_y_m(kk, max_delta_m_seq_index);
-            float d_xx_m = derivaitve_xx_m(kk, max_delta_m_seq_index);
-            float d_yy_m = derivaitve_yy_m(kk, max_delta_m_seq_index);
-            float d_xy_m = derivaitve_xy_m(kk, max_delta_m_seq_index);
+            float d_x_m = 0;
+            float d_y_m = 0;
+            float d_xx_m = 0;
+            float d_yy_m = 0;
+            float d_xy_m = 0;
+
+            derivatives_seq(kk, max_delta_m_seq_index, &d_x_m, &d_y_m, &d_xx_m, &d_yy_m, &d_xy_m);
 
             float delta_y = calculate_delta_seq_y(
                 d_x_m,
@@ -102,6 +104,11 @@ Vertices *seq(KamadaKawai *kk)
         deltas = calculate_delatas_seq(kk);
         max_delta_m_seq_index = get_max_delta_m_seq_index_seq(kk, deltas);
     }
+
+    // for (int i = 0; i < kk->n; i++)
+    // {
+    //     printf("delta[%d]: %f\n", i, deltas[i]);
+    // }
 
     vertices->next = (Vertices *)malloc(sizeof(Vertices));
     vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));

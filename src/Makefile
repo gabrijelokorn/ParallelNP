@@ -33,7 +33,7 @@ run_go:
 	$(MAKE) -C go run
 run_julia:
 	$(MAKE) -C julia run
-run: run_c run_julia run_go
+run: run_c run_go run_julia
 ### --- ### --- ### --- ###
 
 
@@ -65,6 +65,29 @@ check:
 	@node check.js
 # @xdg-open ../views/check.html
 ### --- ### --- ### --- ###
+
+
+
+### --- Partition --- ###
+pp:
+	@echo -e "##########################################\n    |-> Partition problem $(WD)"
+	$(MAKE) -C c c_partition
+	$(MAKE) -C go go_partition
+	$(MAKE) -C julia julia_partition
+	@echo -e "##########################################\n\n"
+### --- ### --- ### --- ###
+
+
+
+### --- Kamada Kawai --- ###
+kk:
+	@echo -e "##########################################\n    |-> Kamada Kawai problem $(WD)"
+	$(MAKE) -C c c_kamada_kawai
+	$(MAKE) -C go go_kamada_kawai
+	$(MAKE) -C julia julia_kamada_kawai
+	@echo -e "##########################################\n\n"
+### --- ### --- ### --- ###
+
 
 ### --- Kamada Kawai --- ###
 kamada_kawai:
