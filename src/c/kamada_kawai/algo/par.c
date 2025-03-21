@@ -6,58 +6,44 @@
 
 #include "../kamada_kawai.h"
 
-int get_max_delta_m_index_par(KamadaKawai *kk, float *deltas)
+void derivatives_par(KamadaKawai *kk, int index, float *x, float *y, float *xx, float *yy, float *xy)
 {
-    int max_index = -1;
-    float max = -1;
-
+#pragma omp parallel for schedule(static, 1)
     for (int i = 0; i < kk->n; i++)
     {
-        if (deltas[i] > max)
+        if (i == index)
+            continue;
+
+        float dist_x = kk->coords[index].x - kk->coords[i].x;
+        float dist_y = kk->coords[index].y - kk->coords[i].y;
+        float x2 = (float)(dist_x * dist_x);
+        float y2 = (float)(dist_y * dist_y);
+        float x2_y2 = x2 + y2;
+        float x2_y2_1_2 = (float)sqrt(x2_y2);
+        float x2_y2_3_2 = (float)pow(x2_y2, (float)3 / 2);
+
+#pragma omp critical
         {
-            max = deltas[i];
-            if (max > kk->epsilon)
-                max_index = i;
+            *x += kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / x2_y2_1_2));
+            *y += kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / x2_y2_1_2));
+            *xx += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * y2) / x2_y2_3_2));
+            *yy += kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * x2) / x2_y2_3_2));
+            *xy += kk->k_ij[index][i] * ((kk->l_ij[index][i] * dist_x * dist_y) / x2_y2_3_2);
         }
     }
-
-    return max_index;
 }
 
-float delta_m_par(float derivaitve_x, float derivaitve_y)
-{
-    return sqrt((float)pow(derivaitve_x, 2) + (float)pow(derivaitve_y, 2));
-}
-
-float calculate_delta_par(KamadaKawai *kk, int index)
-{
-    float derivaitve_x = derivaitve_x_m(kk, index);
-    float derivaitve_y = derivaitve_y_m(kk, index);
-
-    return delta_m_par(derivaitve_x, derivaitve_y);
-}
-
-float *calculate_delatas_par(KamadaKawai *kk)
+float *get_delatas_par(KamadaKawai *kk)
 {
     float *deltas = (float *)malloc(kk->n * sizeof(float));
 
 #pragma omp parallel for shared(deltas)
     for (int i = 0; i < kk->n; i++)
     {
-        deltas[i] = calculate_delta_par(kk, i);
+        deltas[i] = get_delta(kk, i);
     }
 
     return deltas;
-}
-
-float calculate_delta_y_par(float derivaitve_x_m, float derivaitve_y_m, float derivaitve_xx_m, float derivaitve_yy_m, float derivaitve_xy_m)
-{
-    return (-(derivaitve_xy_m * derivaitve_x_m) + (derivaitve_xx_m * derivaitve_y_m)) / (-(derivaitve_xx_m * derivaitve_yy_m) + (derivaitve_xy_m * derivaitve_xy_m));
-}
-
-float calculate_delta_x_par(float derivaitve_x_m, float derivaitve_y_m, float derivaitve_xx_m, float derivaitve_yy_m, float derivaitve_xy_m, float delta_y)
-{
-    return (-(derivaitve_y_m) - (derivaitve_yy_m * delta_y)) / derivaitve_xy_m;
 }
 
 Vertices *par(KamadaKawai *kk)
@@ -69,12 +55,12 @@ Vertices *par(KamadaKawai *kk)
 
     Vertices *vertices_head = vertices;
 
-    float *deltas = calculate_delatas_par(kk);
-    int max_delta_m_index = get_max_delta_m_index_par(kk, deltas);
+    float *deltas = get_delatas_par(kk);
+    int delta_max_index = get_delta_max_index(kk, deltas);
 
-    while (max_delta_m_index != -1)
+    while (delta_max_index != -1)
     {
-        while (deltas[max_delta_m_index] > kk->epsilon)
+        while (deltas[delta_max_index] > kk->epsilon)
         {
             float d_x_m = 0;
             float d_y_m = 0;
@@ -82,16 +68,16 @@ Vertices *par(KamadaKawai *kk)
             float d_yy_m = 0;
             float d_xy_m = 0;
 
-            derivatives_par(kk, max_delta_m_index, &d_x_m, &d_y_m, &d_xx_m, &d_yy_m, &d_xy_m);
+            derivatives_par(kk, delta_max_index, &d_x_m, &d_y_m, &d_xx_m, &d_yy_m, &d_xy_m);
 
-            float delta_y = calculate_delta_y_par(
+            float delta_y = get_delta_y(
                 d_x_m,
                 d_y_m,
                 d_xx_m,
                 d_yy_m,
                 d_xy_m);
 
-            float delta_x = calculate_delta_x_par(
+            float delta_x = get_delta_x(
                 d_x_m,
                 d_y_m,
                 d_xx_m,
@@ -99,14 +85,14 @@ Vertices *par(KamadaKawai *kk)
                 d_xy_m,
                 delta_y);
 
-            kk->coords[max_delta_m_index].x += delta_x;
-            kk->coords[max_delta_m_index].y += delta_y;
+            kk->coords[delta_max_index].x += delta_x;
+            kk->coords[delta_max_index].y += delta_y;
 
-            deltas[max_delta_m_index] = calculate_delta_par(kk, max_delta_m_index);
+            deltas[delta_max_index] = get_delta(kk, delta_max_index);
         }
 
-        deltas = calculate_delatas_par(kk);
-        max_delta_m_index = get_max_delta_m_index_par(kk, deltas);
+        deltas = get_delatas_par(kk);
+        delta_max_index = get_delta_max_index(kk, deltas);
     }
 
     vertices->next = (Vertices *)malloc(sizeof(Vertices));
