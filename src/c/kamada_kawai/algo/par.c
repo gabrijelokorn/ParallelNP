@@ -6,7 +6,7 @@
 
 #include "../kamada_kawai.h"
 
-void derivatives_par(KamadaKawai *kk, int index, float *x, float *y, float *xx, float *yy, float *xy)
+void derivatives_par(KamadaKawai *kk, int index, double *x, double *y, double *xx, double *yy, double *xy)
 {
 #pragma omp parallel for schedule(static, 1)
     for (int i = 0; i < kk->n; i++)
@@ -14,13 +14,13 @@ void derivatives_par(KamadaKawai *kk, int index, float *x, float *y, float *xx, 
         if (i == index)
             continue;
 
-        float dist_x = kk->coords[index].x - kk->coords[i].x;
-        float dist_y = kk->coords[index].y - kk->coords[i].y;
-        float x2 = (float)(dist_x * dist_x);
-        float y2 = (float)(dist_y * dist_y);
-        float x2_y2 = x2 + y2;
-        float x2_y2_1_2 = (float)sqrt(x2_y2);
-        float x2_y2_3_2 = (float)pow(x2_y2, (float)3 / 2);
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+        double x2 = (double)(dist_x * dist_x);
+        double y2 = (double)(dist_y * dist_y);
+        double x2_y2 = x2 + y2;
+        double x2_y2_1_2 = (double)sqrt(x2_y2);
+        double x2_y2_3_2 = (double)pow(x2_y2, (double)3 / 2);
 
 #pragma omp critical
         {
@@ -33,9 +33,9 @@ void derivatives_par(KamadaKawai *kk, int index, float *x, float *y, float *xx, 
     }
 }
 
-float *get_delatas_par(KamadaKawai *kk)
+double *get_delatas_par(KamadaKawai *kk)
 {
-    float *deltas = (float *)malloc(kk->n * sizeof(float));
+    double *deltas = (double *)malloc(kk->n * sizeof(double));
 
 #pragma omp parallel for shared(deltas)
     for (int i = 0; i < kk->n; i++)
@@ -50,34 +50,34 @@ Vertices *par(KamadaKawai *kk)
 {
 
     Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
-    vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
+    vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, vertices->coords, kk->n);
 
     Vertices *vertices_head = vertices;
 
-    float *deltas = get_delatas_par(kk);
+    double *deltas = get_delatas_par(kk);
     int delta_max_index = get_delta_max_index(kk, deltas);
 
     while (delta_max_index != -1)
     {
         while (deltas[delta_max_index] > kk->epsilon)
         {
-            float d_x_m = 0;
-            float d_y_m = 0;
-            float d_xx_m = 0;
-            float d_yy_m = 0;
-            float d_xy_m = 0;
+            double d_x_m = 0;
+            double d_y_m = 0;
+            double d_xx_m = 0;
+            double d_yy_m = 0;
+            double d_xy_m = 0;
 
             derivatives_par(kk, delta_max_index, &d_x_m, &d_y_m, &d_xx_m, &d_yy_m, &d_xy_m);
 
-            float delta_y = get_delta_y(
+            double delta_y = get_delta_y(
                 d_x_m,
                 d_y_m,
                 d_xx_m,
                 d_yy_m,
                 d_xy_m);
 
-            float delta_x = get_delta_x(
+            double delta_x = get_delta_x(
                 d_x_m,
                 d_y_m,
                 d_xx_m,
@@ -96,7 +96,7 @@ Vertices *par(KamadaKawai *kk)
     }
 
     vertices->next = (Vertices *)malloc(sizeof(Vertices));
-    vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord *));
+    vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, vertices->next->coords, kk->n);
     vertices = vertices->next;
     vertices->next = NULL;

@@ -47,10 +47,10 @@ void algo(KamadaKawai *kk, bool verbose, char *num)
 {
     Coord *original = malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, original, kk->n);
-
+    
     run_with_timeout(kk, seq, verbose, "seq", num);
     rewindVertices(kk, original);
-
+    
     run_with_timeout(kk, par, verbose, "par", num);
     rewindVertices(kk, original);
 

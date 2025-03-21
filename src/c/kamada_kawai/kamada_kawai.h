@@ -3,8 +3,8 @@
 
 typedef struct Coord
 {
-    float x;
-    float y;
+    double x;
+    double y;
 } Coord;
 
 typedef struct Edge
@@ -22,12 +22,12 @@ typedef struct KamadaKawai
     Edge *edges; // edges between the vertices
 
     int **d_ij;
-    float **l_ij;
-    float **k_ij;
+    double **l_ij;
+    double **k_ij;
 
-    float K;       // constant k
-    float epsilon; // epsilon
-    float display; // length of a side of a display square area
+    double K;       // constant k
+    double epsilon; // epsilon
+    double display; // length of a side of a display square area
 } KamadaKawai;
 
 typedef struct Vertices
@@ -40,19 +40,19 @@ Vertices *seq(KamadaKawai *kk);
 Vertices *par(KamadaKawai *kk);
 
 void copyCoords(Coord *kk_coords, Coord *v_coords, int n);
-int get_delta_max_index(KamadaKawai *kk, float *deltas);
+int get_delta_max_index(KamadaKawai *kk, double *deltas);
 
-float get_delta_y(float derivaitve_x_m, float derivaitve_y_m, float derivaitve_xx_m, float derivaitve_yy_m, float derivaitve_xy_m);
-float get_delta_x(float derivaitve_x_m, float derivaitve_y_m, float derivaitve_xx_m, float derivaitve_yy_m, float derivaitve_xy_m, float delta_y);
+double get_delta_y(double derivaitve_x_m, double derivaitve_y_m, double derivaitve_xx_m, double derivaitve_yy_m, double derivaitve_xy_m);
+double get_delta_x(double derivaitve_x_m, double derivaitve_y_m, double derivaitve_xx_m, double derivaitve_yy_m, double derivaitve_xy_m, double delta_y);
 
-float delta_m(float derivaitve_x, float derivaitve_y);
-float get_delta(KamadaKawai *kk, int index);
-float *get_delatas(KamadaKawai *kk);
+double delta_m(double derivaitve_x, double derivaitve_y);
+double get_delta(KamadaKawai *kk, int index);
+double *get_delatas(KamadaKawai *kk);
 
-float derivaitve_x_m(KamadaKawai *kk, int index);
-float derivaitve_y_m(KamadaKawai *kk, int index);
-float derivaitve_xx_m(KamadaKawai *kk, int index);
-float derivaitve_yy_m(KamadaKawai *kk, int index);
-float derivaitve_xy_m(KamadaKawai *kk, int index);
+double derivaitve_x_m(KamadaKawai *kk, int index);
+double derivaitve_y_m(KamadaKawai *kk, int index);
+double derivaitve_xx_m(KamadaKawai *kk, int index);
+double derivaitve_yy_m(KamadaKawai *kk, int index);
+double derivaitve_xy_m(KamadaKawai *kk, int index);
 
 #endif

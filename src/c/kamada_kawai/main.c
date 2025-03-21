@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         error_args(argv[0]);
 
     int n;
-    float k;
+    double k;
 
     // Read the input file
     FILE *testF = openFile(test, "r");
