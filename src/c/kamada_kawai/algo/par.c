@@ -48,14 +48,18 @@ double *get_delatas_par(KamadaKawai *kk)
 
 Vertices *par(KamadaKawai *kk)
 {
+    // Create sturct to store results of program execution
+    Vertices *result = (Vertices *)malloc(sizeof(Vertices));
+    result->coords = (Coord *)malloc(kk->n * sizeof(Coord));
 
-    Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
-    vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord));
-    copyCoords(kk->coords, vertices->coords, kk->n);
+    // Copy the coordiantes of original problem into result struct
+    copyCoords(kk->coords, result->coords, kk->n);
 
-    Vertices *vertices_head = vertices;
+    Vertices *result_head = result;
 
+    // deltas - array: stores the value of delta for each particle
     double *deltas = get_delatas_par(kk);
+    // delta_max_index - index of the particle with highest delta value
     int delta_max_index = get_delta_max_index(kk, deltas);
 
     while (delta_max_index != -1)
@@ -94,12 +98,15 @@ Vertices *par(KamadaKawai *kk)
         deltas = get_delatas_par(kk);
         delta_max_index = get_delta_max_index(kk, deltas);
     }
+    
+    // Copy the resulting coordinates to the resulting struct
+    result->next = (Vertices *)malloc(sizeof(Vertices));
+    result->next->coords = (Coord *)malloc(kk->n * sizeof(Coord));
+    copyCoords(kk->coords, result->next->coords, kk->n);
 
-    vertices->next = (Vertices *)malloc(sizeof(Vertices));
-    vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord));
-    copyCoords(kk->coords, vertices->next->coords, kk->n);
-    vertices = vertices->next;
-    vertices->next = NULL;
+    // Mark the resulting coordinates as last
+    result = result->next;
+    result->next = NULL;
 
-    return vertices_head;
+    return result_head;
 }

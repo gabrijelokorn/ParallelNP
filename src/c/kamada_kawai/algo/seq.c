@@ -41,25 +41,24 @@ void derivatives_seq(KamadaKawai *kk, int index, double *x, double *y, double *x
 
 Vertices *seq(KamadaKawai *kk)
 {
-    Vertices *vertices = (Vertices *)malloc(sizeof(Vertices));
-    vertices->coords = (Coord *)malloc(kk->n * sizeof(Coord));
-    copyCoords(kk->coords, vertices->coords, kk->n);
-    Vertices *vertices_head = vertices;
+    // Create sturct to store results of program execution
+    Vertices *result = (Vertices *)malloc(sizeof(Vertices));
+    result->coords = (Coord *)malloc(kk->n * sizeof(Coord));
 
+    // Copy the coordiantes of original problem into result struct
+    copyCoords(kk->coords, result->coords, kk->n);
+    
+    Vertices *result_head = result;
+
+    // deltas - array: stores the value of delta for each particle
     double *deltas = get_delatas(kk);
+    // delta_max_index - index of the particle with highest delta value
     int delta_max_index = get_delta_max_index(kk, deltas);
 
-    int iter = 0;
     while (delta_max_index != -1)
     {
-        printf("iter: %d\n", iter++);
         while (deltas[delta_max_index] > kk->epsilon)
         {
-            // double d_x_m = derivaitve_x_m(kk, delta_max_index);
-            // double d_y_m = derivaitve_y_m(kk, delta_max_index);
-            // double d_xx_m = derivaitve_xx_m(kk, delta_max_index);
-            // double d_yy_m = derivaitve_yy_m(kk, delta_max_index);
-            // double d_xy_m = derivaitve_xy_m(kk, delta_max_index);
             double d_x_m = 0;
             double d_y_m = 0;
             double d_xx_m = 0;
@@ -93,11 +92,13 @@ Vertices *seq(KamadaKawai *kk)
         delta_max_index = get_delta_max_index(kk, deltas);
     }
 
-    vertices->next = (Vertices *)malloc(sizeof(Vertices));
-    vertices->next->coords = (Coord *)malloc(kk->n * sizeof(Coord));
-    copyCoords(kk->coords, vertices->next->coords, kk->n);
-    vertices = vertices->next;
-    vertices->next = NULL;
+    // Copy the resulting coordinates to the resulting struct
+    result->next = (Vertices *)malloc(sizeof(Vertices));
+    result->next->coords = (Coord *)malloc(kk->n * sizeof(Coord));
+    copyCoords(kk->coords, result->next->coords, kk->n);
+    // Mark the resulting coordinates as last
+    result = result->next;
+    result->next = NULL;
 
-    return vertices_head;
+    return result_head;
 }

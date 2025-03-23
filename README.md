@@ -19,3 +19,7 @@ Spodnja tabela prikazuje rezultate izvajanja algoritmov za reševanje problema *
 
 ## Vprašanja
 V katerih primerih je sploh uporabno imeti več niti, kot jih ponuja procesor?
+Omeni zakaj sem dal več različnih primerov z različnimi velikostmi množic.
+Kaj narediti pri KK algo, ko se zaloopa / vrednost postane tako majhna, da delta več ne spreminja koordinat (C)
+Kaj je torej logičen in fizičen thread - (razlika).
+Kako je lahko go napisan v golangu.
