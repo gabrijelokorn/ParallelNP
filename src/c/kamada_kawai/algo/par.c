@@ -48,6 +48,7 @@ double *get_delatas_par(KamadaKawai *kk)
 
 Vertices *par(KamadaKawai *kk)
 {
+    int calcdelt = 0;
     // Create sturct to store results of program execution
     Vertices *result = (Vertices *)malloc(sizeof(Vertices));
     result->coords = (Coord *)malloc(kk->n * sizeof(Coord));
@@ -95,9 +96,11 @@ Vertices *par(KamadaKawai *kk)
             deltas[delta_max_index] = get_delta(kk, delta_max_index);
         }
 
+        calcdelt++;
         deltas = get_delatas_par(kk);
         delta_max_index = get_delta_max_index(kk, deltas);
     }
+    printf("calculating deltas: %d\n", calcdelt);
     
     // Copy the resulting coordinates to the resulting struct
     result->next = (Vertices *)malloc(sizeof(Vertices));

@@ -10,12 +10,15 @@ Za zaganjanje programja, je najprej potrebno [namestiti zahtevano programsko opr
 Dodatna razlaga o delovanju programja je na voljo v [dokumentaciji](./docs/EXPLAIN.md).
 
 ## Primer Izvajanja
-Spodnja tabela prikazuje rezultate izvajanja algoritmov za reševanje problema **Partition**.\
+![Test](./docs/partition_output.png)
+*Rezultati izvajanja za **Partition Problem**.*
+![Test](./docs/kk_output.png)
+*Rezultati izvajanja za **Kamada Kawai algoritem**.*
+
+
+Algoritem z zmagovalnim časom je označen z rumeno barvo, algoritem z najslabšim časom pa s svetlo rdečo.
 Časovno ugodnejše rešitve so označene z zeleno barvo, medtem ko so časovno manj ugodne rešitve označene z rdečo barvo.
 V primeru, da rešitev ni pravilna, je to označeno s svetlo vijolično barvo.
-![Test](./docs/partition_output.png)
-Spodnja tabela prikazuje rezultate izvajanja algoritmov za reševanje problema **Kamada Kawai**.\
-![Test](./docs/kk_output.png)
 
 ## Vprašanja
 V katerih primerih je sploh uporabno imeti več niti, kot jih ponuja procesor?

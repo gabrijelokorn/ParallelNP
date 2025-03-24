@@ -85,8 +85,6 @@ Vertices *seq(KamadaKawai *kk)
             kk->coords[delta_max_index].x += delta_x;
             kk->coords[delta_max_index].y += delta_y;
 
-            printf("coordinates: %.15f, %.15f\n", kk->coords[delta_max_index].x, kk->coords[delta_max_index].y);            
-            
             deltas[delta_max_index] = get_delta(kk, delta_max_index);
         }
 

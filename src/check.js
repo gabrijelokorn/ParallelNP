@@ -1,7 +1,7 @@
 const fs = require('fs').promises;
 const { constants } = require('fs');
 
-const languages = ["c", "julia", "go"]
+const languages = ["c", "go", "julia"]
 const languageExtensions = new Map([
     ["c", ".c"],
     ["julia", ".jl"],

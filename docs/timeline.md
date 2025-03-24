@@ -85,3 +85,18 @@ S profesorjem sva pogledala kaj sem naredil do sedaj - delovanje programja je za
 - Ker seveda ne obstajajo metode, ki bi enolično pokazale, kateri jezik je boljši, bom moral uporabiti več metod primerjave in tako bralcu olajšati izbiro na podlagi le njegovih potreb. V delu bom primerjal:
     - numerično - primerjal bom čase izvajanja algoritmov na izbranih problemih
     - analitično (vsako rešitev) - vsakega jezika bom primerjal z rešitvami drugih jezikov
+
+24.03.2025; 11:00
+---
+S profesorjem sva se sestala in tokrat posvetila več pozornosti Kamada Kawai algoritmu. Pogovor bom poskusil strniti v obliki vprašanj in odgovorov:
+- Imel sem problem z omejujočimi `float` podatkovnimi tipi (posplošitev na 0 pri deljenju majhnih števil). Nadomestil sem jih z `double` podtakovnimi tipi. Naletel sem na problem osciliranja delcev. Kako lahko to rešim?
+    - Algoritem bomo dopolnili na tri načine:
+        - Kamada Kawai algoritem bomo dopolnili z metodo simuliranega ohlajanja: vpliv delte bomo po vsakem premiku zmanjševali tako, da bomo izračunane `delte` množili s faktorjem ohlajanja.
+        - algoritem narekuje, naj po vsakem premiku (kakor to omejuje parameter epsilon) na novo izračunamo delte vseh ostalih delcev. Mi pa bomo poskusili ohraniti vrednost delt ostalih delcev in jih spremeniti le za spremebmo na novo premaknjenega delca.
+        - eksperimentalno bomo poskusili premikati vse delce na grafu hkrati in poskusili ugotoviti, ali se tako algoritem lahko reši in ali je v katerih primerih (za specifično začetno postavitev delcev) tak pristop primernejši od izvornega algoirtma
+- Zakaj je izbira `#niti=#število jeder`  v primeru Kamada-Kawai algoritma primernejša od izbire `#niti=#fizičnih niti`?
+    - Procesorji večinoma (zaradi cene silicija) ponujajo eno floating point procesorsko enoto na procesorskem jedru. Ker se procesorski niti sinhronizirata/"borita" za floating point enoto, to proces operacij program upočasni.
+- V katerem primeru je veliko število niti  (> od števila fizičnih niti) sploh uporabno?
+    - Kadar vnparej vemo, da bodo nekater od naših niti blokirane, medtem, ko bodo druge imele možnost izvajanja - če bi večina ustvarjenih niti čakala na izvajanje, bi jih le malo izmed njih dobilo procesorski čas. Nasprotno pa lahko v primeru, da jih je ustvarjenih več, kot je procesorskih niti lahko nekaj čaka, a je vseeno med tem čakanjem veliki večini dodeljen procesorski čas
+- Je Kamada Kawai algoritem zares odvisen od začentega položaja delcev?
+    - Seveda.
