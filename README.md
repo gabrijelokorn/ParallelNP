@@ -21,6 +21,7 @@ Algoritem z zmagovalnim časom je označen z rumeno barvo, algoritem z najslabš
 V primeru, da rešitev ni pravilna, je to označeno s svetlo vijolično barvo.
 
 Za Kamada-Kawai algoritem se generirajo tudi `mp3` datoteke, ki prikazujejo premikanje delcev:
+
 ![Look into docs directory for examples](./docs/kk1.gif)\
 ![Look into docs directory for examples](./docs/kk2.gif)
 
