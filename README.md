@@ -20,9 +20,14 @@ Algoritem z zmagovalnim časom je označen z rumeno barvo, algoritem z najslabš
 Časovno ugodnejše rešitve so označene z zeleno barvo, medtem ko so časovno manj ugodne rešitve označene z rdečo barvo.
 V primeru, da rešitev ni pravilna, je to označeno s svetlo vijolično barvo.
 
+Za Kamada-Kawai algoritem se generirajo tudi `mp3` datoteke, ki prikazujejo premikanje delcev:
+![Look into docs directory for examples](./docs/kk1.gif)\
+![Look into docs directory for examples](./docs/kk2.gif)
+
+
 ## Vprašanja
-V katerih primerih je sploh uporabno imeti več niti, kot jih ponuja procesor?
 Omeni zakaj sem dal več različnih primerov z različnimi velikostmi množic.
-Kaj narediti pri KK algo, ko se zaloopa / vrednost postane tako majhna, da delta več ne spreminja koordinat (C)
-Kaj je torej logičen in fizičen thread - (razlika).
 Kako je lahko go napisan v golangu.
+Problem pri simuliranem ohlajanju in omejevanju korakov: Namen tega je, da se ustavi po osciliranju. Kaj če oscilira, a to še ni zadnji delec, ki bi ga bilo potrebno premakniti?
+Nisem mogel implementirati redukcije za računanje delt, saj račun ni tako enostaven (sqrt, pow(x,2))
+Zakaj je ob uporabi 8 niti zasedenih 16 na system monitorju

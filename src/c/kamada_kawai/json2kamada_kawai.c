@@ -122,22 +122,22 @@ Edge *getEdges(json_object *edges, int m)
 {
     // Allocate memory for the edges
     Edge *edgesArray = malloc(m * sizeof(Edge));
-    
+
     // Loop through the edges array
     for (int i = 0; i < m; i++)
     {
         // Get the i-th element of the edges array
         struct json_object *edge = json_object_array_get_idx(edges, i);
         struct json_object *source, *target;
-        
+
         json_object_object_get_ex(edge, "source", &source);
         json_object_object_get_ex(edge, "target", &target);
-        
+
         // Get the source and target values of the i-th element of the edges array
         edgesArray[i].source = json_object_get_int(source);
         edgesArray[i].target = json_object_get_int(target);
     }
-    
+
     return edgesArray;
 }
 
@@ -154,7 +154,7 @@ KamadaKawai *json2KamadaKawai(char *buffer)
     kamadaKawai->n = json_object_array_length(coords);
     // Get ocordinates of the vertices
     kamadaKawai->coords = getCoordinates(coords, kamadaKawai->n);
-    
+
     // Get the edges array from the json object
     json_object *edges = json_object_object_get(parsed_json, "edges");
     // Get the length of the edges array
@@ -183,6 +183,16 @@ KamadaKawai *json2KamadaKawai(char *buffer)
     // Get the display value
     kamadaKawai->display = json_object_get_double(display);
 
+    // Get the annealing value from the json object
+    struct json_object *limit;
+    // Check if the annealing value exists
+    json_object_object_get_ex(parsed_json, "limit", &limit);
+    // Get the annealing value
+    kamadaKawai->limit = json_object_get_int(limit);
+    // Set the default limit to 100
+    if (kamadaKawai->limit == 0)
+        kamadaKawai->limit = 100;
+
     // Calculate the d_ij matrix
     kamadaKawai->d_ij = d_ij_fun(kamadaKawai->edges, kamadaKawai->n, kamadaKawai->m);
 
@@ -199,6 +209,21 @@ KamadaKawai *json2KamadaKawai(char *buffer)
     // Calculate the k_ij - spring constants between the vertices
     kamadaKawai->k_ij = k_ij_fun(kamadaKawai->d_ij, kamadaKawai->n, kamadaKawai->K);
 
+    // Allocate space for deltas
+    kamadaKawai->deltas = (double *)malloc(kamadaKawai->n * sizeof(double));
+
+    // Allocate space for ds
+    kamadaKawai->dx = (double *)malloc(kamadaKawai->n * sizeof(double));
+    kamadaKawai->addendx = (double **)malloc(kamadaKawai->n * sizeof(double *));
+    kamadaKawai->dy = (double *)malloc(kamadaKawai->n * sizeof(double));
+    kamadaKawai->addendy = (double **)malloc(kamadaKawai->n * sizeof(double *));
+
+    for (int i = 0; i < kamadaKawai->n; i++)
+    {
+        kamadaKawai->addendx[i] = (double *)malloc(kamadaKawai->n * sizeof(double));
+        kamadaKawai->addendy[i] = (double *)malloc(kamadaKawai->n * sizeof(double));
+    }
+    
     // Return the KamadaKawai struct
     return kamadaKawai;
 }

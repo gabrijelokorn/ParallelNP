@@ -363,7 +363,8 @@
             "target": 37
         }
     ],
-    "K": 100,
-    "epsilon": 0.00001,
-    "display": 5000
+    "K": 1,
+    "epsilon": 0.01,
+    "display": 10,
+    "limit": 100
 }

@@ -11,7 +11,7 @@
 
 void algo(KamadaKawai *kk, bool verbose, char *num);
 
-Vertices *seq(KamadaKawai *kamadaKawai);
-Vertices *par(KamadaKawai *kamadaKawai);
+void seq(KamadaKawai *kamadaKawai, Vertices *result);
+void par(KamadaKawai *kamadaKawai, Vertices *result);
 
 #endif

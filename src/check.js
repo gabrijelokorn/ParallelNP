@@ -110,7 +110,7 @@ async function compare(lang, problemDir, algoName, test, solutionFilename, resul
 
     // Insert the time
     const time = await readCsv(timefilename);
-    result[problemDir][lang][algoName][test]["time"] = time;
+    result[problemDir][lang][algoName][test]["time"] = parseFloat(time.trim());
 
     if (! await fileExists(solutionFilename)) return;
     // Insert the correct flag

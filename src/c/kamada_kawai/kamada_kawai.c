@@ -14,197 +14,111 @@ void copyCoords(Coord *kk_coords, Coord *v_coords, int n)
     }
 }
 
-double derivaitve_x_m(KamadaKawai *kk, int index)
+double get_addend_x(KamadaKawai *kk, int m, int index)
+{
+    double dist_x = kk->coords[index].x - kk->coords[m].x;
+    double dist_y = kk->coords[index].y - kk->coords[m].y;
+
+    double addend = kk->k_ij[index][m] * (dist_x - ((kk->l_ij[index][m] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+    if (isnan(addend))
+        return 0;
+
+    return addend;
+}
+
+double get_addend_y(KamadaKawai *kk, int m, int index)
+{
+    double dist_x = kk->coords[index].x - kk->coords[m].x;
+    double dist_y = kk->coords[index].y - kk->coords[m].y;
+
+    double addend = kk->k_ij[index][m] * (dist_y - ((kk->l_ij[index][m] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+
+    if (isnan(addend))
+        return 0;
+
+    return addend;
+}
+
+double get_derivative_x(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
-            continue;
-
-        double dist_x = kk->coords[index].x - kk->coords[i].x;
-        double dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        double x2 = (double)pow(dist_x, 2);
-        double y2 = (double)pow(dist_y, 2);
-        double x2_y2 = x2 + y2;
-        double x2_y2_1_2 = (double)sqrt(x2_y2);
-
-        double additive = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / x2_y2_1_2));
-        if (isnan(additive))
-            continue;
-
-        sum += additive;
-    }
-
-    return sum;
-}
-
-double derivaitve_y_m(KamadaKawai *kk, int index)
-{
-    double sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        double dist_x = kk->coords[index].x - kk->coords[i].x;
-        double dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        double x2 = (double)pow(dist_x, 2);
-        double y2 = (double)pow(dist_y, 2);
-        double x2_y2 = x2 + y2;
-        double x2_y2_1_2 = (double)sqrt(x2_y2);
-
-        double additive = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / x2_y2_1_2));
-
-        if (isnan(additive))
-            continue;
-
-        sum += additive;
-    }
-
-    return sum;
-}
-
-double derivaitve_xx_m(KamadaKawai *kk, int index)
-{
-    double sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        double dist_x = kk->coords[index].x - kk->coords[i].x;
-        double dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        double x2 = (double)pow(dist_x, 2);
-        double y2 = (double)pow(dist_y, 2);
-        double x2_y2 = x2 + y2;
-        double x2_y2_1_2 = (double)sqrt(x2_y2);
-        double x2_y2_3_2 = (double)pow(x2_y2, (double)3 / 2);
-
-        double additive = kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * y2) / x2_y2_3_2));
-
-        if (isnan(additive))
-            continue;
-
-        sum += additive;
-    }
-
-    return sum;
-}
-
-double derivaitve_yy_m(KamadaKawai *kk, int index)
-{
-    double sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        double dist_x = kk->coords[index].x - kk->coords[i].x;
-        double dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        double x2 = (double)pow(dist_x, 2);
-        double y2 = (double)pow(dist_y, 2);
-        double x2_y2 = x2 + y2;
-        double x2_y2_1_2 = (double)sqrt(x2_y2);
-        double x2_y2_3_2 = (double)pow(x2_y2, (double)3 / 2);
-
-        double additive = kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * x2) / x2_y2_3_2));
-
-        if (isnan(additive))
-            continue;
-
-        sum += additive;
-    }
-
-    return sum;
-}
-
-double derivaitve_xy_m(KamadaKawai *kk, int index)
-{
-    double sum = 0;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (i == index)
-            continue;
-
-        double dist_x = kk->coords[index].x - kk->coords[i].x;
-        double dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        double x2 = (double)pow(dist_x, 2);
-        double y2 = (double)pow(dist_y, 2);
-        double x2_y2 = x2 + y2;
-        double x2_y2_1_2 = (double)sqrt(x2_y2);
-        double x2_y2_3_2 = (double)pow(x2_y2, (double)3 / 2);
-
-        double additive = kk->k_ij[index][i] * ((kk->l_ij[index][i] * dist_x * dist_y) / x2_y2_3_2);
-
-        if (isnan(additive))
-            continue;
-            
-        sum += additive;
-    }
-
-    return sum;
-}
-
-int get_delta_max_index(KamadaKawai *kk, double *deltas)
-{
-    int max_index = -1;
-    double max = -1;
-
-    for (int i = 0; i < kk->n; i++)
-    {
-        if (deltas[i] > max)
         {
-            max = deltas[i];
-            if (max > kk->epsilon)
-                max_index = i;
+            kk->addendx[index][i] = 0;
+            continue;
         }
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+        if (isnan(addend))
+            continue;
+
+        kk->addendx[index][i] = addend;
+        sum += addend;
     }
 
-    return max_index;
+    kk->dx[index] = sum;
+    return sum;
 }
 
-double get_delta_y(double derivaitve_x_m, double derivaitve_y_m, double derivaitve_xx_m, double derivaitve_yy_m, double derivaitve_xy_m)
+double get_derivative_y(KamadaKawai *kk, int index)
 {
-    return (-(derivaitve_xy_m * derivaitve_x_m) + (derivaitve_xx_m * derivaitve_y_m)) / (-(derivaitve_xx_m * derivaitve_yy_m) + (derivaitve_xy_m * derivaitve_xy_m));
-}
-
-double get_delta_x(double derivaitve_x_m, double derivaitve_y_m, double derivaitve_xx_m, double derivaitve_yy_m, double derivaitve_xy_m, double delta_y)
-{
-    return (-(derivaitve_y_m) - (derivaitve_yy_m * delta_y)) / derivaitve_xy_m;
-}
-
-double delta_m(double derivaitve_x, double derivaitve_y)
-{
-    return sqrt((double)pow(derivaitve_x, 2) + (double)pow(derivaitve_y, 2));
-}
-
-double get_delta(KamadaKawai *kk, int index)
-{
-    double derivaitve_x = derivaitve_x_m(kk, index);
-    double derivaitve_y = derivaitve_y_m(kk, index);
-
-    return delta_m(derivaitve_x, derivaitve_y);
-}
-
-double *get_delatas(KamadaKawai *kk)
-{
-    double *deltas = (double *)malloc(kk->n * sizeof(double));
+    double sum = 0;
 
     for (int i = 0; i < kk->n; i++)
     {
-        deltas[i] = get_delta(kk, i);
+        if (i == index)
+        {
+            kk->addendy[index][i] = 0;
+            continue;
+        }
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+
+        if (isnan(addend))
+            continue;
+
+        kk->addendy[index][i] = addend;
+        sum += addend;
     }
 
-    return deltas;
+    kk->dy[index] = sum;
+    return sum;
+}
+
+double get_delta_m_y(double d_m_x, double d_m_y, double d_m_xx, double d_m_yy, double d_m_xy)
+{
+    return (-(d_m_xy * d_m_x) + (d_m_xx * d_m_y)) / (-(d_m_xx * d_m_yy) + (d_m_xy * d_m_xy));
+}
+
+double get_delta_m_x(double d_m_x, double d_m_y, double d_m_xx, double d_m_yy, double d_m_xy, double delta_y)
+{
+    return (-(d_m_y) - (d_m_yy * delta_y)) / d_m_xy;
+}
+
+double get_delta_m(KamadaKawai *kk, int index)
+{
+    return sqrt((double)pow(get_derivative_x(kk, index), 2) + (double)pow(get_derivative_y(kk, index), 2));
+}
+
+double update_delta_m(KamadaKawai *kk, int m, int index)
+{
+    double tempx = get_addend_x(kk, m, index);
+    double tempy = get_addend_y(kk, m, index);
+
+    kk->dx[index] = kk->dx[index] - kk->addendx[index][m] + tempx;
+    kk->dy[index] = kk->dy[index] - kk->addendy[index][m] + tempy;
+
+    kk->addendx[index][m] = tempx;
+    kk->addendy[index][m] = tempy;
+
+    return sqrt((double)pow(kk->dx[index], 2) + (double)pow(kk->dy[index], 2));
 }
