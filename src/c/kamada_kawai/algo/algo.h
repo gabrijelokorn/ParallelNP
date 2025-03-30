@@ -13,5 +13,6 @@ void algo(KamadaKawai *kk, bool verbose, char *num);
 
 void seq(KamadaKawai *kamadaKawai, Vertices *result);
 void par(KamadaKawai *kamadaKawai, Vertices *result);
+void mad(KamadaKawai *kamadaKawai, Vertices *result);
 
 #endif

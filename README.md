@@ -30,3 +30,4 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 - Kako je lahko golang napisan v golangu.
 - Problem pri simuliranem ohlajanju in omejevanju korakov: Namen tega je, da se ustavi po osciliranju. Kaj če oscilira, a to še ni zadnji delec, ki bi ga bilo potrebno premakniti?
 - Zakaj je ob uporabi polovice niti zasedenih vseh n niti
+- Ali sem z vključitvijo isnan(int) v `c`-ju naredil kakšno nevidno neumnost?

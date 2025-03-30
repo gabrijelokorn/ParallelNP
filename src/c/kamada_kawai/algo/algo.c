@@ -62,10 +62,13 @@ void algo(KamadaKawai *kk, bool verbose, char *num)
     Coord *original = malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, original, kk->n);
 
-    run_algo(kk, seq, verbose, "seq", num);
-    resetData(kk, original);
+    // run_algo(kk, seq, verbose, "seq", num);
+    // resetData(kk, original);
 
-    run_algo(kk, par, verbose, "par", num);
+    // run_algo(kk, par, verbose, "par", num);
+    // resetData(kk, original);
+
+    run_algo(kk, mad, verbose, "mad", num);
     resetData(kk, original);
 
     free(original);

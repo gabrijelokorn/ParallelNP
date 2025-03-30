@@ -6,7 +6,7 @@ OUTPUTS = **/*.txt **/*.csv
 SOURCES = main.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c ./kamada_kawai.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./algo/algo.c ./algo/seq.c ./algo/par.c
+./algo/algo.c ./algo/seq.c ./algo/par.c ./algo/mad.c
 
 ALGO = algo
 TESTD = ../../../tests
