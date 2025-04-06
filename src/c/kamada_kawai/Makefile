@@ -28,7 +28,7 @@ compile: $(TARGET)
 
 $(TARGET):
 	@start=$$(date +%s.%N); \
-	$(CC) $(CFLAGS) -o $(TARGET) $(SOURCES); \
+	$(CC) -o $(TARGET) $(SOURCES) $(CFLAGS); \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###
