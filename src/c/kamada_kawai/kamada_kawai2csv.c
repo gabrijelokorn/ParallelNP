@@ -4,17 +4,11 @@
 
 #include "./kamada_kawai2csv.h"
 
-void writeVertices(Vertices *vertices, int n, char *resultFile)
+void writeState(FILE *fp, Coord *state, int n)
 {
-    FILE *fp = fopen(resultFile, "w");
-    while (vertices != NULL)
+    for (int i = 0; i < n; i++)
     {
-        for (int i = 0; i < n; i++)
-        {
-            fprintf(fp, "%f,%f\n", vertices->coords[i].x, vertices->coords[i].y);
-        }
-        vertices = vertices->next;
-        fprintf(fp, "\n");
+        fprintf(fp, "%f,%f\n", state[i].x, state[i].y);
     }
-    fclose(fp);
+    fprintf(fp, "\n");
 }

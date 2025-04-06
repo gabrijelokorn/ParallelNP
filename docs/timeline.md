@@ -26,10 +26,12 @@ HashTable problem ?
 ```
 26.02.2024
 ---
+
 Srečanje s profesorjem po predavanjih prevajalnikov. Obnovila sva, kar sva bila že zmenjena. Dokončno sva dorekla, da bodo problemi iz teorije grafov. Do prihodnjihkrat bova oba našla probleme na tem področju.
 
 13.3.2024 Sestanek po vajah za prevajalnike 11:30 - 12:15
 ---
+
 # ![Slika](timeline_1.png)  
 S profesorjem sva našla tri algoritme iz teorije grafov, na katerih bom testiral vzporedno programiranje v treh različnih jezikih.
 
@@ -43,6 +45,7 @@ Pri prvih dveh problemih bom rešitev poskusil implementirati rekurzivno kot tud
 
 03.04.2024 Sestanek po vajah za prevajalnike 11:10 - 11:40
 ---
+
 Pogovor sva začela s problemom, ki sva ga prejšnjikrat obdelala nekoliko manj podrobno - to je tretji problem oziroma problem simuliranja premikanja delcev, ki drug drugega bodisi privlačijo ali odbijajo.
 Podrobnejši opis implementacije:
 
@@ -58,6 +61,7 @@ Na STUDISU moram izpolniti obrazec za prijavo diplomske naloge, kjer označim me
 
 17.07.2024; 09:00
 ---
+
 - Kako naj primerjam jezike med seboj?
     
     Primejati moram konstrukte, podatkovne strukture ostalo orodje, tudi knjižnice, ki mi jih ponujajo jeziki (vse v obe smeri).
@@ -72,6 +76,7 @@ Na STUDISU moram izpolniti obrazec za prijavo diplomske naloge, kjer označim me
 
 17.03.2025; 11:00
 ---
+
 S profesorjem sva pogledala kaj sem naredil do sedaj - delovanje programja je zadovoljivo. Obdelala sva naslednje problematike: 
 - Profesor je predlagal, da dodam možnost za izbiro števila niti, ki jih program uporabi. Odločil sem se, da bom to implementiral v `Makefile`. Namen tega je, da testiramo delovanje z uporabo števila niti, ki je enako številu jeder na procesorju.
 - Pri merjenju časa je zaželjeno, da merim čas izvajanja algoritma po "stenski uri", saj tako dobimo najboljši rezultat časovnih meritev - kako jeziki (compiler-ji) in njihovi urniki obvladujejo vzporedne progame. 
@@ -88,6 +93,7 @@ S profesorjem sva pogledala kaj sem naredil do sedaj - delovanje programja je za
 
 24.03.2025; 11:00
 ---
+
 S profesorjem sva se sestala in tokrat posvetila več pozornosti Kamada Kawai algoritmu. Pogovor bom poskusil strniti v obliki vprašanj in odgovorov:
 - Imel sem problem z omejujočimi `float` podatkovnimi tipi (posplošitev na 0 pri deljenju majhnih števil). Nadomestil sem jih z `double` podtakovnimi tipi. Naletel sem na problem osciliranja delcev. Kako lahko to rešim?
     - Algoritem bomo dopolnili na tri načine:
@@ -100,3 +106,19 @@ S profesorjem sva se sestala in tokrat posvetila več pozornosti Kamada Kawai al
     - Kadar vnparej vemo, da bodo nekater od naših niti blokirane, medtem, ko bodo druge imele možnost izvajanja - če bi večina ustvarjenih niti čakala na izvajanje, bi jih le malo izmed njih dobilo procesorski čas. Nasprotno pa lahko v primeru, da jih je ustvarjenih več, kot je procesorskih niti lahko nekaj čaka, a je vseeno med tem čakanjem veliki večini dodeljen procesorski čas
 - Je Kamada Kawai algoritem zares odvisen od začentega položaja delcev?
     - Seveda.
+
+31.03.2025; 11:00
+---
+
+Tokrat sva se s profesorjem osredotočila na performanco algoritmov. Skozi pogovor sva naredila nekaj zaključkov:
+- Algoritme moram poganjati na dovolj velikem številu niti, zato, da vzporedenje sploh pride do izraza (sicer igra kreiranje in sinhroniziranje niti v programu večjo vlogo)
+- Zakaj je ob uporabi polovice niti zasedenih vseh n niti
+    - Menjajo se!
+
+Plan:
+- 1.) Nov sinhroni algoritem za Kamada-Kawai (premikanje n delcev)
+- 2.) Ureditev golang in julia Kamada Kawai algoritma
+- 3.) Priprava okolja za superračunalnik
+- 4.) Analiza primerov: koliko delcev na nit (približno 100? zaenkrat)
+- 5.) Kreiranje primernih testnih primerov
+- 6.) Zagon testov na superračunalniku

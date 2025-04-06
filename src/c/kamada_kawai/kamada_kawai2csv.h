@@ -5,6 +5,6 @@
 
 #include "./kamada_kawai.h"
 
-void writeVertices(Vertices *vertices, int n, char *filename);
+void writeState(FILE *fp, Coord *state, int n);
 
 #endif

@@ -7,25 +7,14 @@
 #include "../../common/parallelNP.h"
 #include "algo.h"
 
-void timeout_handler(int signum)
+bool *run_algo(int **arr,  Partitions *p, bool *(*func)(Partitions *, int **), char *name, char *num)
 {
-    printf("Timeout reached!\n");
-    exit(0);
-}
-
-bool *run_with_timeout(int **arr,  Partitions *p, bool *(*func)(Partitions *, int **), int verbose, char *name, char *num)
-{
-    signal(SIGALRM, timeout_handler);
-    alarm(25); 
-    
     double start = omp_get_wtime();
     bool *result = func(p, arr);
     double end = omp_get_wtime();
     
     alarm(0); 
 
-    if (!verbose)
-        return NULL;
     char *algoresult = generateFilename(name, num, "json");
     writePartitions(result, p->rows, algoresult);
     
@@ -33,14 +22,14 @@ bool *run_with_timeout(int **arr,  Partitions *p, bool *(*func)(Partitions *, in
     writeTime(end - start, algotime);
 }
 
-void algo(int **arr, Partitions *p, bool verbose, char *num)
+void algo(int **arr, Partitions *p, char *num)
 {
-    run_with_timeout(arr, p, seq, verbose, "seq", num);
-    run_with_timeout(arr, p, mlt_stc, verbose, "mlt_stc", num);
-    run_with_timeout(arr, p, mlt_dyn, verbose, "mlt_dyn", num);
-    run_with_timeout(arr, p, sgl_dyn, verbose, "sgl_dyn", num);
-    run_with_timeout(arr, p, sgl_stc, verbose, "sgl_stc", num);
-    run_with_timeout(arr, p, nested, verbose, "nested", num);
+    run_algo(arr, p, seq, "seq", num);
+    run_algo(arr, p, mlt_stc, "mlt_stc", num);
+    run_algo(arr, p, mlt_dyn, "mlt_dyn", num);
+    run_algo(arr, p, sgl_dyn, "sgl_dyn", num);
+    run_algo(arr, p, sgl_stc, "sgl_stc", num);
+    run_algo(arr, p, nested, "nested", num);
 
     return;
 }

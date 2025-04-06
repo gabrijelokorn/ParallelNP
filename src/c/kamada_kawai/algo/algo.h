@@ -9,10 +9,11 @@
 #include "../json2kamada_kawai.h"
 #include "../kamada_kawai2csv.h"
 
-void algo(KamadaKawai *kk, bool verbose, char *num);
+void algo(KamadaKawai *kk, char *num);
 
-void seq(KamadaKawai *kamadaKawai, Vertices *result);
-void par(KamadaKawai *kamadaKawai, Vertices *result);
-void mad(KamadaKawai *kamadaKawai, Vertices *result);
+void sgl_seq(KamadaKawai *kamadaKawai);
+void sgl_par(KamadaKawai *kamadaKawai);
+void mlt_seq(KamadaKawai *kamadaKawai);
+void mlt_par(KamadaKawai *kamadaKawai);
 
 #endif

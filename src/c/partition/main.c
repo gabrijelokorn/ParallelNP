@@ -24,14 +24,13 @@
 
 int main(int argc, char *argv[])
 {
-    bool verbose = false;
     char *test;
     char *nThreadsStr;
     char *num;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":vt:x:")) != -1)
+    while ((opt = getopt(argc, argv, ":t:x:")) != -1)
     {
         switch (opt)
         {
@@ -40,9 +39,6 @@ int main(int argc, char *argv[])
             break;
         case 'x':
             num = optarg;
-            break;
-        case 'v':
-            verbose = true;
             break;
         case ':':
         case '?':
@@ -68,7 +64,7 @@ int main(int argc, char *argv[])
     free(buffer);
 
     // Run the algorithm
-    algo(arr, p, verbose, num);
+    algo(arr, p, num);
     free(arr);
 
     return 0;

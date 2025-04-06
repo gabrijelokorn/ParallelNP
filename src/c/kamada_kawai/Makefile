@@ -6,7 +6,7 @@ OUTPUTS = **/*.txt **/*.csv
 SOURCES = main.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c ./kamada_kawai.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./algo/algo.c ./algo/seq.c ./algo/par.c ./algo/mad.c
+./algo/algo.c ./algo/sgl_seq.c ./algo/sgl_par.c ./algo/mlt_seq.c ./algo/mlt_par.c
 
 ALGO = algo
 TESTD = ../../../tests
@@ -41,7 +41,7 @@ run: $(TARGET)
 	export OMP_NUM_THREADS=$(KamadaKawaiThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
-		./$(TARGET) -t $$case -x $$num -v; \
+		./$(TARGET) -t $$case -x $$num; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"

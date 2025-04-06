@@ -21,8 +21,10 @@ const algoDetail = {
     },
     "kamada_kawai": {
         "c": {
-            "seq": "Zaporedni program",
-            "par": "Paralelni program",
+            "sgl_seq": "Premikamo en delec naenkrat, delte računamo sinhrono",
+            "sgl_par": "Premikamo en delec naenkrat, delte računamo vzporedno",
+            "mlt_seq": "Premikamo več delcev naenkrat, delte računamo sinhrono",
+            "mlt_par": "Premikamo več delcev naenkrat, delte računamo vzporedno",
         },
         "go": {
             "seq": "Zaporedni program",

@@ -42,7 +42,7 @@ run: $(TARGET)
 	export OMP_NUM_THREADS=$(PartitionThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
-		./$(TARGET) -t $$case -x $$num -v; \
+		./$(TARGET) -t $$case -x $$num; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"
