@@ -3,6 +3,7 @@
 
 typedef struct Partitions
 {
+    int **arr;
     int quantity;
     int rows;
     int *cols;

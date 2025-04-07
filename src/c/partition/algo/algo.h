@@ -7,13 +7,13 @@
 #include "../partition.h"
 #include "../partitions2json.h"
 
-void algo(int **arr, Partitions *p, char *num);
+void algo(Partitions *p, char *test_id);
 
-bool* seq(Partitions *p, int **arr);
-bool* mlt_stc(Partitions *p, int **arr);
-bool* mlt_dyn(Partitions *p, int **arr);
-bool* sgl_dyn(Partitions *p, int **arr);
-bool* sgl_stc(Partitions *p, int **arr);
-bool* nested(Partitions *p, int **arr);
+void seq(Partitions *p, bool *result);
+void mlt_stc(Partitions *p, bool *result);
+void mlt_dyn(Partitions *p, bool *result);
+void sgl_dyn(Partitions *p, bool *result);
+void sgl_stc(Partitions *p, bool *result);
+void nested(Partitions *p, bool * result);
 
 #endif

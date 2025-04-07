@@ -7,29 +7,34 @@
 #include "../../common/parallelNP.h"
 #include "algo.h"
 
-bool *run_algo(int **arr,  Partitions *p, bool *(*func)(Partitions *, int **), char *name, char *num)
+bool *run_algo(Partitions *p, void (*func)(Partitions *, bool *), char *name, char *test_id)
 {
-    double start = omp_get_wtime();
-    bool *result = func(p, arr);
-    double end = omp_get_wtime();
-    
-    alarm(0); 
+    // --- SETUP --- //
+    bool *result = (bool *)malloc(p->rows * sizeof(bool));
 
-    char *algoresult = generateFilename(name, num, "json");
+    // --- EXECTUTION --- //
+    double start = omp_get_wtime();
+    func(p, result);
+    double end = omp_get_wtime();
+
+    // --- WRITE RESULTS TO FILE --- //
+    char *algoresult = generateFilename(name, test_id, "json");
     writePartitions(result, p->rows, algoresult);
-    
-    char *algotime = generateFilename(name, num, "txt");
+    // --- WRITE TIME TO FILE --- //
+    char *algotime = generateFilename(name, test_id, "txt");
     writeTime(end - start, algotime);
+
+    free(result);
 }
 
-void algo(int **arr, Partitions *p, char *num)
+void algo(Partitions *p, char *test_id)
 {
-    run_algo(arr, p, seq, "seq", num);
-    run_algo(arr, p, mlt_stc, "mlt_stc", num);
-    run_algo(arr, p, mlt_dyn, "mlt_dyn", num);
-    run_algo(arr, p, sgl_dyn, "sgl_dyn", num);
-    run_algo(arr, p, sgl_stc, "sgl_stc", num);
-    run_algo(arr, p, nested, "nested", num);
+    run_algo(p, seq, "seq", test_id);
+    run_algo(p, mlt_stc, "mlt_stc", test_id);
+    run_algo(p, mlt_dyn, "mlt_dyn", test_id);
+    run_algo(p, sgl_dyn, "sgl_dyn", test_id);
+    run_algo(p, sgl_stc, "sgl_stc", test_id);
+    run_algo(p, nested, "nested", test_id);
 
     return;
 }

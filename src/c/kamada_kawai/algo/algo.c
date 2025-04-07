@@ -24,7 +24,6 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *nu
     writeState(fp, original, kk->n);
     writeState(fp, kk->coords, kk->n);
     fclose(fp);
-
     // --- WRITE TIME TO FILE --- //
     char *algotime = generateFilename(name, num, "txt");
     writeTime(end - start, algotime);

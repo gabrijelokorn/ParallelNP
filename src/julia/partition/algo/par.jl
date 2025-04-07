@@ -18,11 +18,11 @@ function par(arr::Vector{Vector{Int64}})
         if problem_sum % 2 != 0
             continue
         end
-        half_sum = problem_sum / 2
+        half_problem_sum = problem_sum / 2
 
         for j in 1:numOfCombinations
             sum = partition_sum(arr[i], size, j)
-            if sum == half_sum
+            if sum == half_problem_sum
                 result[i] = true
                 break
             end

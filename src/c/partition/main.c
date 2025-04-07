@@ -24,9 +24,8 @@
 
 int main(int argc, char *argv[])
 {
-    char *test;
-    char *nThreadsStr;
-    char *num;
+    char *test_name;
+    char *test_id;
     bool help = false;
 
     int opt;
@@ -35,10 +34,10 @@ int main(int argc, char *argv[])
         switch (opt)
         {
         case 't':
-            test = optarg;
+            test_name = optarg;
             break;
         case 'x':
-            num = optarg;
+            test_id = optarg;
             break;
         case ':':
         case '?':
@@ -53,19 +52,19 @@ int main(int argc, char *argv[])
         error_args(argv[0]);
 
     // Read the input file
-    FILE *testF = openFile(test, "r");
+    FILE *testF = openFile(test_name, "r");
     char *buffer = readFile(testF);
     fclose(testF);
 
     // json -> partitions
     Partitions *p = get_partitions(buffer);
-    // partitions -> array
-    int **arr = json2partitions(buffer, p);
-    free(buffer);
 
     // Run the algorithm
-    algo(arr, p, num);
-    free(arr);
+    algo(p, test_id);
+
+    // Free the allocated memory
+    free(buffer);
+    free(p);
 
     return 0;
 }

@@ -20,11 +20,11 @@ func SolvePartition(problem []int) bool {
 	if problem_sum%2 != 0 {
 		return false
 	}
-	var half_sum int = problem_sum / 2
+	var half_problem_sum int = problem_sum / 2
 	
 	for j := int64(0); j < numOfCombinations; j++ {
 		var sum int = Partition_sum(problem, len(problem), j)
-		if sum == half_sum {
+		if sum == half_problem_sum {
 			return true
 		}
 	}

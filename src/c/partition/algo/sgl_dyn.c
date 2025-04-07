@@ -2,15 +2,13 @@
 
 #include "algo.h"
 
-bool *sgl_dyn(Partitions *p, int **arr)
+void sgl_dyn(Partitions *p, bool *result)
 {
-    bool *result = (bool *)malloc(p->rows * sizeof(bool));
-
     for (int i = 0; i < p->rows; i++)
     {
         result[i] = false;
 
-        int *row = arr[i];
+        int *row = p->arr[i];
         int size = p->cols[i];
 
         unsigned long long int numOfCombinations = 1 << (size - 1);
@@ -19,18 +17,18 @@ bool *sgl_dyn(Partitions *p, int **arr)
         int problem_sum = partition_sum(row, size, allNumbersMask);
         if (problem_sum % 2 != 0)
             continue;
-        int half_sum = problem_sum / 2;
+        int half_problem_sum = problem_sum / 2;
 
         {
             bool found = false;
-            #pragma omp parallel default(none) shared(row, size, numOfCombinations, half_sum, result, i, found)
+            #pragma omp parallel default(none) shared(row, size, numOfCombinations, half_problem_sum, result, i, found)
             #pragma omp for schedule(dynamic, 10)
             for (int j = 0; j < numOfCombinations; j++)
             {
                 if (found)
                     continue;
                 int sum = partition_sum(row, size, j);
-                if (sum == half_sum)
+                if (sum == half_problem_sum)
                 {
                     result[i] = true;
                     found = true;
@@ -38,6 +36,4 @@ bool *sgl_dyn(Partitions *p, int **arr)
             }
         }
     }
-
-    return result;
 }

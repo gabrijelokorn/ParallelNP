@@ -17,9 +17,8 @@
 
 int main(int argc, char *argv[])
 {
-    char *test;
-    char *nThreadsStr;
-    char *num;
+    char *test_name;
+    char *test_id;
     bool help = false;
 
     int opt;
@@ -28,10 +27,10 @@ int main(int argc, char *argv[])
         switch (opt)
         {
         case 't':
-            test = optarg;
+            test_name = optarg;
             break;
         case 'x':
-            num = optarg;
+            test_id = optarg;
             break;
         case ':':
         case '?':
@@ -45,20 +44,19 @@ int main(int argc, char *argv[])
     if (help)
         error_args(argv[0]);
 
-    int n;
-    double k;
-
     // Read the input file
-    FILE *testF = openFile(test, "r");
-    char *buffer = readFile(testF);
-    fclose(testF);
+    FILE *test_file = openFile(test_name, "r");
+    char *buffer = readFile(test_file);
+    fclose(test_file);
 
     // json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
-    free(buffer);
-
+    
     // Run the algorithm
-    algo(kamadaKawai, num);
+    algo(kamadaKawai, test_id);
+    
+    // Free the allocated memory
+    free(buffer);
     free(kamadaKawai);
 
     return 0;
