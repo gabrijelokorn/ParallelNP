@@ -1,8 +1,8 @@
 package algo
 
 import (
-	"sync"
 	partition "golang/partition/lib"
+	"sync"
 )
 
 func Mlt_all_chn(arr [][]int) []int32 {

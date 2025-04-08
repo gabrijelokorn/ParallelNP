@@ -7,7 +7,7 @@ TESTF = *.json
 
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
 export PartitionThreads
-KamadaKawaiThreads ?= $(if $(K),$(K),$(shell nproc))
+KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
 
 run:

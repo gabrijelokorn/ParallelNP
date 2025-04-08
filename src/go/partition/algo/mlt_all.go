@@ -1,8 +1,8 @@
 package algo
 
 import (
-	"sync"
 	partition "golang/partition/lib"
+	"sync"
 )
 
 func Mlt_all(arr [][]int) []int32 {
@@ -11,7 +11,7 @@ func Mlt_all(arr [][]int) []int32 {
 	wg := sync.WaitGroup{}
 	for i := 0; i < len(arr); i++ {
 		result[i] = 0
-		
+
 		wg.Add(1)
 
 		go func(i int) {

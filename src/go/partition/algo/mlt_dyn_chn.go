@@ -1,15 +1,18 @@
 package algo
 
 import (
-	"sync"
-	"runtime"
+	"fmt"
 	partition "golang/partition/lib"
+	"runtime"
+	"sync"
 )
 
 func Mlt_dyn_chn(arr [][]int) []int32 {
 	wg := sync.WaitGroup{}
 	nThreads := runtime.GOMAXPROCS(0)
-	
+
+	fmt.Println("Number of threads: ", nThreads)
+
 	var result []int32 = make([]int32, len(arr))
 	var partitionsChannel = make(chan partition.Task, nThreads)
 

@@ -9,7 +9,7 @@ func Seq(arr [][]int) []int32 {
 
 	for i := 0; i < len(arr); i++ {
 		result[i] = 0
-		
+
 		if partition.SolvePartition(arr[i]) {
 			result[i] = 1
 		}

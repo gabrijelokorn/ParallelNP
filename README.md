@@ -26,3 +26,4 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 ![Look into docs directory for examples](./docs/kk2.gif)
 
 ## Vprašanja
+Ne znam se odločiti, ali je bolje da pri Partition Problemu delam result boolean array skupen vsem algoritmom ali ga naredim znotraj vsakega algoritma posebej.\

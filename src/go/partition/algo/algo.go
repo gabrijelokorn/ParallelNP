@@ -6,25 +6,23 @@ import (
 	"time"
 )
 
-func run_with_timeout(arr [][]int, algoFunc(func([][]int) []int32), verbose bool, name string, num string) {
+func run_algo(arr [][]int, algoFunc func([][]int) []int32, name string, test_id string) {
+	// --- EXECTUTION --- //
 	start := time.Now()
 	result := algoFunc(arr)
 	elapsed := time.Since(start)
-	
-	if !verbose {
-		return
-	}
-	algoresult := parallelNP.GenerateFilename(name, num, "json")
+
+	// --- WRITE RESULTS TO FILE --- //
+	algoresult := parallelNP.GenerateFilename(name, test_id, "json")
 	partition.WritePartitions(result, algoresult)
-	
-	algotime := parallelNP.GenerateFilename(name, num, "txt")
+	// --- WRITE TIME TO FILE --- //
+	algotime := parallelNP.GenerateFilename(name, test_id, "txt")
 	parallelNP.WriteTime(elapsed, algotime)
 }
 
-func Algo(arr [][]int, num string, verbose bool) {
-	run_with_timeout(arr, Seq, verbose, "seq", num)
-	run_with_timeout(arr, Mlt_dyn_chn, verbose, "mlt_dyn_chn", num)	
-	run_with_timeout(arr, Mlt_all_chn, verbose, "mlt_all_chn", num)
-	run_with_timeout(arr, Mlt_all, verbose, "mlt_all", num)
+func Algo(arr [][]int, test_id string) {
+	run_algo(arr, Seq, "seq", test_id)
+	run_algo(arr, Mlt_dyn_chn, "mlt_dyn_chn", test_id)
+	run_algo(arr, Mlt_all_chn, "mlt_all_chn", test_id)
+	run_algo(arr, Mlt_all, "mlt_all", test_id)
 }
-

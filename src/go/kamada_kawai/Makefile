@@ -10,7 +10,7 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
-KamadaKawaiThreads ?= $(if $(K),$(K),$(shell nproc))
+KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
 
 

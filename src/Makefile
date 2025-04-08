@@ -71,8 +71,8 @@ check:
 ### --- Partition --- ###
 pp:
 	@echo -e "##########################################\n    |-> Partition problem $(WD)"
-	$(MAKE) -C c c_partition
-# 	$(MAKE) -C go go_partition
+# 	$(MAKE) -C c c_partition
+	$(MAKE) -C go go_partition
 # 	$(MAKE) -C julia julia_partition
 	@echo -e "##########################################\n\n"
 ### --- ### --- ### --- ###
@@ -82,8 +82,8 @@ pp:
 ### --- Kamada Kawai --- ###
 kk:
 	@echo -e "##########################################\n    |-> Kamada Kawai problem $(WD)"
-	$(MAKE) -C c c_kamada_kawai
-#	$(MAKE) -C go go_kamada_kawai
+#	$(MAKE) -C c c_kamada_kawai
+	$(MAKE) -C go go_kamada_kawai
 #	$(MAKE) -C julia julia_kamada_kawai
 	@echo -e "##########################################\n\n"
 ### --- ### --- ### --- ###

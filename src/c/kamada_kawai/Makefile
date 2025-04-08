@@ -18,7 +18,7 @@ CFLAGS = -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
 
-#KamadaKawaiThreads ?= $(if $(K),$(K),$(shell nproc))
+#KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
 

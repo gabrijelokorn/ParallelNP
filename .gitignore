@@ -29,3 +29,7 @@ src/go/**/main
 # julia output files
 src/julia/*.out
 src/julia/*.o
+
+# SLURM specific files
+src/err.log
+src/out.log
