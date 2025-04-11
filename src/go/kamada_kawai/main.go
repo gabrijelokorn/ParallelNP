@@ -13,15 +13,13 @@ func main() {
 	// Define flags
 	t := flag.String("t", "test", "Name of the test file")
 	x := flag.String("x", "unknonw_testcase", "Test case id")
-	v := flag.Bool("v", false, "Verbose mode")
 	flag.Parse()
 
-	test := *t
-	num := *x
-	verbose := *v
+	test_name := *t
+	test_id := *x
 
 	// Read the file
-	data, err := ioutil.ReadFile(test)
+	data, err := ioutil.ReadFile(test_name)
 	if err != nil {
 		parallelNP.IOError("main.go", "Error reading the file", err)
 	}
@@ -34,5 +32,5 @@ func main() {
 	}
 	kk.Init()
 
-	kk.Algo(num, verbose)
+	kk.Algo(test_id)
 }

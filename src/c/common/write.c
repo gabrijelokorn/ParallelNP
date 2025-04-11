@@ -2,15 +2,13 @@
 #include "./error.h"
 #include "./file.h"
 
-void *writeTime(double time, char* timeFile) {
-    FILE *file = openFile(timeFile, "w");
-
-    if (file == NULL) {
+void *writeTime(FILE *fp, double time)
+{
+    if (fp == NULL)
+    {
         error_file();
         return NULL;
     }
-
-    fprintf(file, "%.9f\n", time);
-
+    fprintf(fp, "%.9f\n", time);
     return NULL;
 }

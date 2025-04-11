@@ -7,6 +7,20 @@
 #include "../../common/parallelNP.h"
 #include "algo.h"
 
+void output_algo (Partitions *p, bool *result, double elapsed, char *name, char *test_id)
+{
+    // --- WRITE RESULTS TO FILE --- //
+    char *algoresult = generateFilename(name, test_id, "json");
+    FILE *algoresult_fp = openFile(algoresult, "w");
+    writePartitions(algoresult_fp, result, p->rows);
+    fclose(algoresult_fp);
+    // --- WRITE TIME TO FILE --- //
+    char *algotime = generateFilename(name, test_id, "txt");
+    FILE *algotime_fp = openFile(algotime, "w");
+    writeTime(algotime_fp, elapsed);
+    fclose(algotime_fp);
+}
+
 bool *run_algo(Partitions *p, void (*func)(Partitions *, bool *), char *name, char *test_id)
 {
     // --- SETUP --- //
@@ -17,12 +31,7 @@ bool *run_algo(Partitions *p, void (*func)(Partitions *, bool *), char *name, ch
     func(p, result);
     double end = omp_get_wtime();
 
-    // --- WRITE RESULTS TO FILE --- //
-    char *algoresult = generateFilename(name, test_id, "json");
-    writePartitions(result, p->rows, algoresult);
-    // --- WRITE TIME TO FILE --- //
-    char *algotime = generateFilename(name, test_id, "txt");
-    writeTime(end - start, algotime);
+    output_algo(p, result, end - start, name, test_id); // Write results to file
 
     free(result);
 }

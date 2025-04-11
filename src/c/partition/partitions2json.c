@@ -29,10 +29,22 @@ void writeJsonArray(FILE *fp, bool *result, int n)
     writeJsonObject(fp, jobj);
 }
 
-void writePartitions(bool* result, int n, char *resultFile) {
-    FILE *file = openFile(resultFile, "w");
+void writePartitions(FILE *fp, bool* result, int n) {
+    if (fp == NULL)
+    {
+        fprintf(stderr, "%s )-: File pointer is null\n", "writePartitions");
+        return;
+    }
+    if (result == NULL)
+    {
+        fprintf(stderr, "%s )-: Result array is null\n", "writePartitions");
+        return;
+    }
+    if (n <= 0)
+    {
+        fprintf(stderr, "%s )-: Invalid size of result array\n", "writePartitions");
+        return;
+    }
 
-    writeJsonArray(file, result, n);    
-
-    fclose(file);
+    writeJsonArray(fp, result, n);
 }

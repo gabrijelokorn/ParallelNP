@@ -13,6 +13,7 @@ const algoDetail = {
             "mlt_all_chn": "Vsak partition problem je dinamično dodeljen svoji goroutine-i. Goroutine-i so sinhronizirani z uporabo kanalov",
             "mlt_dyn_chn": "Dinamično porazdeljevanje dela med goroutine - z uporabo kanalov. Goroutine-i so sinhronizirani z uporabo kanalov",
             "mlt_all": "Vsak partition problem je dinamično dodeljen svoji goroutine-i.",
+            "sgl_all_chn": "Rešuje se en partition problem naenkrat, pri čemer se podmnožice rešujejo vzporedno z uporabo kanalov",
         },
         "julia": {
             "seq": "Zaporedni program",
@@ -27,8 +28,8 @@ const algoDetail = {
             "mlt_par": "Premikamo več delcev naenkrat, delte računamo vzporedno",
         },
         "go": {
-            "seq": "Zaporedni program",
-            "par": "Paralelni program",
+            "sgl_seq": "Zaporedni program",
+            "sgl_par": "Paralelni program",
         },
         "julia": {
             "seq": "Zaporedni program",

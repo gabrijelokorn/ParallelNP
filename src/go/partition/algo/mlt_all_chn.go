@@ -18,7 +18,7 @@ func Mlt_all_chn(arr [][]int) []int32 {
 
 			for task := range partitionsChannel {
 				result[task.Index] = 0
-				if partition.SolvePartition(task.Array) {
+				if partition.SolvePartitionSeq(task.Array) {
 					result[task.Index] = 1
 				}
 			}

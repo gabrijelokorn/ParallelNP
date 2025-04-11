@@ -1,24 +1,16 @@
 package parallelNP
 
 import (
+	"fmt"
 	"os"
 	"time"
-	"fmt"
 )
 
-func WriteTime(t time.Duration, timeFile string) {
-	file, err := os.Create(timeFile)
-	if err != nil {
-		IOError("write.go", "Error creating the file", err)
-		return
-	}
-	defer file.Close()
-
+func WriteTime(fp *os.File, t time.Duration) {
 	// Convert the duration to seconds
 	seconds := t.Seconds()
 
-	// Write the duration in seconds to the file
-	_, err = file.WriteString(fmt.Sprintf("%.9f\n", seconds))
+	_, err := fmt.Fprintf(fp, "%.9f\n", seconds)
 	if err != nil {
 		IOError("write.go", "Error writing to the file", err)
 	}

@@ -17,7 +17,7 @@ func Mlt_all(arr [][]int) []int32 {
 		go func(i int) {
 			defer wg.Done()
 
-			if partition.SolvePartition(arr[i]) {
+			if partition.SolvePartitionSeq(arr[i]) {
 				result[i] = 1
 			}
 		}(i)

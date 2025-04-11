@@ -2,36 +2,54 @@ package algo
 
 import (
 	parallelNP "golang/common"
+	"os"
 	"time"
 )
 
-func rewindVertices(kk *KamadaKawai, result [][]Coord) {
-	for i := 0; i < kk.N; i++ {
-		kk.Coords[i].X = result[0][i].X
-		kk.Coords[i].Y = result[0][i].Y
+func output_algo(kk *KamadaKawai, elapsed time.Duration, original []Coord, name string, test_id string) {
+	// --- WRITE RESULTS TO FILE --- //
+	algoresult := parallelNP.GenerateFilename(name, test_id, "csv")
+	algoresult_fp, err := os.Create(algoresult)
+	if err != nil {
+		panic(err)
 	}
-}
+	WriteState(algoresult_fp, original)
+	WriteState(algoresult_fp, kk.Coords)
+	defer algoresult_fp.Close()
+	if err != nil {
+		parallelNP.IOError("main.go", "Error closing the file", err)
+	}
 
-func run_with_timeout(kk *KamadaKawai, algoFunc(func() [][]Coord), verbose bool, name string, num string) {
-	start := time.Now()
-	result := algoFunc()
-	elapsed := time.Since(start)
-	
-	rewindVertices(kk, result)
-	
-	if !verbose {
+	// --- WRITE TIME TO FILE --- //
+	algotime := parallelNP.GenerateFilename(name, test_id, "txt")
+	algotime_fp, err := os.Create(algotime)
+	if err != nil {
+		parallelNP.IOError("main.go", "Error creating the file", err)
 		return
 	}
-	algoresult := parallelNP.GenerateFilename(name, num, "csv")
-	WriteVertices(result, algoresult)
-	
-	algotime := parallelNP.GenerateFilename(name, num, "txt")
-	parallelNP.WriteTime(elapsed, algotime)
+	defer algotime_fp.Close()
+	parallelNP.WriteTime(algotime_fp, elapsed)
 }
 
-func (kk *KamadaKawai) Algo(num string, verbose bool) error {
-	run_with_timeout(kk, kk.Seq, verbose, "seq", num)
-	run_with_timeout(kk, kk.Par, verbose, "par", num)
-	return nil 
+func run_algo(kk *KamadaKawai, algoFunc func(), name string, test_id string) {
+	// --- SETUP --- //
+	original := kk.set_original_coords()
+
+	// --- EXECUTION --- //
+	start := time.Now()
+	algoFunc()
+	elapsed := time.Since(start)
+
+	// --- OUTPUT --- //
+	output_algo(kk, elapsed, original, name, test_id)
+
+	// --- RESET DATA --- //
+	kk.get_original_coords(original)
 }
-	
+
+func (kk *KamadaKawai) Algo(test_id string) error {
+	run_algo(kk, kk.Sgl_seq, "sgl_seq", test_id)
+	run_algo(kk, kk.Sgl_par, "sgl_par", test_id)
+
+	return nil
+}
