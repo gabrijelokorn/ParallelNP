@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func output_algo(kk *KamadaKawai, elapsed time.Duration, original []Coord, name string, test_id string) {
+func output_algo(kk *KamadaKawai, original []Coord, elapsed time.Duration, name string, test_id string) {
 	// --- WRITE RESULTS TO FILE --- //
 	algoresult := parallelNP.GenerateFilename(name, test_id, "csv")
 	algoresult_fp, err := os.Create(algoresult)
@@ -41,7 +41,7 @@ func run_algo(kk *KamadaKawai, algoFunc func(), name string, test_id string) {
 	elapsed := time.Since(start)
 
 	// --- OUTPUT --- //
-	output_algo(kk, elapsed, original, name, test_id)
+	output_algo(kk, original, elapsed, name, test_id)
 
 	// --- RESET DATA --- //
 	kk.get_original_coords(original)

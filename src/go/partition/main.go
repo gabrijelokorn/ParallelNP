@@ -14,11 +14,11 @@ func main() {
 	x := flag.String("x", "unknonw_testcase", "Test case id")
 	flag.Parse()
 
-	test_name := *t
+	test_path := *t
 	test_id := *x
 
 	// Read the file
-	data, err := ioutil.ReadFile(test_name)
+	data, err := ioutil.ReadFile(test_path)
 	if err != nil {
 		parallelNP.IOError("main.go", "Error reading the file", err)
 	}

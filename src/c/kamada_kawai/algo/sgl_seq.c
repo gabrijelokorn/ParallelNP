@@ -9,6 +9,7 @@ void sgl_seq(KamadaKawai *kk)
     while (delta_max_index != -1)
     {
         int steps = kk->limit;
+        
         while (kk->deltas[delta_max_index] > kk->epsilon)
         {
             double d_x_m = 0, d_y_m = 0, d_xx_m = 0, d_yy_m = 0, d_xy_m = 0;

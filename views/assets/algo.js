@@ -32,8 +32,8 @@ const algoDetail = {
             "sgl_par": "Paralelni program",
         },
         "julia": {
-            "seq": "Zaporedni program",
-            "par": "Paralelni program",
+            "sgl_seq": "Zaporedni program",
+            "sgl_par": "Paralelni program",
         },
     },
 }

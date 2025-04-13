@@ -7,7 +7,7 @@
 #include "../kamada_kawai.h"
 #include "algo.h"
 
-void output_algo(KamadaKawai *kk, double elapsed, Coord *original, char *name, char *test_id)
+void output_algo(KamadaKawai *kk, Coord *original, double elapsed, char *name, char *test_id)
 {
     // --- WRITE RESULTS TO FILE --- //
     char *algoresult = generateFilename(name, test_id, "csv");
@@ -24,6 +24,7 @@ void output_algo(KamadaKawai *kk, double elapsed, Coord *original, char *name, c
 
 void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *test_id)
 {
+    // --- SETUP --- //
     Coord *original = malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, original, kk->n); // Copy the original data
 
@@ -32,7 +33,7 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *te
     func(kk);                       // Run the algorithm
     double end = omp_get_wtime();   // End algoritYYYm time
 
-    output_algo(kk, end - start, original, name, test_id); // Write results to file
+    output_algo(kk, original, end - start, name, test_id); // Write results to file
 
     // --- RESET DATA --- //
     copyCoords(original, kk->coords, kk->n); // Copy the original data back

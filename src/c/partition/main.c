@@ -24,7 +24,7 @@
 
 int main(int argc, char *argv[])
 {
-    char *test_name;
+    char *test_path;
     char *test_id;
     bool help = false;
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         switch (opt)
         {
         case 't':
-            test_name = optarg;
+            test_path = optarg;
             break;
         case 'x':
             test_id = optarg;
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
         error_args(argv[0]);
 
     // Read the input file
-    FILE *testF = openFile(test_name, "r");
+    FILE *testF = openFile(test_path, "r");
     char *buffer = readFile(testF);
     fclose(testF);
 

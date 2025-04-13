@@ -1,9 +1,9 @@
 module Algo
 
-include("./seq.jl")
-using .Seq
-include("./par.jl")
-using .Par
+include("./sgl_seq.jl")
+using .Sgl_seq
+include("./sgl_par.jl")
+using .Sgl_par
 
 using ..Kamada_Kawai2csv
 using ..Kamada_Kawai
@@ -15,37 +15,36 @@ using .File
 
 export algo
 
-function rewindVertices(kk:: KamadaKawai, vertices::Vector{Coord})
-    for i in 1:length(vertices)
-        kk.coords[i].x = vertices[i].x
-        kk.coords[i].y = vertices[i].y
-    end
-end # rewindVertices
-
-function run_with_timeout(kk::KamadaKawai, f::Function, verbose::Bool, name::String, num::String)
-    start = Base.time_ns()
-    result = f(kk)
-    elapsed = (Base.time_ns() - start) / 1e9
-    
-    if !verbose
-        return
-    end
-
-    algoresult = generateFilename(name, num, "csv")
-    writeVertices(result, algoresult)
-
-    algotime = generateFilename(name, num, "txt")
+function output_algo(kk::KamadaKawai, original::Vector{Coord}, elapsed, name::String, test_id::String)
+    # --- WRITE RESULTS TO FILE --- #
+    algoresult = generateFilename(name, test_id, "csv")
+    algoresult_fp = open(algoresult, "w")
+    writeState(algoresult_fp, original)
+    writeState(algoresult_fp, kk.coords)
+    close(algoresult_fp)
+    # --- WRITE TIME TO FILE --- #
+    algotime = generateFilename(name, test_id, "txt")
     writeTime(algotime, elapsed)
 end
 
-function algo(kk::KamadaKawai, verbose::Bool, num::String)
-    original = deepcopy(kk.coords)
-    
-    run_with_timeout(kk, Seq.seq, verbose, "seq", num)
-    rewindVertices(kk, original)
+function run_algo(kk::KamadaKawai, f::Function, name::String, test_id::String)
+    # --- SETUP --- #
+    original = set_original_coords(kk)
 
-    run_with_timeout(kk, Par.par, verbose, "par", num)
-    rewindVertices(kk, original)
+    # --- EXECTUTION --- #
+    start = Base.time_ns()
+    f(kk)
+    elapsed = (Base.time_ns() - start) / 1e9
+    
+    output_algo(kk, original, elapsed, name, test_id)
+
+    # --- RESET DATA --- #
+    get_original_coords(kk, original)
+end
+
+function algo(kk::KamadaKawai, test_id::String)
+    run_algo(kk, Sgl_seq.sgl_seq, "sgl_seq", test_id)
+    # run_algo(kk, Sgl_par.sgl_par, "sgl_par", test_id)
 end # algo
 
 end # module

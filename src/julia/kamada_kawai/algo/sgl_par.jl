@@ -1,5 +1,5 @@
-module Par
-export par
+module Sgl_par
+export sgl_par
 
 using ...Kamada_Kawai
 
@@ -80,7 +80,7 @@ function compute_derivatives_par(kk, max_delta_m_par_index)
 end
 
 
-function par(kk::KamadaKawai)
+function sgl_par(kk::KamadaKawai)
     states = Vector{Vector{Coord}}()
     # copy the coordinates into the first element of states
     push!(states, deepcopy(kk.coords))

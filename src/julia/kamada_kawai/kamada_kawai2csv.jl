@@ -2,21 +2,15 @@ module Kamada_Kawai2csv
 
 using ..Kamada_Kawai
 
-export writeVertices
-function writeVertices(vertices::Vector{Vector{Coord}}, resultFile::String)
-    file = open(resultFile, "w")
-
-    for i in 1:length(vertices)
-        for j in 1:length(vertices[i])
-            write(file, string(vertices[i][j].x))
-            write(file, ",")
-            write(file, string(vertices[i][j].y))
-            write(file, "\n")
-        end
-        write(file, "\n")
+export writeState
+function writeState(fp::IOStream, state::Vector{Coord})
+    for i in 1:length(state)
+        write(fp, string(state[i].x))
+        write(fp, ",")
+        write(fp, string(state[i].y))
+        write(fp, "\n")
     end
-
-    close(file)
-end # writeVertices
+    write(fp, "\n")
+end # writeState
 
 end # module
