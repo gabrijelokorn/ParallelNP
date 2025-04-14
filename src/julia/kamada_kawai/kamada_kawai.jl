@@ -177,8 +177,25 @@ function get_delta_m!(kk::KamadaKawai, index::Int)
 	return sqrt(get_derivative_x!(kk, index)^2 + get_derivative_y!(kk, index)^2)
 end
 
-export get_deltas_seq!
+export get_deltas_seq!, get_deltas_par!
 function get_deltas_seq!(kk::KamadaKawai)
+	delta_index = -1
+	max_delta = 0.0
+
+	for i in 1:kk.n
+		kk.deltas[i] = get_delta_m!(kk, i)
+
+		if kk.deltas[i] > kk.epsilon
+			if kk.deltas[i] > max_delta
+				max_delta = kk.deltas[i]
+				delta_index = i
+			end
+		end
+	end
+
+	return delta_index
+end
+function get_deltas_par!(kk::KamadaKawai)
 	delta_index = -1
 	max_delta = 0.0
 
@@ -236,7 +253,7 @@ function update_delta_m!(kk::KamadaKawai, m::Int, index::Int)
 	return sqrt(kk.dx[index]^2 + kk.dy[index]^2)
 end
 
-export update_deltas_seq!
+export update_deltas_seq!, update_deltas_par!
 function update_deltas_seq!(kk::KamadaKawai, m::Int)
 	delta_index = -1
 	max_delta = 0.0
@@ -256,9 +273,70 @@ function update_deltas_seq!(kk::KamadaKawai, m::Int)
 
 	return delta_index
 end
+function update_deltas_par!(kk::KamadaKawai, m::Int)
+	delta_index = -1
+	max_delta = 0.0
 
-export get_derivatives_seq!
+	for i in 1:kk.n
+		if m == i
+			continue
+		end
+
+		kk.deltas[i] = update_delta_m!(kk, m, i)
+
+		if kk.deltas[i] > kk.epsilon && kk.deltas[i] > max_delta
+			max_delta = kk.deltas[i]
+			delta_index = i
+		end
+	end
+
+	return delta_index
+end
+
+export get_derivatives_seq!, get_derivatives_par!
 function get_derivatives_seq!(kk::KamadaKawai, index::Int)
+	d_m_x = d_m_y = d_m_xx = d_m_yy = d_m_xy = 0.0
+
+	for i in 1:kk.n
+		if i == index
+			continue
+		end
+
+		dist_x = kk.coords[index].x - kk.coords[i].x
+		dist_y = kk.coords[index].y - kk.coords[i].y
+
+		x2 = dist_x^2
+		y2 = dist_y^2
+		x2_y2 = x2 + y2
+		x2_y2_1_2 = sqrt(x2_y2)
+		x2_y2_3_2 = x2_y2^(3/2)
+
+		addx  = kk.k_ij[index,i] * (dist_x - ((kk.l_ij[index,i] * dist_x) / x2_y2_1_2));
+		addy  = kk.k_ij[index,i] * (dist_y - ((kk.l_ij[index,i] * dist_y) / x2_y2_1_2));
+		addxx = kk.k_ij[index,i] * (1 - ((kk.l_ij[index,i] * y2) / x2_y2_3_2));
+		addyy = kk.k_ij[index,i] * (1 - ((kk.l_ij[index,i] * x2) / x2_y2_3_2));
+		addxy = kk.k_ij[index,i] * ((kk.l_ij[index,i] * dist_x * dist_y) / x2_y2_3_2);
+
+		if !isnan(addx)
+			d_m_x += addx
+		end
+		if !isnan(addy)
+			d_m_y += addy
+		end
+		if !isnan(addxx)
+			d_m_xx += addxx
+		end
+		if !isnan(addyy)
+			d_m_yy += addyy
+		end
+		if !isnan(addxy)
+			d_m_xy += addxy
+		end
+	end
+
+	return d_m_x, d_m_y, d_m_xx, d_m_yy, d_m_xy
+end
+function get_derivatives_par!(kk::KamadaKawai, index::Int)
 	d_m_x = d_m_y = d_m_xx = d_m_yy = d_m_xy = 0.0
 
 	for i in 1:kk.n

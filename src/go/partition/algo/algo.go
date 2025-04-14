@@ -44,5 +44,6 @@ func Algo(arr [][]int, test_id string) {
 	run_algo(arr, Mlt_dyn_chn, "mlt_dyn_chn", test_id)
 	run_algo(arr, Mlt_all_chn, "mlt_all_chn", test_id)
 	run_algo(arr, Mlt_all, "mlt_all", test_id)
-	// run_algo(arr, Sgl_all_chn, "sgl_all_chn", test_id)
+	run_algo(arr, Sgl_all_chn, "sgl_all_chn", test_id)
+	run_algo(arr, Nested, "nested", test_id)
 }

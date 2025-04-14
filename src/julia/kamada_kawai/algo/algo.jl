@@ -44,7 +44,7 @@ end
 
 function algo(kk::KamadaKawai, test_id::String)
     run_algo(kk, Sgl_seq.sgl_seq, "sgl_seq", test_id)
-    # run_algo(kk, Sgl_par.sgl_par, "sgl_par", test_id)
+    run_algo(kk, Sgl_par.sgl_par, "sgl_par", test_id)
 end # algo
 
 end # module

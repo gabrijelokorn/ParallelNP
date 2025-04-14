@@ -14,6 +14,7 @@ const algoDetail = {
             "mlt_dyn_chn": "Dinamično porazdeljevanje dela med goroutine - z uporabo kanalov. Goroutine-i so sinhronizirani z uporabo kanalov",
             "mlt_all": "Vsak partition problem je dinamično dodeljen svoji goroutine-i.",
             "sgl_all_chn": "Rešuje se en partition problem naenkrat, pri čemer se podmnožice rešujejo vzporedno z uporabo kanalov",
+            "nested": "Vsakemu partition problemu pripada ena goroutina, ki ga kasneje rešuje hkrati več goroutin"
         },
         "julia": {
             "seq": "Zaporedni program",

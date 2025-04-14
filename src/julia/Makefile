@@ -17,11 +17,11 @@ run:
 	@echo -e "##########################################\n\n\n"
 
 julia_partition:
-	@echo -e "       |\n       |-> Compiling & Running $(WD)"
+	@echo -e "       |\n       |-> Running $(WD)"
 	$(MAKE) -C partition run
 
 julia_kamada_kawai:
-	@echo -e "       |\n       |-> Compiling & Running $(WD)"
+	@echo -e "       |\n       |-> Running $(WD)"
 	$(MAKE) -C kamada_kawai run
 
 clean:

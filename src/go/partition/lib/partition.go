@@ -1,8 +1,6 @@
 package partition
 
 import (
-	"context"
-	"fmt"
 	"runtime"
 	"sync"
 )
@@ -39,65 +37,55 @@ func SolvePartitionSeq(problem []int) bool {
 }
 
 func SolvePartitionPar(problem []int) bool {
-	numOfCombinations := int64(1 << (len(problem) - 1))
-	allNumbersMask := int64((1 << len(problem)) - 1)
+	numOfCombinations := int64(1) << (len(problem) - 1)
+	allNumbersMask := (int64(1) << len(problem)) - 1
 
 	problemSum := Partition_sum(problem, len(problem), allNumbersMask)
 	if problemSum%2 != 0 {
 		return false
 	}
-	halfProblemSum := problemSum / 2
+	halfSum := problemSum / 2
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	nThreads := runtime.GOMAXPROCS(0)
+	chunkSize := numOfCombinations / int64(nThreads)
 
-	found := make(chan bool, 1) // Buffered channel to prevent blocking
+	done := make(chan struct{}) // signal for all goroutines
 	var wg sync.WaitGroup
+	found := make(chan bool, 1) // buffer size 1 to avoid blocking
 
-	// Limit the number of workers to the number of CPU cores
-	numWorkers := runtime.NumCPU()
-	work := make(chan int64, numWorkers)
+	for w := 0; w < nThreads; w++ {
+		start := int64(w) * chunkSize
+		end := start + chunkSize
+		if w == nThreads-1 {
+			end = numOfCombinations
+		}
 
-	// Worker function
-	worker := func() {
-		defer wg.Done()
-		for mask := range work {
-			if Partition_sum(problem, len(problem), mask) == halfProblemSum {
+		wg.Add(1)
+		go func(start, end int64) {
+			defer wg.Done()
+			for j := start; j < end; j++ {
 				select {
-				case found <- true:
-					fmt.Println("found")
-					cancel() // Stop other workers
+				case <-done:
+					return // someone found the solution, exit
 				default:
+					if Partition_sum(problem, len(problem), j) == halfSum {
+						select {
+						case found <- true:
+							close(done) // signal others to stop
+						default:
+						}
+						return
+					}
 				}
 			}
-		}
+		}(start, end)
 	}
 
-	// Start worker goroutines
-	for i := 0; i < numWorkers; i++ {
-		wg.Add(1)
-		go worker()
+	wg.Wait()
+	select {
+	case <-found:
+		return true
+	default:
+		return false
 	}
-
-	// Send tasks to workers
-	go func() {
-		for j := int64(0); j < numOfCombinations; j++ {
-			select {
-			case <-ctx.Done():
-				fmt.Println("cancel")
-				close(work)
-				return
-			default:
-				work <- j
-			}
-		}
-	}()
-
-	// Wait for workers to finish
-	go func() {
-		wg.Wait()
-		close(found)
-	}()
-
-	return <-found
 }
