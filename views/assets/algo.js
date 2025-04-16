@@ -20,7 +20,7 @@ const algoDetail = {
             "seq": "Zaporedni program",
             "mlt_stc": "Več partition problemov se rešuje vzporedno (statična porazdelitev med threade), pri čemer se vsak problem rešuje zaporedno",
             "mlt_dyn": "Več partition problemov se rešuje vzporedno (dinamična porazdelitev med threade), pri čemer se vsak problem rešuje zaporedno",
-            "sgl_dyn": "Vsak partition problem se rešuje zaporedno, pri čemer se vsak problem rešuje vzporedno (z nastavitvijo static)",
+            "sgl_stc": "Vsak partition problem se rešuje zaporedno, pri čemer se vsak problem rešuje vzporedno (z nastavitvijo static)",
             "sgl_dyn": "Vsak partition problem se rešuje zaporedno, pri čemer se vsak problem rešuje vzporedno (z nastavitvijo dynamic)"
         },
     },
