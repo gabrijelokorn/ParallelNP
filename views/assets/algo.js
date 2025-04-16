@@ -18,10 +18,10 @@ const algoDetail = {
         },
         "julia": {
             "seq": "Zaporedni program",
-            "mlt_sgl": "Več partition problemov se rešuje vzporedno (statična porazdelitev med threade), pri čemer se vsak problem rešuje zaporedno",
+            "mlt_stc": "Več partition problemov se rešuje vzporedno (statična porazdelitev med threade), pri čemer se vsak problem rešuje zaporedno",
             "mlt_dyn": "Več partition problemov se rešuje vzporedno (dinamična porazdelitev med threade), pri čemer se vsak problem rešuje zaporedno",
-            "sng_dyn": "Vsak partition problem se rešuje zaporedno, pri čemer se vsak problem rešuje vzporedno (z nastavitvijo static)",
-            "sng_dyn": "Vsak partition problem se rešuje zaporedno, pri čemer se vsak problem rešuje vzporedno (z nastavitvijo dynamic)"
+            "sgl_dyn": "Vsak partition problem se rešuje zaporedno, pri čemer se vsak problem rešuje vzporedno (z nastavitvijo static)",
+            "sgl_dyn": "Vsak partition problem se rešuje zaporedno, pri čemer se vsak problem rešuje vzporedno (z nastavitvijo dynamic)"
         },
     },
     "kamada_kawai": {
