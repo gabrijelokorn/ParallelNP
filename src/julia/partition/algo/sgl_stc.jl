@@ -1,13 +1,13 @@
-module Par
+module Sgl_stc
 
 include("../partition.jl")
 using .Partition
+using Base.Threads
 
-function par(arr::Vector{Vector{Int64}})
-    # an array of bools
+function sgl_stc(arr::Vector{Vector{Int64}})
     result = Vector{Bool}(undef, length(arr))
 
-    Threads.@threads for i in 1:length(arr)
+    for i in 1:length(arr)
         result[i] = false
         size = length(arr[i])
 
@@ -18,15 +18,24 @@ function par(arr::Vector{Vector{Int64}})
         if problem_sum % 2 != 0
             continue
         end
-        half_problem_sum = problem_sum / 2
+        half_problem_sum = problem_sum ÷ 2
 
-        for j in 1:numOfCombinations
+        # Shared atomic flag
+        found = Threads.Atomic{Bool}(false)
+
+        Threads.@threads for j in 1:numOfCombinations
+            # Early exit if already found
+            if found[]
+                continue
+            end
+
             sum = partition_sum(arr[i], size, j)
             if sum == half_problem_sum
-                result[i] = true
-                break
+                found[] = true
             end
         end
+
+        result[i] = found[]
     end
 
     return result

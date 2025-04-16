@@ -72,8 +72,8 @@ a {
 .algo-detail-cell {
     text-align: left;
     padding: 0.25rem;
-    min-width: 15rem;
-    max-width: 15rem;
+    min-width: 20rem;
+    max-width: 25rem;
     border: solid white 0.1rem;
 }
 
