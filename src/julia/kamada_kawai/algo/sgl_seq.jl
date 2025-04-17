@@ -20,6 +20,7 @@ function sgl_seq(kk::KamadaKawai)
 
 			kk.deltas[delta_max_index] = get_delta_m!(kk, delta_max_index)
 
+			steps -= 1
 			if steps <= 0
 				break
 			end

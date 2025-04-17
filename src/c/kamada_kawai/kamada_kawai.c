@@ -175,13 +175,10 @@ int update_deltas_seq(KamadaKawai *kk, int m)
 
         kk->deltas[i] = update_delta_m(kk, m, i);
 
-        if (kk->deltas[i] > kk->epsilon)
+        if (kk->deltas[i] > kk->epsilon && kk->deltas[i] > max_delta)
         {
-            if (kk->deltas[i] > max_delta)
-            {
-                max_delta = kk->deltas[i];
-                delta_index = i;
-            }
+            max_delta = kk->deltas[i];
+            delta_index = i;
         }
     }
 

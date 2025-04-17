@@ -4,6 +4,10 @@ include("./sgl_seq.jl")
 using .Sgl_seq
 include("./sgl_par.jl")
 using .Sgl_par
+include("./mlt_seq.jl")
+using .Mlt_seq
+include("./mlt_par.jl")
+using .Mlt_par
 
 using ..Kamada_Kawai2csv
 using ..Kamada_Kawai
@@ -12,6 +16,8 @@ include("../../common/write.jl")
 using .Write
 include("../../common/file.jl")
 using .File
+
+using BenchmarkTools
 
 export algo
 
@@ -45,6 +51,9 @@ end
 function algo(kk::KamadaKawai, test_id::String)
     run_algo(kk, Sgl_seq.sgl_seq, "sgl_seq", test_id)
     run_algo(kk, Sgl_par.sgl_par, "sgl_par", test_id)
+    run_algo(kk, Mlt_seq.mlt_seq, "mlt_seq", test_id)
+    run_algo(kk, Mlt_par.mlt_par, "mlt_par", test_id)
+    
 end # algo
 
 end # module

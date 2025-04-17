@@ -22,10 +22,10 @@ func (kk *KamadaKawai) Sgl_par() {
 
 			kk.Deltas[delta_max_index] = kk.get_delta_m(delta_max_index)
 
+			steps--
 			if steps <= 0 {
 				break
 			}
-			steps--
 		}
 		var temp int64 = kk.update_deltas_seq(delta_max_index)
 		if temp == delta_max_index {
