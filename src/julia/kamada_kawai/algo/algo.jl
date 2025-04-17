@@ -17,8 +17,6 @@ using .Write
 include("../../common/file.jl")
 using .File
 
-using BenchmarkTools
-
 export algo
 
 function output_algo(kk::KamadaKawai, original::Vector{Coord}, elapsed, name::String, test_id::String)
