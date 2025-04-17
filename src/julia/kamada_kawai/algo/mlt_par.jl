@@ -4,8 +4,6 @@ export mlt_par
 using ...Kamada_Kawai
 
 function mlt_par(kk::KamadaKawai)
-	delta_max_index = get_deltas_par!(kk);
-
 	steps = kk.limit
 
 	while true

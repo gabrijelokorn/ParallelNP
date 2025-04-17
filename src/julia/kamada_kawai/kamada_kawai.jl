@@ -1,5 +1,6 @@
 module Kamada_Kawai
 
+using Base.Threads
 export Coord, Edge, KamadaKawai
 
 mutable struct Coord
@@ -184,7 +185,7 @@ function get_deltas_seq!(kk::KamadaKawai)
 
 	for i in 1:kk.n
 		kk.deltas[i] = get_delta_m!(kk, i)
-
+		
 		if kk.deltas[i] > kk.epsilon
 			if kk.deltas[i] > max_delta
 				max_delta = kk.deltas[i]
@@ -192,18 +193,17 @@ function get_deltas_seq!(kk::KamadaKawai)
 			end
 		end
 	end
-
+	
 	return delta_index
 end
 function get_deltas_par!(kk::KamadaKawai)
-    # Parallel computation of deltas
-    Threads.@threads for i in 1:kk.n
-        kk.deltas[i] = get_delta_m!(kk, i)
-    end
+	delta_index = -1
+	max_delta = 0.0
+		
+	Threads.@threads :static for i in 1:kk.n
+		kk.deltas[i] = get_delta_m!(kk, i) 
+	end
 
-    # Find max delta and index (single-threaded)
-    delta_index = -1
-    max_delta = 0.0
     for i in 1:kk.n
         if kk.deltas[i] > kk.epsilon && kk.deltas[i] > max_delta
             max_delta = kk.deltas[i]
@@ -276,38 +276,25 @@ function update_deltas_seq!(kk::KamadaKawai, m::Int)
 	return delta_index
 end
 function update_deltas_par!(kk::KamadaKawai, m::Int)
-    n = kk.n
-    nthreads = Threads.nthreads()
-    
-    # Thread-local storage for max delta tracking
-    max_deltas = fill((0.0, -1), nthreads)
-    
-    Threads.@threads for i in 1:n
-        if i != m
-            delta = update_delta_m!(kk, m, i)
-            kk.deltas[i] = delta
-            
-            # Track thread-local max
-            tid = Threads.threadid()
-            if delta > kk.epsilon && delta > max_deltas[tid][1]
-                max_deltas[tid] = (delta, i)
-            end
-        end
-    end
-    
-    # Find global max (parallel reduction)
-    max_delta = 0.0
     delta_index = -1
-    for (d, idx) in max_deltas
-        if d > max_delta
-            max_delta = d
-            delta_index = idx
-        end
-    end
-    
-    return delta_index
-end
+	max_delta = 0.0
 
+	Threads.@threads :static for i in 1:kk.n
+		if m == i
+			continue
+		end
+		kk.deltas[i] = update_delta_m!(kk, m, i)
+	end
+
+	for i in 1:kk.n
+		if kk.deltas[i] > kk.epsilon && kk.deltas[i] > max_delta
+			max_delta = kk.deltas[i]
+			delta_index = i
+		end
+	end
+
+	return delta_index
+end
 
 export get_derivatives_seq!, get_derivatives_par!
 function get_derivatives_seq!(kk::KamadaKawai, index::Int)
@@ -352,66 +339,50 @@ function get_derivatives_seq!(kk::KamadaKawai, index::Int)
 
 	return d_m_x, d_m_y, d_m_xx, d_m_yy, d_m_xy
 end
-struct ThreadAccums
-	x::Float64
-	y::Float64
-	xx::Float64
-	yy::Float64
-	xy::Float64
-end
-function get_derivatives_par!(kk::KamadaKawai, index::Int)
-    # Use a struct to avoid false sharing
-
-    nthreads = Threads.nthreads()
-    accumulators = [ThreadAccums(0.0, 0.0, 0.0, 0.0, 0.0) for _ in 1:nthreads]
-
-    Threads.@threads :static for i in 1:kk.n
+function get_derivative_par(kk::KamadaKawai, index::Int, chunk_range, indexx, indexy)
+    x = y = xx = yy = xy = 0.0
+    
+    for i in chunk_range
         i == index && continue
         
-        tid = Threads.threadid()
-        acc = accumulators[tid]
-        
-        dist_x = kk.coords[index].x - kk.coords[i].x
-        dist_y = kk.coords[index].y - kk.coords[i].y
-
+        dist_x = indexx - kk.coords[i].x
+        dist_y = indexy - kk.coords[i].y
         x2 = dist_x^2
         y2 = dist_y^2
-        x2_y2 = x2 + y2
-        x2_y2_1_2 = sqrt(x2_y2)
-        x2_y2_3_2 = x2_y2 * x2_y2_1_2  # More efficient than ^1.5
-
+        dist = sqrt(x2 + y2)
+        inv_dist = kk.l_ij[index, i] / dist
+        inv_dist3 = inv_dist / (x2 + y2)
         kij = kk.k_ij[index, i]
-        lij = kk.l_ij[index, i]
 
-        inv_dist = lij / x2_y2_1_2
-        inv_dist3 = lij / x2_y2_3_2
-
-        # Calculate all terms
-        addx = kij * (dist_x - dist_x * inv_dist)
-        addy = kij * (dist_y - dist_y * inv_dist)
-        addxx = kij * (1.0 - y2 * inv_dist3)
-        addyy = kij * (1.0 - x2 * inv_dist3)
-        addxy = kij * (dist_x * dist_y * inv_dist3)
-
-        # Accumulate (NaN checks are expensive, only use if absolutely necessary)
-        acc = ThreadAccums(
-            acc.x + ifelse(isnan(addx), 0.0, addx),
-            acc.y + ifelse(isnan(addy), 0.0, addy),
-            acc.xx + ifelse(isnan(addxx), 0.0, addxx),
-            acc.yy + ifelse(isnan(addyy), 0.0, addyy),
-            acc.xy + ifelse(isnan(addxy), 0.0, addxy)
-        )
-        accumulators[tid] = acc
+        x += kij * (dist_x - dist_x * inv_dist)
+        y += kij * (dist_y - dist_y * inv_dist)
+        xx += kij * (1.0 - y2 * inv_dist3)
+        yy += kij * (1.0 - x2 * inv_dist3)
+        xy += kij * (dist_x * dist_y * inv_dist3)
     end
+    
+    return (x, y, xx, yy, xy)
+end
 
-    # Reduction
-    return (
-        sum(a.x for a in accumulators),
-        sum(a.y for a in accumulators),
-        sum(a.xx for a in accumulators),
-        sum(a.yy for a in accumulators),
-        sum(a.xy for a in accumulators)
-    )
+function get_derivatives_par!(kk::KamadaKawai, index::Int)
+    nthreads = Threads.nthreads()
+    chunk_size = ceil(Int, kk.n / nthreads)
+    
+    ranges = [i:min(i+chunk_size-1, kk.n) for i in 1:chunk_size:kk.n]
+    
+    tasks = [Threads.@spawn get_derivative_par(kk, index, r, kk.coords[index].x, kk.coords[index].y) for r in ranges]
+    
+    x = y = xx = yy = xy = 0.0
+    for t in tasks
+        dx, dy, dxx, dyy, dxy = fetch(t)
+        x += dx
+        y += dy
+        xx += dxx
+        yy += dyy
+        xy += dxy
+    end
+    
+    return (x, y, xx, yy, xy)
 end
 
 end #module

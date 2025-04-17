@@ -19,7 +19,7 @@ run:
 	export JULIA_NUM_THREADS=$(KamadaKawaiThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
-		julia main.jl -t $$case -x $$num; \
+		perf stat -e cache-misses,cache-references,LLC-load-misses,LLC-store-misses julia main.jl -t $$case -x $$num; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"

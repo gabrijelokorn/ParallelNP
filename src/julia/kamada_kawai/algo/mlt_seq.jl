@@ -4,8 +4,6 @@ export mlt_seq
 using ...Kamada_Kawai
 
 function mlt_seq(kk::KamadaKawai)
-	delta_max_index = get_deltas_seq!(kk);
-
 	steps = kk.limit
 
 	while true
