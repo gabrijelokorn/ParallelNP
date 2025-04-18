@@ -14,7 +14,7 @@ func (kk *KamadaKawai) Sgl_par() {
 				break
 			}
 
-			d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m := kk.get_derivatives_seq(delta_max_index)
+			d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m := kk.get_derivatives_par(delta_max_index)
 			var delta_y float64 = kk.get_delta_m_y(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m)
 			var delta_x float64 = kk.get_delta_m_x(d_y_m, d_yy_m, d_xy_m, delta_y)
 			kk.Coords[delta_max_index].X += delta_x

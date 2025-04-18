@@ -17,6 +17,7 @@ using .Write
 include("../../common/file.jl")
 using .File
 
+using BenchmarkTools
 export algo
 
 function output_algo(kk::KamadaKawai, original::Vector{Coord}, elapsed, name::String, test_id::String)
@@ -48,7 +49,6 @@ end
 
 function algo(kk::KamadaKawai, test_id::String)
     run_algo(kk, Sgl_seq.sgl_seq, "sgl_seq", test_id)
-    println()
     run_algo(kk, Sgl_par.sgl_par, "sgl_par", test_id)
     # run_algo(kk, Mlt_seq.mlt_seq, "mlt_seq", test_id)
     # run_algo(kk, Mlt_par.mlt_par, "mlt_par", test_id)
