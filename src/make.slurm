@@ -7,4 +7,4 @@
 #SBATCH --time=01:00:00  # Max runtime (1 hour)
 #SBATCH --partition=amd  # Use a valid CPU-only partition
 
-make -s clean kk check
+make -s clean pp check

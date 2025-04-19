@@ -39,6 +39,8 @@ type KamadaKawai struct {
 	Epsilon float64 `json:"epsilon"`
 	Display float64 `json:"display"`
 	Limit   int64   `json:"limit"`
+
+	mu sync.RWMutex
 }
 
 func (kk *KamadaKawai) Init() {
@@ -323,10 +325,9 @@ func (kk *KamadaKawai) get_derivatives_seq(m int64) (float64, float64, float64, 
 	return d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m
 }
 func (kk *KamadaKawai) get_derivatives_par(m int64) (float64, float64, float64, float64, float64) {
-	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
-
+	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m float64
 	var wg sync.WaitGroup
-	arr := make([][5]float64, kk.N)
+	var mu sync.Mutex
 
 	for i := 0; i < kk.N; i++ {
 		if i == int(m) {
@@ -334,53 +335,49 @@ func (kk *KamadaKawai) get_derivatives_par(m int64) (float64, float64, float64, 
 		}
 
 		wg.Add(1)
-		go func(m int64, i int) {
+		go func(i int) {
 			defer wg.Done()
 
-			var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
-			var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
+			kk.mu.RLock()
+			dist_x := kk.Coords[m].X - kk.Coords[i].X
+			dist_y := kk.Coords[m].Y - kk.Coords[i].Y
+			kk.mu.RUnlock() // <-- fix here
 
-			var x2 float64 = math.Pow(dist_x, 2)
-			var y2 float64 = math.Pow(dist_y, 2)
-			var x2_y2 float64 = x2 + y2
-			var x2_y2_1_2 float64 = math.Pow(x2_y2, float64(1)/float64(2))
-			var x2_y2_3_2 float64 = math.Pow(x2_y2, float64(3)/float64(2))
+			x2 := dist_x * dist_x
+			y2 := dist_y * dist_y
+			x2_y2 := x2 + y2
+			x2_y2_1_2 := math.Sqrt(x2_y2)
+			x2_y2_3_2 := math.Pow(x2_y2, 1.5)
 
-			var addx = kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / x2_y2_1_2))
-			var addy = kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / x2_y2_1_2))
-			var addxx = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * y2) / x2_y2_3_2))
-			var addyy = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * x2) / x2_y2_3_2))
-			var addxy = kk.K_ij[m][i] * ((kk.L_ij[m][i] * dist_x * dist_y) / x2_y2_3_2)
+			k := kk.K_ij[m][i]
+			l := kk.L_ij[m][i]
 
+			addx := k * (dist_x - ((l * dist_x) / x2_y2_1_2))
+			addy := k * (dist_y - ((l * dist_y) / x2_y2_1_2))
+			addxx := k * (1 - ((l * y2) / x2_y2_3_2))
+			addyy := k * (1 - ((l * x2) / x2_y2_3_2))
+			addxy := k * ((l * dist_x * dist_y) / x2_y2_3_2)
+
+			mu.Lock()
 			if !math.IsNaN(addx) {
-				arr[i][0] = addx
+				d_x_m += addx
 			}
 			if !math.IsNaN(addy) {
-				arr[i][1] = addy
+				d_y_m += addy
 			}
 			if !math.IsNaN(addxx) {
-				arr[i][2] = addxx
+				d_xx_m += addxx
 			}
 			if !math.IsNaN(addyy) {
-				arr[i][3] = addyy
+				d_yy_m += addyy
 			}
 			if !math.IsNaN(addxy) {
-				arr[i][4] = addxy
+				d_xy_m += addxy
 			}
-		}(m, i)
+			mu.Unlock()
+		}(i)
 	}
+
 	wg.Wait()
-
-	for i := 0; i < kk.N; i++ {
-		if i == int(m) {
-			continue
-		}
-		d_x_m += arr[i][0]
-		d_y_m += arr[i][1]
-		d_xx_m += arr[i][2]
-		d_yy_m += arr[i][3]
-		d_xy_m += arr[i][4]
-	}
-
 	return d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m
 }

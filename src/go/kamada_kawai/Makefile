@@ -30,7 +30,7 @@ $(TARGET): $(SOURCES)
 ### --- RUN --- ###
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
-	export GOMAXPROCS=$$KamadaKawaiThreads; \
+	export GOMAXPROCS=$(KamadaKawaiThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
 		num=$$(basename $$case .json); \
 		./$(TARGET) -t=$$case -x=$$num; \

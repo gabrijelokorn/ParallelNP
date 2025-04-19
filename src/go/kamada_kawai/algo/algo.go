@@ -50,6 +50,8 @@ func run_algo(kk *KamadaKawai, algoFunc func(), name string, test_id string) {
 func (kk *KamadaKawai) Algo(test_id string) error {
 	run_algo(kk, kk.Sgl_seq, "sgl_seq", test_id)
 	run_algo(kk, kk.Sgl_par, "sgl_par", test_id)
+	run_algo(kk, kk.Mlt_seq, "mlt_seq", test_id)
+	run_algo(kk, kk.Mlt_par, "mlt_par", test_id)
 
 	return nil
 }
