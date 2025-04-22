@@ -28,6 +28,5 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 ## Vprašanja
 Ne znam se odločiti, ali je bolje da pri Partition Problemu delam result boolean array skupen vsem algoritmom ali ga naredim znotraj vsakega algoritma posebej.\
 Ali lahko probleme za boljše rešitve objavim na Reddit?\
-Zakaj je julia mlt_dyn hitrejši od seq v primeru 02.json?\
 Pod katerimi pogoji je smiselno primerjati prostorsko zahtevnost?\
-Zakaj niti vzporedni programi niso konkurenčni?\
+Zakaj niti zaporedni programi niso konkurenčni? - kako je lahko golang tako (slab)?
