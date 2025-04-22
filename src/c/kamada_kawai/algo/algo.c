@@ -22,18 +22,24 @@ void output_algo(KamadaKawai *kk, Coord *original, double elapsed, char *name, c
     fclose(algotime_fp);
 }
 
-void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *test_id)
+void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *test_id, char *repetitions)
 {
     // --- SETUP --- //
     Coord *original = malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, original, kk->n); // Copy the original data
 
     // --- EXECTUTION --- //
-    double start = omp_get_wtime(); // Start algorithm time
-    func(kk);                       // Run the algorithm
-    double end = omp_get_wtime();   // End algoritYYYm time
+    double time = 0;
+    for (int i = 0; i < atoi(repetitions); i++)
+    {
+        double start = omp_get_wtime(); // Start algorithm time
+        func(kk);                       // Run the algorithm
+        double end = omp_get_wtime();   // End algoritYYYm time
+        time += end - start;
+    }
+    time = time / atoi(repetitions);
 
-    output_algo(kk, original, end - start, name, test_id); // Write results to file
+    output_algo(kk, original, time, name, test_id); // Write results to file
 
     // --- RESET DATA --- //
     copyCoords(original, kk->coords, kk->n); // Copy the original data back
@@ -42,12 +48,12 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *te
     return;
 }
 
-void algo(KamadaKawai *kk, char *test_id)
+void algo(KamadaKawai *kk, char *test_id, char *repetitions)
 {
-    run_algo(kk, sgl_seq, "sgl_seq", test_id);
-    run_algo(kk, sgl_par, "sgl_par", test_id);
-    run_algo(kk, mlt_seq, "mlt_seq", test_id);
-    run_algo(kk, mlt_par, "mlt_par", test_id);
+    run_algo(kk, sgl_seq, "sgl_seq", test_id, repetitions);
+    run_algo(kk, sgl_par, "sgl_par", test_id, repetitions);
+    // run_algo(kk, mlt_seq, "mlt_seq", test_id, repetitions);
+    // run_algo(kk, mlt_par, "mlt_par", test_id, repetitions);
 
     return;
 }

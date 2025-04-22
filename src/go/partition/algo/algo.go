@@ -41,9 +41,9 @@ func run_algo(arr [][]int, algoFunc func([][]int) []int32, name string, test_id 
 
 func Algo(arr [][]int, test_id string) {
 	run_algo(arr, Seq, "seq", test_id)
-	run_algo(arr, Mlt_dyn_chn, "mlt_dyn_chn", test_id)
-	run_algo(arr, Mlt_all_chn, "mlt_all_chn", test_id)
-	run_algo(arr, Mlt_all, "mlt_all", test_id)
 	run_algo(arr, Sgl_dyn, "sgl_dyn", test_id)
-	run_algo(arr, Nested, "nested", test_id)
+	// run_algo(arr, Nested, "nested", test_id)
+	// run_algo(arr, Mlt_dyn_chn, "mlt_dyn_chn", test_id)
+	// run_algo(arr, Mlt_all_chn, "mlt_all_chn", test_id)
+	// run_algo(arr, Mlt_all, "mlt_all", test_id)
 }

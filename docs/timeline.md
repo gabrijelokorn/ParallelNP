@@ -122,3 +122,8 @@ Plan:
 - 4.) Analiza primerov: koliko delcev na nit (približno 100? zaenkrat)
 - 5.) Kreiranje primernih testnih primerov
 - 6.) Zagon testov na superračunalniku
+
+22.04.2025; 09:00
+---
+Probleme morma zasnovati tako, da bom z vsakim problemom analiziral le en parameter (multithreading, nastavitve vzporedneja in tako dalje).\
+Dodati je potrebno večkratno zaganjanje istega algoritma (za povprečenje).

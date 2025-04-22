@@ -5,11 +5,6 @@ TESTD = ../../../tests
 WD = $(notdir $(CURDIR))
 TESTF = *.json
 
-PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
-export PartitionThreads
-KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
-export KamadaKawaiThreads
-
 compile:
 	@echo -e "##########################################\n    |-> COMPILING $(WD)"
 	$(MAKE) -C partition compile

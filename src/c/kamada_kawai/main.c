@@ -19,10 +19,11 @@ int main(int argc, char *argv[])
 {
     char *test_path;
     char *test_id;
+    char *repetitions;
     bool help = false;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":t:x:")) != -1)
+    while ((opt = getopt(argc, argv, ":t:x:r:")) != -1)
     {
         switch (opt)
         {
@@ -31,6 +32,9 @@ int main(int argc, char *argv[])
             break;
         case 'x':
             test_id = optarg;
+            break;
+        case 'r':
+            repetitions = optarg;
             break;
         case ':':
         case '?':
@@ -51,10 +55,10 @@ int main(int argc, char *argv[])
 
     // json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
-    
+
     // Run the algorithm
-    algo(kamadaKawai, test_id);
-    
+    algo(kamadaKawai, test_id, repetitions);
+
     // Free the allocated memory
     free(buffer);
     free(kamadaKawai);

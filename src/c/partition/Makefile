@@ -6,7 +6,8 @@ OUTPUTS = **/*.json **/*.txt
 SOURCES = main.c\
 ./json2partitions.c ./partitions2json.c ./partition.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c ./algo/sgl_dyn.c ./algo/sgl_stc.c ./algo/nested.c
+./algo/algo.c ./algo/seq.c ./algo/sgl_dyn.c ./algo/sgl_stc.c
+# ./algo/algo.c ./algo/seq.c ./algo/mlt_stc.c ./algo/mlt_dyn.c ./algo/sgl_dyn.c ./algo/sgl_stc.c ./algo/nested.c
 
 ALGO = algo
 TESTD = ../../../tests
@@ -20,6 +21,7 @@ CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
 
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
 export PartitionThreads
+Repetitions ?= $(if $(R),$(R),1)
 
 
 
@@ -41,8 +43,9 @@ run: $(TARGET)
 	export OMP_NESTED=TRUE; \
 	export OMP_NUM_THREADS=$(PartitionThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
+		mkdir -p $(ALGO)/$(PartitionThreads); \
 		num=$$(basename $$case .json); \
-		./$(TARGET) -t $$case -x $$num; \
+		./$(TARGET) -t $$case -x $$num -r $(Repetitions); \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"

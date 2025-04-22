@@ -48,30 +48,43 @@
                 problemTableHead.appendChild(problemTestcaseHead);
 
                 if (x === 'partition') {
-                    for (let y of partition) {
-                        const testcase = document.createElement('th');
+                    const sortedKeys = partitionThreads
+                        .map(Number)
+                        .sort((a, b) => a - b)
+                        .map(num => num.toString().padStart(2, '0'));
 
-                        const linkToDoc = document.createElement('a');
-                        linkToDoc.target = '_blank';
-                        linkToDoc.href = `../tests/${x}/${y}.json`;
-                        linkToDoc.innerText = `${y}.json`;
+                    for (let y of partitionTests) {
+                        for (let z of sortedKeys) {
+                            const testcase = document.createElement('th');
 
-                        testcase.appendChild(linkToDoc);
+                            const linkToDoc = document.createElement('a');
+                            linkToDoc.target = '_blank';
+                            linkToDoc.href = `../tests/${x}/${y}.json`;
+                            linkToDoc.innerText = `${y}.json [${z} threads]`;
 
-                        problemTestcaseHead.appendChild(testcase);
+                            testcase.appendChild(linkToDoc);
+
+                            problemTestcaseHead.appendChild(testcase);
+                        }
                     }
                 } else if (x === 'kamada_kawai') {
-                    for (let y of kamada_kawai) {
-                        const testcase = document.createElement('th');
+                    const sortedKeys = kamada_kawaiThreads
+                        .map(Number)
+                        .sort((a, b) => a - b)
+                        .map(num => num.toString().padStart(2, '0'));
+                    for (let y of kamada_kawaiTests) {
+                        for (let z of sortedKeys) {
+                            const testcase = document.createElement('th');
 
-                        const linkToDoc = document.createElement('a');
-                        linkToDoc.target = '_blank';
-                        linkToDoc.href = `../tests/${x}/${y}.json`;
-                        linkToDoc.innerText = `${y}.json`;
+                            const linkToDoc = document.createElement('a');
+                            linkToDoc.target = '_blank';
+                            linkToDoc.href = `../tests/${x}/${y}.json`;
+                            linkToDoc.innerText = `${y}.json [${z} threads]`;
 
-                        testcase.appendChild(linkToDoc);
+                            testcase.appendChild(linkToDoc);
 
-                        problemTestcaseHead.appendChild(testcase);
+                            problemTestcaseHead.appendChild(testcase);
+                        }
                     }
                 }
 
@@ -121,73 +134,79 @@
 
 
                         for (let t of sortedKeys) {
-                            const testcaseCell = document.createElement('td');
-                            testcaseCell.classList.add('testcase');
 
-                            const testCaseLink = document.createElement('a');
-                            let posfix = 'json';
-                            if (x === 'kamada_kawai') {
-                                posfix = 'csv';
-                            }
+                            for (let thread in results[x][l][a][t]) {
+                                nThreads = Number(thread)
 
-                            // const scale = results[x][l][a][t].score * 120;
-                            const score = results[x][l][a][t].score;
+                                const testcaseCell = document.createElement('td');
+                                testcaseCell.classList.add('testcase');
 
-                            // do scale from 0 to 255 
-                            // 0 for red 
-                            // 255 for green
-                            // based on score
-
-
-                            const hue = Math.round(score * 2.125);
-                            let r = Math.round(255 - score * 255);
-                            let g = Math.round(score * 255);
-
-                            
-                            r *= 0.6;
-                            g *= 0.6;
-                            
-                            if (score === 1) {
-                                r = 255;
-                                g = 255;
-                                r *= 0.75;
-                                g *= 0.75;
-                            }
-
-                            if (score === 0) {
-                                r = 255;
-                                g = 0;
-                                r *= 0.75;
-                                g *= 0.75;
-                            }
-                            
-
-                            if (results[x][l][a][t].time === 0) {
-                                testCaseLink.innerText = '/';
-                            } else {
-                                testcaseCell.style.backgroundColor = `rgb(${r}, ${g}, 0)`;
-                                if (score === 1) {
-                                    testCaseLink.style.color = 'black';
+                                const testCaseLink = document.createElement('a');
+                                let posfix = 'json';
+                                if (x === 'kamada_kawai') {
+                                    posfix = 'csv';
                                 }
-                                testCaseLink.target = '_blank';
-                                testCaseLink.href = `../src/${l}/${x}/algo/${a}${t}.${posfix}`;
-                                testCaseLink.innerText = `${results[x][l][a][t].time}`;
-                            }
 
-                            if (!results[x][l][a][t].correct) {
-                                // testcaseCell.style.backgroundColor = "#941e86";
-                            }
+                                // const scale = results[x][l][a][t][nThreads].score * 120;
+                                const score = results[x][l][a][t][nThreads].score;
 
-                            if (results[x][l][a][t].time === 0) {
-                                testcaseCell.style.backgroundColor = "#1f2226";
-                            }
+                                // do scale from 0 to 255 
+                                // 0 for red 
+                                // 255 for green
+                                // based on score
 
-                            testcaseCell.appendChild(testCaseLink);
 
-                            if (firstAlgo) {
-                                langRow.appendChild(testcaseCell);
-                            } else {
-                                algoRow.appendChild(testcaseCell);
+                                const hue = Math.round(score * 2.125);
+                                let r = Math.round(255 - score * 255);
+                                let g = Math.round(score * 255);
+
+
+                                r *= 0.6;
+                                g *= 0.6;
+
+                                if (score === 1) {
+                                    r = 255;
+                                    g = 255;
+                                    r *= 0.75;
+                                    g *= 0.75;
+                                }
+
+                                if (score === 0) {
+                                    r = 255;
+                                    g = 0;
+                                    r *= 0.75;
+                                    g *= 0.75;
+                                }
+
+
+                                if (results[x][l][a][t][nThreads].time === 0) {
+                                    testCaseLink.innerText = '/';
+                                } else {
+                                    testcaseCell.style.backgroundColor = `rgb(${r}, ${g}, 0)`;
+                                    if (score === 1) {
+                                        testCaseLink.style.color = 'black';
+                                    }
+                                    testCaseLink.target = '_blank';
+                                    testCaseLink.href = `../src/${l}/${x}/algo/${[nThreads]}/${a}${t}.${posfix}`;
+                                    testCaseLink.innerText = `${results[x][l][a][t][nThreads].time}`;
+                                }
+
+                                if (!results[x][l][a][t][nThreads].correct) {
+                                    if (x === 'partition')
+                                    testcaseCell.style.backgroundColor = "#941e86";
+                                }
+
+                                if (results[x][l][a][t][nThreads].time === 0) {
+                                    testcaseCell.style.backgroundColor = "#1f2226";
+                                }
+
+                                testcaseCell.appendChild(testCaseLink);
+
+                                if (firstAlgo) {
+                                    langRow.appendChild(testcaseCell);
+                                } else {
+                                    algoRow.appendChild(testcaseCell);
+                                }
                             }
                         }
 
