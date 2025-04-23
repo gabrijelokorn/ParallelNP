@@ -8,14 +8,6 @@
 .PHONY: all clean compile run c julia go check
 all: clean compile run check
 
-PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
-export PartitionThreads
-Repetitions ?= $(if $(R),$(R),1)
-KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
-export KamadaKawaiThreads
-Repetitions ?= $(if $(R),$(R),1)
-
-
 
 ### --- COMPILE --- ###
 compile_c:

@@ -22,6 +22,7 @@ CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
 export PartitionThreads
 Repetitions ?= $(if $(R),$(R),1)
+Threads ?= $(if $(THREADS),$(THREADS),$(PartitionThreads))
 
 
 
@@ -41,11 +42,13 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
-	export OMP_NUM_THREADS=$(PartitionThreads); \
-	for case in $(TESTD)/$(WD)/$(TESTF); do \
-		mkdir -p $(ALGO)/$(PartitionThreads); \
-		num=$$(basename $$case .json); \
-		./$(TARGET) -t $$case -x $$num -r $(Repetitions); \
+	for thread in $(Threads); do \
+		export OMP_NUM_THREADS=$$thread; \
+		for case in $(TESTD)/$(WD)/$(TESTF); do \
+			mkdir -p $(ALGO)/$$thread; \
+			num=$$(basename $$case .json); \
+			./$(TARGET) -t $$case -x $$num -r $(Repetitions); \
+		done; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"

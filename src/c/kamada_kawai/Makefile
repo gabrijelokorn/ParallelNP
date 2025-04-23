@@ -23,6 +23,7 @@ CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
 Repetitions ?= $(if $(R),$(R),1)
+Threads ?= $(if $(THREADS),$(THREADS),$(PartitionThreads))
 
 
 
@@ -41,11 +42,13 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
-	export OMP_NUM_THREADS=$(KamadaKawaiThreads); \
-	for case in $(TESTD)/$(WD)/$(TESTF); do \
-		mkdir -p $(ALGO)/$(KamadaKawaiThreads); \
-		num=$$(basename $$case .json); \
-		./$(TARGET) -t $$case -x $$num -r $(Repetitions); \
+	for thread in $(Threads); do \
+		export OMP_NUM_THREADS=$$thread; \
+		for case in $(TESTD)/$(WD)/$(TESTF); do \
+			mkdir -p $(ALGO)/$$thread; \
+			num=$$(basename $$case .json); \
+			./$(TARGET) -t $$case -x $$num -r $(Repetitions); \
+		done; \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"

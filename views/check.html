@@ -241,29 +241,18 @@
             }
         };
 
-        function getColor (score) {
-            const hue = Math.round(score * 2.125);
-            let r = Math.round(255 - score * 255);
-            let g = Math.round(score * 255);
+        function getColor(lang, algo) {
+            console.log(lang, algo);
 
-            r *= 0.6;
-            g *= 0.6;
-
-            if (score === 1) {
-                r = 255;
-                g = 255;
-                r *= 0.75;
-                g *= 0.75;
+            if (lang === "c") {
+                return `rgb(200, ${255 / algo}, ${255 / algo})`;
+            } else if (lang === "go") {
+                return `rgb(${255 / algo}, 200, ${255 / algo})`;
+            } else if (lang === "julia") {
+                return `rgb(${255 / algo}, ${255 / algo}, 200)`;
             }
 
-            if (score === 0) {
-                r = 255;
-                g = 0;
-                r *= 0.75;
-                g *= 0.75;
-            }
-
-            return `rgb(${r}, ${g}, 0)`;
+            return `rgb(${255 / algo}, ${255 / algo}, ${255 / algo})`;
         }
 
         function doChart(problemNumber, thediv, pn, threads) {
@@ -299,6 +288,7 @@
                 if (problemname !== pn) continue;
 
                 for (let lang in results[problemname]) {
+                    let index = 2;
                     for (let algo in results[problemname][lang]) {
                         for (let problem in results[problemname][lang][algo]) {
 
@@ -306,7 +296,12 @@
                             const line = {}
                             line.label = `${lang} ${algo}`;
                             line.data = [];
-                            
+
+                            if (index === 2) {
+                                line.borderDash = [1, 1];
+                            } 
+                            line.borderColor = getColor(lang, index);
+
                             line.borderWidth = 2;
                             for (let threads in results[problemname][lang][algo][problem]) {
                                 if (results[problemname][lang][algo][problem][threads].time === 0) {
@@ -318,6 +313,7 @@
                             // console.log(line);
                             ds.push(line);
                         }
+                        index += 1;
                     }
                 }
             }
@@ -331,9 +327,44 @@
                 options: {
                     scales: {
                         y: {
-                            beginAtZero: true
+                            title: {
+                                display: true,
+                                text: 'Time (s)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Threads'
+                            }
                         }
                     },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'left',
+                            labels: {
+                                color: '#000000'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: `${pn} ${partitionTests[problemNumber]}`,
+                            color: '#000000'
+                        }
+                    },
+                    responsive: true,
+                    elements: {
+                        point: {
+                            radius: 3,
+                            hoverRadius: 5
+                        }
+                    },
+                    aspectRatio: 2,
+                    animation: {
+                        duration: 1000
+                    }
+
                 }
             });
 
