@@ -34,3 +34,5 @@ src/julia/*.o
 # SLURM specific files
 src/err.log
 src/out.log
+
+.vscode
