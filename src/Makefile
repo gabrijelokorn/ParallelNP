@@ -10,8 +10,11 @@ all: clean compile run check
 
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
 export PartitionThreads
+Repetitions ?= $(if $(R),$(R),1)
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
+Repetitions ?= $(if $(R),$(R),1)
+
 
 
 ### --- COMPILE --- ###
@@ -72,8 +75,8 @@ check:
 pp:
 	@echo -e "##########################################\n    |-> Partition problem $(WD)"
 	$(MAKE) -C c c_partition
-#	$(MAKE) -C go go_partition
-#	$(MAKE) -C julia julia_partition
+	$(MAKE) -C go go_partition
+	$(MAKE) -C julia julia_partition
 	@echo -e "##########################################\n\n"
 ### --- ### --- ### --- ###
 
@@ -83,8 +86,8 @@ pp:
 kk:
 	@echo -e "##########################################\n    |-> Kamada Kawai problem $(WD)"
 	$(MAKE) -C c c_kamada_kawai
-#	$(MAKE) -C go go_kamada_kawai
-#	$(MAKE) -C julia julia_kamada_kawai
+	$(MAKE) -C go go_kamada_kawai
+	$(MAKE) -C julia julia_kamada_kawai
 	@echo -e "##########################################\n\n"
 ### --- ### --- ### --- ###
 

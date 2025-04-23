@@ -61,7 +61,7 @@ async function readThreads(algorithm) {
             console.error(`Error reading ${dirPath}:`, err);
         }
     }
-    return directories;
+    return [...new Set(directories)];
 }
 
 async function fileExists(filepath) {

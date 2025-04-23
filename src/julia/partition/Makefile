@@ -10,16 +10,18 @@ TESTF = *.json
 
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
 export PartitionThreads
-KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
-export KamadaKawaiThreads
+Repetitions ?= $(if $(R),$(R),1)
+
+
 
 ### --- RUN --- ###
 run:
 	@start=$$(date +%s.%N); \
 	export JULIA_NUM_THREADS=$(PartitionThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
+		mkdir -p $(ALGO)/$(PartitionThreads); \
 		num=$$(basename $$case .json); \
-		julia main.jl -t $$case -x $$num; \
+		julia main.jl -t $$case -x $$num -r $(Repetitions); \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)            $$(echo "$$end - $$start" | bc) seconds"

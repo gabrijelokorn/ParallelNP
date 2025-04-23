@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.service": "ini",
+        "parallelnp.h": "c",
+        "stdlib.h": "c"
+    }
+}

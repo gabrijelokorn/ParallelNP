@@ -2,7 +2,6 @@ module Sgl_seq
 export sgl_seq
 
 using ...Kamada_Kawai
-using BenchmarkTools
 
 function sgl_seq(kk::KamadaKawai)
 	delta_max_index = get_deltas_seq!(kk);

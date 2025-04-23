@@ -12,6 +12,8 @@ TESTF = *.json
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
+Repetitions ?= $(if $(R),$(R),1)
+
 
 
 
@@ -32,8 +34,9 @@ run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export GOMAXPROCS=$(KamadaKawaiThreads); \
 	for case in $(TESTD)/$(WD)/$(TESTF); do \
+		mkdir -p $(ALGO)/$(KamadaKawaiThreads); \
 		num=$$(basename $$case .json); \
-		./$(TARGET) -t=$$case -x=$$num; \
+		./$(TARGET) -t=$$case -x=$$num -r=$(Repetitions); \
 	done; \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"

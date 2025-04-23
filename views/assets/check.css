@@ -87,3 +87,24 @@ button {
     border: transparent;
     color: #000;
 }
+
+.charts {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.partition_charts, .kamadakawai_charts {
+    width: 100%;
+    margin: 1rem;
+}
+
+.partition_charts {
+    border-right: solid rgb(151, 151, 151) 0.1rem;
+}
+
+.chart-div {
+    padding: 1rem;
+}

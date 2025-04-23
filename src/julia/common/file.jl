@@ -3,10 +3,11 @@ module File
 export generateFilename
 
 function generateFilename(algo::String, num::String, postfix::String)
-    filename = "algo/" * algo * num * "." * postfix
-
+    nThreads = Threads.nthreads()
+    filename = "algo/$(nThreads)/$(algo)$(num).$(postfix)"
     return filename
-end # generateFilename
+end
+
 
 end # module
 

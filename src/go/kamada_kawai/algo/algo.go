@@ -31,27 +31,34 @@ func output_algo(kk *KamadaKawai, original []Coord, elapsed time.Duration, name 
 	parallelNP.WriteTime(algotime_fp, elapsed)
 }
 
-func run_algo(kk *KamadaKawai, algoFunc func(), name string, test_id string) {
+func run_algo(kk *KamadaKawai, algoFunc func(), name string, test_id string, repetitions int) {
 	// --- SETUP --- //
 	original := kk.set_original_coords()
 
-	// --- EXECUTION --- //
-	start := time.Now()
-	algoFunc()
-	elapsed := time.Since(start)
-
+	// --- RUN ALGORITHM R times --- //
+	var avg_time time.Duration = 0.0
+	for i := 0; i < repetitions; i++ {
+		// --- RESET DATA --- //
+		kk.get_original_coords(original)
+		
+		// --- EXECUTION --- //
+		start := time.Now()
+		algoFunc()
+		elapsed := time.Since(start)
+		avg_time = avg_time + elapsed
+	}
+	avg_time = avg_time / time.Duration(repetitions)
+	
 	// --- OUTPUT --- //
-	output_algo(kk, original, elapsed, name, test_id)
-
+	output_algo(kk, original, avg_time, name, test_id)
+	
 	// --- RESET DATA --- //
 	kk.get_original_coords(original)
 }
 
-func (kk *KamadaKawai) Algo(test_id string) error {
-	run_algo(kk, kk.Sgl_seq, "sgl_seq", test_id)
-	run_algo(kk, kk.Sgl_par, "sgl_par", test_id)
-	run_algo(kk, kk.Mlt_seq, "mlt_seq", test_id)
-	run_algo(kk, kk.Mlt_par, "mlt_par", test_id)
+func (kk *KamadaKawai) Algo(test_id string, repetitions int) error {
+	run_algo(kk, kk.Sgl_seq, "sgl_seq", test_id, repetitions)
+	run_algo(kk, kk.Sgl_par, "sgl_par", test_id, repetitions)
 
 	return nil
 }

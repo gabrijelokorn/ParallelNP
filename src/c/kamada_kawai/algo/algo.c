@@ -7,7 +7,7 @@
 #include "../kamada_kawai.h"
 #include "algo.h"
 
-void output_algo(KamadaKawai *kk, Coord *original, double elapsed, char *name, char *test_id)
+void output_algo(KamadaKawai *kk, Coord *original, double avg_time, char *name, char *test_id)
 {
     // --- WRITE RESULTS TO FILE --- //
     char *algoresult = generateFilename(name, test_id, "csv");
@@ -18,7 +18,7 @@ void output_algo(KamadaKawai *kk, Coord *original, double elapsed, char *name, c
     // --- WRITE TIME TO FILE --- //
     char *algotime = generateFilename(name, test_id, "txt");
     FILE *algotime_fp = fopen(algotime, "w");
-    writeTime(algotime_fp, elapsed);
+    writeTime(algotime_fp, avg_time);
     fclose(algotime_fp);
 }
 
@@ -28,23 +28,28 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *te
     Coord *original = malloc(kk->n * sizeof(Coord));
     copyCoords(kk->coords, original, kk->n); // Copy the original data
 
-    // --- EXECTUTION --- //
-    double time = 0;
+    // --- RUN ALGORITHM R times --- //
+    double avg_time = 0;
     for (int i = 0; i < atoi(repetitions); i++)
     {
+        // --- RESET DATA --- //
+        copyCoords(original, kk->coords, kk->n); // Copy the original data back
+
+        // --- EXECUTION --- //
         double start = omp_get_wtime(); // Start algorithm time
         func(kk);                       // Run the algorithm
         double end = omp_get_wtime();   // End algoritYYYm time
-        time += end - start;
+        avg_time += end - start;
     }
-    time = time / atoi(repetitions);
+    avg_time = avg_time / atoi(repetitions);
 
-    output_algo(kk, original, time, name, test_id); // Write results to file
+    // --- OUTPUT --- //
+    output_algo(kk, original, avg_time, name, test_id); // Write results to file
 
     // --- RESET DATA --- //
     copyCoords(original, kk->coords, kk->n); // Copy the original data back
-    free(original);                          // Free the original data
 
+    free(original); // Free the original data
     return;
 }
 

@@ -11,13 +11,21 @@
     <h1>Preverjanje rezultatov</h1>
     <i>Pravilnost posameznih programov je določena na podlagi rešitev v
         <b>tests/&lt;algoritem&gt;/solutions/&lt;xy&gt;.json</b></i>
-
     <div id="results"></div>
+    <div id="charts" class="charts">
+        <div id="partition_charts" class="partition_charts">
+            <h2>Partition</h2>
+        </div>
+        <div id="kamadakawai_charts" class="kamadakawai_charts">
+            <h2>Kamada Kawai</h2>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="assets/checks.js"></script>
     <script src="assets/algo.js"></script>
     <script>
-
         // Function to display data
         window.onload = function displayData() {
             // Partition problem
@@ -193,7 +201,7 @@
 
                                 if (!results[x][l][a][t][nThreads].correct) {
                                     if (x === 'partition')
-                                    testcaseCell.style.backgroundColor = "#941e86";
+                                        testcaseCell.style.backgroundColor = "#941e86";
                                 }
 
                                 if (results[x][l][a][t][nThreads].time === 0) {
@@ -232,6 +240,114 @@
                 result.appendChild(problemTable);
             }
         };
+
+        function getColor (score) {
+            const hue = Math.round(score * 2.125);
+            let r = Math.round(255 - score * 255);
+            let g = Math.round(score * 255);
+
+            r *= 0.6;
+            g *= 0.6;
+
+            if (score === 1) {
+                r = 255;
+                g = 255;
+                r *= 0.75;
+                g *= 0.75;
+            }
+
+            if (score === 0) {
+                r = 255;
+                g = 0;
+                r *= 0.75;
+                g *= 0.75;
+            }
+
+            return `rgb(${r}, ${g}, 0)`;
+        }
+
+        function doChart(problemNumber, thediv, pn, threads) {
+            // create chart div
+            const chartDiv = document.createElement('div');
+            chartDiv.classList.add('chart-div');
+
+            const chartLink = document.createElement('a');
+            chartLink.innerHTML = `<h2>${partitionTests[problemNumber]}.json</h2>`;
+            chartLink.href = `../tests/${pn}/${partitionTests[problemNumber]}.json`;
+            chartLink.target = '_blank';
+
+            chartContainer = document.createElement('div');
+            chartContainer.classList.add('chart-container');
+            chartContainer.style.borderRadius = "10px"
+            // chartContainer.style.backgroundColor = "#000000"
+            chartContainer.style.backgroundColor = "#ffffff"
+            // chartContainer.style.backgroundColor = "#aaaaaa"
+
+            const canvas = document.createElement('canvas');
+            canvas.id = `chart-${pn}-${partitionTests[problemNumber]}`;
+            chartContainer.appendChild(canvas);
+
+            chartDiv.appendChild(chartLink);
+            chartDiv.appendChild(chartContainer);
+            thediv.appendChild(chartDiv);
+
+            const ctx = document.getElementById(`chart-${pn}-${partitionTests[problemNumber]}`).getContext('2d');
+
+            let ds = [];
+            const labels = threads.map(Number).sort((a, b) => a - b).map(num => num.toString().padStart(2, '0'));
+            for (let problemname in results) {
+                if (problemname !== pn) continue;
+
+                for (let lang in results[problemname]) {
+                    for (let algo in results[problemname][lang]) {
+                        for (let problem in results[problemname][lang][algo]) {
+
+                            if (problem !== partitionTests[problemNumber]) continue;
+                            const line = {}
+                            line.label = `${lang} ${algo}`;
+                            line.data = [];
+                            
+                            line.borderWidth = 2;
+                            for (let threads in results[problemname][lang][algo][problem]) {
+                                if (results[problemname][lang][algo][problem][threads].time === 0) {
+                                    line.data.push(0);
+                                    continue;
+                                }
+                                line.data.push(Number(results[problemname][lang][algo][problem][threads].time));
+                            }
+                            // console.log(line);
+                            ds.push(line);
+                        }
+                    }
+                }
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: ds
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                }
+            });
+
+        }
+
+        // draw charts for each testcase
+        const partition_charts = document.getElementById('partition_charts');
+        const kamadakawai_charts = document.getElementById('kamadakawai_charts');
+        for (let pp in partitionTests) {
+            doChart(pp, partition_charts, "partition", partitionThreads);
+        }
+        for (let kk in kamada_kawaiTests) {
+            doChart(kk, kamadakawai_charts, "kamada_kawai", kamada_kawaiThreads);
+        }
     </script>
 </body>
 
