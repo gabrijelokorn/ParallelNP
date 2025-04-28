@@ -19,7 +19,7 @@ void seq(Partitions *p, bool *result)
             continue;
         int half_problem_sum = problem_sum / 2;
 
-        for (int j = 0; j < numOfCombinations; j++)
+        for (unsigned long long int j = 0; j < numOfCombinations; j++)
         {
             int sum = partition_sum(row, size, j);
             if (sum == half_problem_sum)

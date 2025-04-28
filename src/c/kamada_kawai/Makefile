@@ -59,6 +59,7 @@ run: $(TARGET)
 ### --- CLEAN --- ###
 clean:
 	@start=$$(date +%s.%N); \
+	shopt -s globstar nullglob; \
 	rm -f $(TARGET) $(OUTPUTS); \
 	end=$$(date +%s.%N); \
 	echo "          |"; \

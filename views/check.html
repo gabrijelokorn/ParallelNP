@@ -242,8 +242,6 @@
         };
 
         function getColor(lang, algo) {
-            console.log(lang, algo);
-
             if (lang === "c") {
                 return `rgb(200, ${255 / algo}, ${255 / algo})`;
             } else if (lang === "go") {
@@ -293,23 +291,26 @@
                         for (let problem in results[problemname][lang][algo]) {
 
                             if (problem !== partitionTests[problemNumber]) continue;
+                            let anyData = false;
                             const line = {}
                             line.label = `${lang} ${algo}`;
                             line.data = [];
 
                             if (index === 2) {
                                 line.borderDash = [1, 1];
-                            } 
+                            }
                             line.borderColor = getColor(lang, index);
 
                             line.borderWidth = 2;
                             for (let threads in results[problemname][lang][algo][problem]) {
                                 if (results[problemname][lang][algo][problem][threads].time === 0) {
-                                    line.data.push(0);
+                                    line.data.push(null);
                                     continue;
                                 }
+                                anyData = true;
                                 line.data.push(Number(results[problemname][lang][algo][problem][threads].time));
                             }
+                            if (!anyData) break;
                             // console.log(line);
                             ds.push(line);
                         }
@@ -349,7 +350,7 @@
                         },
                         title: {
                             display: true,
-                            text: `${pn} ${partitionTests[problemNumber]}`,
+                            text: `tests/${pn}/${partitionTests[problemNumber]}.json`,
                             color: '#000000'
                         }
                     },

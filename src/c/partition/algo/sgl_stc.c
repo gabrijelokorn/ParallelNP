@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <omp.h>
 #include <inttypes.h>
+#include <stdio.h>
 
 #include "algo.h"
 #include "../partition.h"
@@ -23,10 +24,11 @@ void sgl_stc(Partitions *p, bool *result)
         int half_problem_sum = problem_sum / 2;
 
         {
+            // printf("number of combs: %llu\n", numOfCombinations);
             bool found = false;
             #pragma omp parallel default(none) shared(row, size, numOfCombinations, half_problem_sum, result, i, found)
             #pragma omp for 
-            for (int j = 0; j < numOfCombinations; j++)
+            for (unsigned long long int j = 0; j < numOfCombinations; j++)
             {
                 if (found)
                     continue;
