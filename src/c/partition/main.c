@@ -26,7 +26,8 @@ int main(int argc, char *argv[])
 {
     char *test_path;
     char *test_id;
-    char *repetitions;
+    char *r;
+    int repetitions;
     bool help = false;
 
     int opt;
@@ -41,7 +42,8 @@ int main(int argc, char *argv[])
             test_id = optarg;
             break;
         case 'r':
-            repetitions = optarg;
+            r = optarg;
+            repetitions = atoi(r);
             break;
         case ':':
         case '?':

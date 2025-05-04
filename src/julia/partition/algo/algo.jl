@@ -25,15 +25,21 @@ function output_algo(result::Vector{Bool}, elapsed, name::String, test_id::Strin
 end
 
 function run_algo(arr::Vector{Vector{Int64}}, f::Function, name::String, test_id::String, repetitions::Int)
-    # --- SETUP --- #
-    result = Vector{Bool}(undef, length(arr))
+	# --- SETUP --- #
+	result = Vector{Bool}(undef, length(arr))
 
 	# --- RUN ALGORITHM R times --- #
 	avg_time = 0.0
-	for i in 1:repetitions# --- EXECTUTION --- #
+	# --- EXECTUTION --- #
+	for i in 1:repetitions
 		start = Base.time_ns()
-		result = f(arr)
+		# result = f(arr)
+		test = 0
+		for j in 1:1000000000
+			test = test + 1
+		end
 		elapsed = (Base.time_ns() - start) / 1e9
+		println("julia: ", test, " time: ", elapse)
 		avg_time += elapsed
 	end
 	avg_time /= repetitions
@@ -43,8 +49,8 @@ end
 
 function algo(arr::Vector{Vector{Int64}}, test_id::String, repetitions::Int)
 	run_algo(arr, Seq.seq, "seq", test_id, repetitions)
-	run_algo(arr, Sgl_dyn.sgl_dyn, "sgl_dyn", test_id, repetitions)
-	run_algo(arr, Sgl_stc.sgl_stc, "sgl_stc", test_id, repetitions)
+	# run_algo(arr, Sgl_dyn.sgl_dyn, "sgl_dyn", test_id, repetitions)
+	# run_algo(arr, Sgl_stc.sgl_stc, "sgl_stc", test_id, repetitions)
 end # algo
 
 end # module

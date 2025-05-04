@@ -23,32 +23,37 @@ void output_algo(Partitions *p, bool *result, double avg_time, char *name, char 
     fclose(algotime_fp);
 }
 
-bool *run_algo(Partitions *p, void (*func)(Partitions *, bool *), char *name, char *test_id, char *repetitions)
+bool *run_algo(Partitions *p, void (*func)(Partitions *, bool *), char *name, char *test_id, int repetitions)
 {
     // --- SETUP --- //
     bool *result = (bool *)malloc(p->rows * sizeof(bool));
 
     // --- EXECTUTION --- //
     double avg_time = 0;
-    for (int i = 0; i < atoi(repetitions); i++)
+    for (int i = 0; i < repetitions; i++)
     {
         double start = omp_get_wtime();
-        func(p, result);
+        // func(p, result);
+        int test = 0;
+        for (int j = 0; j < 1000000000; j++) {
+            test = test + 1;
+        }
         double end = omp_get_wtime();
+        printf("c: %d\n", test);
         avg_time += end - start;
     }
-    avg_time = avg_time / atoi(repetitions);
+    avg_time = avg_time / repetitions;
 
     output_algo(p, result, avg_time, name, test_id); // Write results to file
 
     free(result);
 }
 
-void algo(Partitions *p, char *test_id, char *repetitions)
+void algo(Partitions *p, char *test_id, int repetitions)
 {
     run_algo(p, seq, "seq", test_id, repetitions);
-    run_algo(p, sgl_stc, "sgl_stc", test_id, repetitions);
-    run_algo(p, sgl_dyn, "sgl_dyn", test_id, repetitions);
+    // run_algo(p, sgl_stc, "sgl_stc", test_id, repetitions);
+    // run_algo(p, sgl_dyn, "sgl_dyn", test_id, repetitions);
 
     return;
 }
