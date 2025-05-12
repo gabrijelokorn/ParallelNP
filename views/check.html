@@ -281,7 +281,8 @@
             const ctx = document.getElementById(`chart-${pn}-${partitionTests[problemNumber]}`).getContext('2d');
 
             let ds = [];
-            const labels = threads.map(Number).sort((a, b) => a - b).map(num => num.toString().padStart(2, '0'));
+            // const labels = threads.map(Number).sort((a, b) => a - b).map(num => num.toString().padStart(2, '0'));
+            // console.log("labels", labels);
             for (let problemname in results) {
                 if (problemname !== pn) continue;
 
@@ -308,7 +309,12 @@
                                     continue;
                                 }
                                 anyData = true;
-                                line.data.push(Number(results[problemname][lang][algo][problem][threads].time));
+                                line.data.push({
+                                    x: Number(threads),
+                                    y: Number(results[problemname][lang][algo][problem][threads].time)
+                                });
+
+                                // line.data.push(Number(results[problemname][lang][algo][problem][threads].time));
                             }
                             if (!anyData) break;
                             // console.log(line);
@@ -322,23 +328,28 @@
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
+                    // labels: labels,
                     datasets: ds
                 },
                 options: {
                     scales: {
                         y: {
+                            type: 'linear',
                             title: {
                                 display: true,
                                 text: 'Time (s)'
                             }
                         },
                         x: {
+                            type: 'linear',
                             title: {
                                 display: true,
                                 text: 'Threads'
+                            },
+                            ticks: {
+                                precision: 0
                             }
-                        }
+                        },
                     },
                     plugins: {
                         legend: {

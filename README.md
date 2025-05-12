@@ -26,7 +26,6 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 ![Look into docs directory for examples](./docs/kk2.gif)
 
 ## Vprašanja
-- Zakaj niti zaporedni programi niso konkurenčni? - kako je lahko golang tako (slab)?
-- Kako zanesljiv je wall clock time measurement v različnih jezikih?
-- Ali je smiselno primerjat med seboj urničarje glede na to, da jih ne definira jezik ampak so implementation-specific? ... go ima sicer uradno izdajo, za c obstaja veliko prevajalnikov.
 
+## TODO pred oddajo
+- probej vsaj en openMP support tool 

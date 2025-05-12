@@ -127,3 +127,19 @@ Plan:
 ---
 Probleme morma zasnovati tako, da bom z vsakim problemom analiziral le en parameter (multithreading, nastavitve vzporedneja in tako dalje).\
 Dodati je potrebno večkratno zaganjanje istega algoritma (za povprečenje).
+
+12.05.2025; 11:00
+---
+Pogledala sva zasnovo diplomske naloge. Zasnova je vredu: poglavja, podpoglavja in pristop ter način primerjanja so vredu.
+
+Zastavljena vprašanja:
+- ali je smiselno primerjat med seboj urničarje glede na to, da jih ne definira jezik ampak so implementation-specific? ... go ima sicer uradno izdajo, za c obstaja veliko prevajalnikov.
+    - To omeni, nekje v začetku kakšnega poglavja ali kje drugje. Naj ne bo to celo podpoglavje - najbolje, da to omenim v poglavju primerjanja učinkovitosti, kot dodatna razlaga vplivov in pri tem razložim zakaj ne primerjam (ni specifika jezika ampak implementacije jezika)
+- ali naj vključim speedup graf:
+    - lahko. vsekakor sta oba smiselna
+
+Potrebne spremembe / dodatki:
+- linearno merilo na x osi na grafu pri prikazovanju časa izvajanja
+- popravi naslov v poglavju analitične primerjave
+- popravi podnaslove v poglavju analitične primerjave: naj bo v podnaslovih jasno za kateri jezik in katero (knjižnico) se gre
+
