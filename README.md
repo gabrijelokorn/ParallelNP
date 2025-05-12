@@ -26,8 +26,7 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 ![Look into docs directory for examples](./docs/kk2.gif)
 
 ## Vprašanja
-Ne znam se odločiti, ali je bolje da pri Partition Problemu delam result boolean array skupen vsem algoritmom ali ga naredim znotraj vsakega algoritma posebej.\
-Ali lahko probleme za boljše rešitve objavim na Reddit?\
-Pod katerimi pogoji je smiselno primerjati prostorsko zahtevnost?\
-Zakaj niti zaporedni programi niso konkurenčni? - kako je lahko golang tako (slab)?\
-Kako zanesljiv je wall clock time measurement v različnih jezikih?\
+- Zakaj niti zaporedni programi niso konkurenčni? - kako je lahko golang tako (slab)?
+- Kako zanesljiv je wall clock time measurement v različnih jezikih?
+- Ali je smiselno primerjat med seboj urničarje glede na to, da jih ne definira jezik ampak so implementation-specific? ... go ima sicer uradno izdajo, za c obstaja veliko prevajalnikov.
+
