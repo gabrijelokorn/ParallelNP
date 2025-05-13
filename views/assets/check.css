@@ -88,23 +88,19 @@ button {
     color: #000;
 }
 
-.charts {
+.whole-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
 
-
-.partition_charts, .kamadakawai_charts {
-    width: 100%;
-    margin: 1rem;
-}
-
 .partition_charts {
-    border-right: solid rgb(151, 151, 151) 0.1rem;
+    padding-bottom: 1rem;
+    border-bottom: dashed rgb(133, 101, 209) 0.25rem;
 }
 
 .chart-div {
-    padding: 1rem;
+    padding: 0.5rem;
+    width: 100%;
 }

@@ -232,42 +232,71 @@ async function evaluateResults(partitionTests, kamada_kawaiTests, partitionThrea
     {
         const problemDir = "kamada_kawai";
         for (let x of kamada_kawaiTests) {
-        for (let thread of kamada_kawaiThreads) {
-            let bestTime = Number.MAX_VALUE;
-            let worstTime = 0;
-            for (let l of languages) {
-                const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
-                for (let a of algos) {
-                    if (result[problemDir][l][a][x][thread].time > 0) {
-                        if (result[problemDir][l][a][x][thread].time < bestTime) {
-                            bestTime = result[problemDir][l][a][x][thread].time;
-                        }
-                        if (result[problemDir][l][a][x][thread].time > worstTime) {
-                            worstTime = result[problemDir][l][a][x][thread].time;
+            for (let thread of kamada_kawaiThreads) {
+                let bestTime = Number.MAX_VALUE;
+                let worstTime = 0;
+                for (let l of languages) {
+                    const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
+                    for (let a of algos) {
+                        if (result[problemDir][l][a][x][thread].time > 0) {
+                            if (result[problemDir][l][a][x][thread].time < bestTime) {
+                                bestTime = result[problemDir][l][a][x][thread].time;
+                            }
+                            if (result[problemDir][l][a][x][thread].time > worstTime) {
+                                worstTime = result[problemDir][l][a][x][thread].time;
+                            }
                         }
                     }
-                }
 
-            }
-            // normalize and give each algorithm a score based on the best time (the fastest algorithm gets 1 and the rest get a score between 0 and 1)
-            for (let l of languages) {
-                const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
-                for (let a of algos) {
-                    if (result[problemDir][l][a][x][thread].time === 0) {
-                        continue;
+                }
+                // normalize and give each algorithm a score based on the best time (the fastest algorithm gets 1 and the rest get a score between 0 and 1)
+                for (let l of languages) {
+                    const algos = await readAlgos(l, problemDir, languageExtensions.get(l));
+                    for (let a of algos) {
+                        if (result[problemDir][l][a][x][thread].time === 0) {
+                            continue;
+                        }
+                        if (bestTime === result[problemDir][l][a][x][thread].time) {
+                            result[problemDir][l][a][x][thread]["score"] = 1;
+                            continue;
+                        }
+                        if (worstTime === result[problemDir][l][a][x][thread].time) {
+                            result[problemDir][l][a][x][thread]["score"] = 0;
+                            continue;
+                        }
+                        result[problemDir][l][a][x][thread]["score"] = (worstTime - result[problemDir][l][a][x][thread].time) / (worstTime - bestTime);
                     }
-                    if (bestTime === result[problemDir][l][a][x][thread].time) {
-                        result[problemDir][l][a][x][thread]["score"] = 1;
-                        continue;
-                    }
-                    if (worstTime === result[problemDir][l][a][x][thread].time) {
-                        result[problemDir][l][a][x][thread]["score"] = 0;
-                        continue;
-                    }
-                    result[problemDir][l][a][x][thread]["score"] = (worstTime - result[problemDir][l][a][x][thread].time) / (worstTime - bestTime);
                 }
             }
         }
+    }
+}
+
+async function evaluateSpeedup(problemString, problemTests) {
+    for (let l of languages) {
+        const algos = await readAlgos(l, problemString, languageExtensions.get(l));
+        for (let a of algos) {
+            for (let test of problemTests) {
+                let baseExists = false;
+                let baseTime = 0;
+                
+                if (!result[problemString]) return;
+                for (let thread in result[problemString][l][a][test]) {
+                    if (Number(thread) === 1) {
+                        baseExists = true;
+                        baseTime = result[problemString][l][a][test][thread].time;
+                    }
+                }
+                if (!baseExists) {
+                    continue;
+                }
+
+                for (let thread in result[problemString][l][a][test]) {
+                    if (result[problemString][l][a][test][thread].time !== 0) {
+                        result[problemString][l][a][test][thread]["speedup"] = baseTime / result[problemString][l][a][test][thread].time;
+                    }
+                }
+            }
         }
     }
 }
@@ -287,6 +316,9 @@ async function main() {
 
     // Evaluate the results
     await evaluateResults(partitionTests, kamada_kawaiTests, partitionThreads, kamada_kawaiThreads);
+    // Evaluate the speedup
+    await evaluateSpeedup(one_partition, partitionTests);
+    await evaluateSpeedup(one_kamada_kawai, kamada_kawaiTests);
 
     // Create the checks.js file
     const output = `const results = ${JSON.stringify(result)};`;

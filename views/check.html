@@ -253,36 +253,59 @@
             return `rgb(${255 / algo}, ${255 / algo}, ${255 / algo})`;
         }
 
-        function doChart(problemNumber, thediv, pn, threads) {
+        function doChart(problemNumber, thediv, pn, threads, tests) {
             // create chart div
+            const wholeContainer = document.createElement('div');
+            wholeContainer.classList.add('whole-container');
+
             const chartDiv = document.createElement('div');
             chartDiv.classList.add('chart-div');
 
+            const speedUpDiv = document.createElement('div');
+            speedUpDiv.classList.add('chart-div');
+
             const chartLink = document.createElement('a');
-            chartLink.innerHTML = `<h2>${partitionTests[problemNumber]}.json</h2>`;
-            chartLink.href = `../tests/${pn}/${partitionTests[problemNumber]}.json`;
+            chartLink.innerHTML = `<h2>${tests[problemNumber]}.json</h2>`;
+            chartLink.href = `../tests/${pn}/${tests[problemNumber]}.json`;
             chartLink.target = '_blank';
+
+            const speedupLink = document.createElement('a');
+            speedupLink.innerHTML = `<h2>${tests[problemNumber]} Speedup</h2>`;
+            speedupLink.href = `../tests/${pn}/${tests[problemNumber]}.json`;
+            speedupLink.target = '_blank';
 
             chartContainer = document.createElement('div');
             chartContainer.classList.add('chart-container');
             chartContainer.style.borderRadius = "10px"
-            // chartContainer.style.backgroundColor = "#000000"
             chartContainer.style.backgroundColor = "#ffffff"
-            // chartContainer.style.backgroundColor = "#aaaaaa"
+
+            speedUpContainer = document.createElement('div');
+            speedUpContainer.classList.add('chart-container');
+            speedUpContainer.style.borderRadius = "10px"
+            speedUpContainer.style.backgroundColor = "#ffffff"
 
             const canvas = document.createElement('canvas');
-            canvas.id = `chart-${pn}-${partitionTests[problemNumber]}`;
+            canvas.id = `chart-${pn}-${tests[problemNumber]}`;
             chartContainer.appendChild(canvas);
+
+            const speedUpCanvas = document.createElement('canvas');
+            speedUpCanvas.id = `speedup-${pn}-${tests[problemNumber]}`;
+            speedUpContainer.appendChild(speedUpCanvas);
 
             chartDiv.appendChild(chartLink);
             chartDiv.appendChild(chartContainer);
-            thediv.appendChild(chartDiv);
+            wholeContainer.appendChild(chartDiv);
 
-            const ctx = document.getElementById(`chart-${pn}-${partitionTests[problemNumber]}`).getContext('2d');
+            speedUpDiv.appendChild(speedupLink);
+            speedUpDiv.appendChild(speedUpContainer);
+            wholeContainer.appendChild(speedUpDiv);
+
+            thediv.appendChild(wholeContainer);
+
+            const ctx = document.getElementById(`chart-${pn}-${tests[problemNumber]}`).getContext('2d');
+            const speedupCtx = document.getElementById(`speedup-${pn}-${tests[problemNumber]}`).getContext('2d');
 
             let ds = [];
-            // const labels = threads.map(Number).sort((a, b) => a - b).map(num => num.toString().padStart(2, '0'));
-            // console.log("labels", labels);
             for (let problemname in results) {
                 if (problemname !== pn) continue;
 
@@ -291,7 +314,7 @@
                     for (let algo in results[problemname][lang]) {
                         for (let problem in results[problemname][lang][algo]) {
 
-                            if (problem !== partitionTests[problemNumber]) continue;
+                            if (problem !== tests[problemNumber]) continue;
                             let anyData = false;
                             const line = {}
                             line.label = `${lang} ${algo}`;
@@ -305,7 +328,10 @@
                             line.borderWidth = 2;
                             for (let threads in results[problemname][lang][algo][problem]) {
                                 if (results[problemname][lang][algo][problem][threads].time === 0) {
-                                    line.data.push(null);
+                                    // line.data.push({
+                                    //     x: Number(threads),
+                                    //     y: null
+                                    // });
                                     continue;
                                 }
                                 anyData = true;
@@ -313,11 +339,8 @@
                                     x: Number(threads),
                                     y: Number(results[problemname][lang][algo][problem][threads].time)
                                 });
-
-                                // line.data.push(Number(results[problemname][lang][algo][problem][threads].time));
                             }
                             if (!anyData) break;
-                            // console.log(line);
                             ds.push(line);
                         }
                         index += 1;
@@ -325,10 +348,108 @@
                 }
             }
 
+            let dsSpeedup = [];
+            for (let problemname in results) {
+                if (problemname !== pn) continue;
+
+                for (let lang in results[problemname]) {
+                    let index = 2;
+                    for (let algo in results[problemname][lang]) {
+                        for (let problem in results[problemname][lang][algo]) {
+
+                            if (problem !== tests[problemNumber]) continue;
+                            let anyData = false;
+                            const line = {}
+                            line.label = `${lang} ${algo}`;
+                            line.data = [];
+
+                            if (index === 2) {
+                                line.borderDash = [1, 1];
+                            }
+                            line.borderColor = getColor(lang, index);
+
+                            line.borderWidth = 2;
+                            for (let threads in results[problemname][lang][algo][problem]) {
+                                if (results[problemname][lang][algo][problem][threads].time === 0) {
+                                    // line.data.push({
+                                    //     x: Number(threads),
+                                    //     y: null
+                                    // });
+                                    continue;
+                                }
+                                anyData = true;
+                                const speedup = results[problemname][lang][algo][problem]['1'].time / results[problemname][lang][algo][problem][threads].time;
+                                line.data.push({
+                                    x: Number(threads),
+                                    y: Number(speedup)
+                                });
+                            }
+                            if (!anyData) break;
+                            dsSpeedup.push(line);
+                        }
+                        index += 1;
+                    }
+                }
+            }
+
+            // draw speedup chart
+            new Chart(speedupCtx, {
+                type: 'line',
+                data: {
+                    datasets: dsSpeedup
+                },
+                options: {
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Speedup'
+                            }
+                        },
+                        x: {
+                            type: 'linear',
+                            title: {
+                                display: true,
+                                text: 'Threads'
+                            },
+                            ticks: {
+                                precision: 0
+                            }
+                        },
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'left',
+                            labels: {
+                                color: '#000000'
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: `tests/${pn}/${tests[problemNumber]}.json`,
+                            color: '#000000'
+                        }
+                    },
+                    responsive: true,
+                    elements: {
+                        point: {
+                            radius: 3,
+                            hoverRadius: 5
+                        }
+                    },
+                    aspectRatio: 2,
+                    animation: {
+                        duration: 1000
+                    }
+
+                }
+            });
+
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    // labels: labels,
                     datasets: ds
                 },
                 options: {
@@ -361,7 +482,7 @@
                         },
                         title: {
                             display: true,
-                            text: `tests/${pn}/${partitionTests[problemNumber]}.json`,
+                            text: `tests/${pn}/${tests[problemNumber]}.json`,
                             color: '#000000'
                         }
                     },
@@ -379,17 +500,16 @@
 
                 }
             });
-
         }
 
         // draw charts for each testcase
         const partition_charts = document.getElementById('partition_charts');
         const kamadakawai_charts = document.getElementById('kamadakawai_charts');
         for (let pp in partitionTests) {
-            doChart(pp, partition_charts, "partition", partitionThreads);
+            doChart(pp, partition_charts, "partition", partitionThreads, partitionTests);
         }
         for (let kk in kamada_kawaiTests) {
-            doChart(kk, kamadakawai_charts, "kamada_kawai", kamada_kawaiThreads);
+            doChart(kk, kamadakawai_charts, "kamada_kawai", kamada_kawaiThreads, kamada_kawaiTests);
         }
     </script>
 </body>
