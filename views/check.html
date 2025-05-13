@@ -320,7 +320,7 @@
                             line.label = `${lang} ${algo}`;
                             line.data = [];
 
-                            if (index === 2) {
+                            if (algo === "seq" || algo === "sgl_seq") {
                                 line.borderDash = [1, 1];
                             }
                             line.borderColor = getColor(lang, index);
