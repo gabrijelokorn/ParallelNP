@@ -26,6 +26,7 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 ![Look into docs directory for examples](./docs/kk2.gif)
 
 ## Vprašanja
+- zakaj se julia program s 8 taski kljub SOČANOSTI izvaja le tako dolgo kot 1 task
 
 ## TODO pred oddajo
 - probej vsaj en openMP support tool 
