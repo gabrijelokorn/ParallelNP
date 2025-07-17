@@ -40,4 +40,5 @@ clean:
 	rm -f $(TARGET) $(OUTPUTS); \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)      $$(echo "$$end - $$start" | bc) seconds"
+	find ./algo -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} +
 ### --- ------ --- ###

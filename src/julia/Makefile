@@ -24,4 +24,5 @@ clean:
 	rm -rf lib/*.o
 	$(MAKE) -C partition clean
 	$(MAKE) -C kamada_kawai clean
+	
 	@echo -e "##########################################\n\n\n"
