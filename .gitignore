@@ -36,3 +36,6 @@ src/err.log
 src/out.log
 
 .vscode
+
+src/go/go.sum
+src/**/*.pprof

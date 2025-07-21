@@ -21,7 +21,7 @@ void sgl_par(KamadaKawai *kk)
             kk->coords[delta_max_index].x += delta_x;
             kk->coords[delta_max_index].y += delta_y;
 
-            kk->deltas[delta_max_index] = get_delta_m(kk, delta_max_index);
+            kk->deltas[delta_max_index] = get_delta_m_par(kk, delta_max_index);
             if (steps-- <= 0)
                 break;
         }

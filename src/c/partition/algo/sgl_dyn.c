@@ -23,7 +23,7 @@ void sgl_dyn(Partitions *p, bool *result)
         {
             bool found = false;
             #pragma omp parallel default(none) shared(row, size, numOfCombinations, half_problem_sum, result, i, found)
-            #pragma omp for schedule(dynamic, 10)
+            #pragma omp for schedule(dynamic, 2)
             for (unsigned long long int j = 0; j < numOfCombinations; j++)
             {
                 if (found)

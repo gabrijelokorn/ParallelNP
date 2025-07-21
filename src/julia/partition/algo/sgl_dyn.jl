@@ -23,7 +23,7 @@ function sgl_dyn(arr::Vector{Vector{Int64}})
         # Shared atomic flag
         found = Threads.Atomic{Bool}(false)
 
-        Threads.@threads for j in 1:numOfCombinations
+        Threads.@threads :dynamic for j in 1:numOfCombinations
             # Early exit if already found
             if found[]
                 continue

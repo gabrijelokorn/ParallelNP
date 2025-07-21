@@ -377,7 +377,18 @@
                                     continue;
                                 }
                                 anyData = true;
-                                const speedup = results[problemname][lang][algo][problem]['1'].time / results[problemname][lang][algo][problem][threads].time;
+
+                                minThread = '';
+                                //get the lowest threads number - in results[problemname][lang][algo][problem]
+                                for (let t in results[problemname][lang][algo][problem]) {
+                                    if (minThread === '' || Number(t) < Number(minThread)) {
+                                        minThread = t;
+                                    }
+                                }
+                                console.log(results[problemname][lang][algo][problem]);
+                                
+                                
+                                const speedup = results[problemname][lang][algo][problem][minThread].time / results[problemname][lang][algo][problem][threads].time;
                                 line.data.push({
                                     x: Number(threads),
                                     y: Number(speedup)

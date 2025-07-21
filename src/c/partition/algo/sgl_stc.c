@@ -27,7 +27,7 @@ void sgl_stc(Partitions *p, bool *result)
             // printf("number of combs: %llu\n", numOfCombinations);
             bool found = false;
             #pragma omp parallel default(none) shared(row, size, numOfCombinations, half_problem_sum, result, i, found)
-            #pragma omp for 
+            #pragma omp for schedule(static)
             for (unsigned long long int j = 0; j < numOfCombinations; j++)
             {
                 if (found)
