@@ -246,22 +246,23 @@ func checkPartitionBalanced(array []int, numOfCombinations int64, target int) bo
 			defer wg.Done()
 			
 			// Pin thread for better cache locality
-			runtime.LockOSThread()
-			defer runtime.UnlockOSThread()
-			
-			// Local copy to avoid false sharing
-			localArray := make([]int, len(array))
-			copy(localArray, array)
-			arrayLen := len(localArray)
+			// runtime.LockOSThread()
+			// defer runtime.UnlockOSThread()
 			
 			// Large blocks to reduce atomic checks
 			const blockSize = 32768
 			
 			for blockStart := start; blockStart < end; blockStart += blockSize {
+				localArray := make([]int, len(array))
+				copy(localArray, array)
+				arrayLen := len(localArray)
+				
 				// Check early termination less frequently
 				if atomic.LoadInt32(&found) != 0 {
 					return
 				}
+				// Local copy to avoid false sharing
+				
 				
 				blockEnd := blockStart + blockSize
 				if blockEnd > end {
