@@ -10,10 +10,6 @@
 void algo(Partitions *p, char *test_id, int repetitions);
 
 void seq(Partitions *p, bool *result);
-void mlt_stc(Partitions *p, bool *result);
-void mlt_dyn(Partitions *p, bool *result);
-void sgl_dyn(Partitions *p, bool *result);
 void sgl_stc(Partitions *p, bool *result);
-void nested(Partitions *p, bool * result);
 
 #endif

@@ -32,18 +32,14 @@ func output_algo(result []int32, avg_time time.Duration, name string, test_id st
 func run_algo(arr [][]int, algoFunc func([][]int) []int32, name string, test_id string, repetitions int) {
 	// --- SETUP --- //
 	result := make([]int32, len(arr))
-	
+
 	// --- EXECTUTION --- //
 	var avg_time time.Duration = 0.0
 	for i := 0; i < repetitions; i++ {
 		start := time.Now()
 		result = algoFunc(arr)
-		// test := 0
-		// for j := 0; j < 1000000000; j++ {
-		// 	test = test + 1
-		// }
 		elapsed := time.Since(start)
-		// fmt.Println("go: ", test)
+
 		avg_time = avg_time + elapsed
 	}
 	avg_time = avg_time / time.Duration(repetitions)
@@ -52,6 +48,5 @@ func run_algo(arr [][]int, algoFunc func([][]int) []int32, name string, test_id 
 }
 
 func Algo(arr [][]int, test_id string, repetitions int) {
-	// run_algo(arr, Seq, "seq", test_id, repetitions)
-	run_algo(arr, Sgl_dyn, "sgl_dyn", test_id, repetitions)
+	run_algo(arr, Sgl_stc, "sgl_stc", test_id, repetitions)
 }

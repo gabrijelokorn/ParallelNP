@@ -30,3 +30,5 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 
 ## TODO pred oddajo
 - probej vsaj en openMP support tool 
+- Kako je fer merit čas izvajanja v Julii (z ali brez compilation time / precompiled s paketom / neki warmupi / garbace collector ... )
+- branje found spremenljivke sem naredil *thread-unsafe*, je to vredu?

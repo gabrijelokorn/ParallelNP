@@ -3,14 +3,14 @@ package main
 import (
 	"flag"
 	parallelNP "golang/common"
-	partition "golang/partition/lib"
 	algo "golang/partition/algo"
+	partition "golang/partition/lib"
 	"io/ioutil"
 	// "github.com/pkg/profile"
 )
 
 func main() {
-	// defer profile.Start(profile.BlockProfile, profile.ProfilePath(".")).Stop()
+	// defer profile.Start(profile.CPUProfile, profile.ProfilePath(".")).Stop()
 
 	t := flag.String("t", "test", "Name of the test file")
 	x := flag.String("x", "unknonw_testcase", "Test case id")

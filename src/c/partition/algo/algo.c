@@ -34,10 +34,6 @@ bool *run_algo(Partitions *p, void (*func)(Partitions *, bool *), char *name, ch
     {
         double start = omp_get_wtime();
         func(p, result);
-        // int test = 0;
-        // for (int j = 0; j < 1000000000; j++) {
-        //     test = test + 1;
-        // }
         double end = omp_get_wtime();
         avg_time += end - start;
     }
@@ -52,7 +48,6 @@ void algo(Partitions *p, char *test_id, int repetitions)
 {
     // run_algo(p, seq, "seq", test_id, repetitions);
     run_algo(p, sgl_stc, "sgl_stc", test_id, repetitions);
-    // run_algo(p, sgl_dyn, "sgl_dyn", test_id, repetitions);
 
     return;
 }

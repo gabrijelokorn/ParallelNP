@@ -2,8 +2,6 @@ module Algo
 
 include("./seq.jl")
 using .Seq
-include("./sgl_dyn.jl")
-using .Sgl_dyn
 include("./sgl_stc.jl")
 using .Sgl_stc
 include("../partitions2json.jl")
@@ -31,6 +29,7 @@ function run_algo(arr::Vector{Vector{Int64}}, f::Function, name::String, test_id
     result = Vector{Bool}(undef, length(arr))
 
     # --- BENCHMARK --- #
+	GC.gc() # Force garbage collection to ensure memory is cleaned up before output
 	bench = @benchmark $f($arr) samples=repetitions evals=1
 
     # Get median execution time in seconds
@@ -45,7 +44,6 @@ end
 
 function algo(arr::Vector{Vector{Int64}}, test_id::String, repetitions::Int)
 	# run_algo(arr, Seq.seq, "seq", test_id, repetitions)
-	# run_algo(arr, Sgl_dyn.sgl_dyn, "sgl_dyn", test_id, repetitions)
 	run_algo(arr, Sgl_stc.sgl_stc, "sgl_stc", test_id, repetitions)
 end # algo
 
