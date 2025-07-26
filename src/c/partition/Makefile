@@ -42,6 +42,7 @@ run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
 	for thread in $(Threads); do \
+		export OMP_CANCELLATION=true; \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \
 			mkdir -p $(ALGO)/$$thread; \

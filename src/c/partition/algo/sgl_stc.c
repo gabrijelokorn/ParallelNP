@@ -28,13 +28,13 @@ void sgl_stc(Partitions *p, bool *result)
 #pragma omp for schedule(static)
             for (unsigned long long int j = 0; j < numOfCombinations; j++)
             {
-                if (result[i])
-                    continue;
+                #pragma omp cancellation point for
 
                 int sum = partition_sum(arr, size, j);
-                if (sum == half_problem_sum)
-                {
+                if (sum == half_problem_sum){
+                    #pragma omp atomic write
                     result[i] = true;
+                    #pragma omp cancel for 
                 }
             }
         }

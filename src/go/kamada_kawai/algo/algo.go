@@ -40,7 +40,7 @@ func run_algo(kk *KamadaKawai, algoFunc func(), name string, test_id string, rep
 	for i := 0; i < repetitions; i++ {
 		// --- RESET DATA --- //
 		kk.get_original_coords(original)
-		
+
 		// --- EXECUTION --- //
 		start := time.Now()
 		algoFunc()
@@ -48,16 +48,16 @@ func run_algo(kk *KamadaKawai, algoFunc func(), name string, test_id string, rep
 		avg_time = avg_time + elapsed
 	}
 	avg_time = avg_time / time.Duration(repetitions)
-	
+
 	// --- OUTPUT --- //
 	output_algo(kk, original, avg_time, name, test_id)
-	
+
 	// --- RESET DATA --- //
 	kk.get_original_coords(original)
 }
 
 func (kk *KamadaKawai) Algo(test_id string, repetitions int) error {
-	run_algo(kk, kk.Sgl_seq, "sgl_seq", test_id, repetitions)
+	// run_algo(kk, kk.Sgl_seq, "sgl_seq", test_id, repetitions)
 	run_algo(kk, kk.Sgl_par, "sgl_par", test_id, repetitions)
 
 	return nil

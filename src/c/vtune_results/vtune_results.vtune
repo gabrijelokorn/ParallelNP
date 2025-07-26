@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+ <rdmgr>
+  <timestamp type="u64_t">1753535694</timestamp>
+  <hostname type="string">fedora</hostname>
+  <os type="string">linux</os>
+  <product type="string">Intel® VTune™ Profiler 2025.4.0</product>
+  <buildNumber type="s32_t">630424</buildNumber>
+  <logicalCPUCount type="s32_t">32</logicalCPUCount>
+  <physicalCoreCount type="s32_t">8</physicalCoreCount>
+  <processorPackageCount type="s32_t">1</processorPackageCount>
+  <CPUFrequency type="s64_t">4216961000</CPUFrequency>
+  <CPUFamily type="s32_t">23</CPUFamily>
+  <CPUModel type="s32_t">8</CPUModel>
+  <CPUStepping type="s32_t">2</CPUStepping>
+  <CPUBrandName type="string">AMD Ryzen 7 2700X Eight-Core Processor</CPUBrandName>
+  <isa type="string">avx2</isa>
+  <collectionTimeBegin type="u64_t">1753535694</collectionTimeBegin>
+  <collectionTimeEnd type="u64_t">1753535695</collectionTimeEnd>
+  <variables>
+   <at type="string">hs</at>
+  </variables>
+ </rdmgr>
+</root>

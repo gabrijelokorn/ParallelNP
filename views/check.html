@@ -316,21 +316,14 @@
                             if (problem !== tests[problemNumber]) continue;
                             let anyData = false;
                             const line = {}
-                            line.label = `${lang} ${algo}`;
+                            line.label = `${lang}`;
                             line.data = [];
 
-                            if (algo === "seq" || algo === "sgl_seq") {
-                                line.borderDash = [1, 1];
-                            }
                             line.borderColor = getColor(lang, index);
 
                             line.borderWidth = 2;
                             for (let threads in results[problemname][lang][algo][problem]) {
                                 if (results[problemname][lang][algo][problem][threads].time === 0) {
-                                    // line.data.push({
-                                    //     x: Number(threads),
-                                    //     y: null
-                                    // });
                                     continue;
                                 }
                                 anyData = true;
@@ -359,7 +352,7 @@
                             if (problem !== tests[problemNumber]) continue;
                             let anyData = false;
                             const line = {}
-                            line.label = `${lang} ${algo}`;
+                            line.label = `${lang}`;
                             line.data = [];
 
                             if (index === 2) {
@@ -414,7 +407,7 @@
                             type: 'linear',
                             title: {
                                 display: true,
-                                text: 'Speedup'
+                                text: 'Speedup (factor)'
                             }
                         },
                         x: {
@@ -431,14 +424,14 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'left',
+                            position: 'top',
                             labels: {
                                 color: '#000000'
                             }
                         },
                         title: {
                             display: true,
-                            text: `tests/${pn}/${tests[problemNumber]}.json`,
+                            text: `100 Vozlišč`,
                             color: '#000000'
                         }
                     },
@@ -485,14 +478,14 @@
                     plugins: {
                         legend: {
                             display: true,
-                            position: 'left',
+                            position: 'top',
                             labels: {
                                 color: '#000000'
                             }
                         },
                         title: {
                             display: true,
-                            text: `tests/${pn}/${tests[problemNumber]}.json`,
+                            text: `30 Števil`,
                             color: '#000000'
                         }
                     },

@@ -20,23 +20,19 @@ function sgl_stc(arr::Vector{Vector{Int64}})
 		end
 		half_problem_sum = problem_sum ÷ 2
 
-		# Shared atomic flag
 		found = Threads.Atomic{Bool}(false)
-
 		Threads.@threads :static for j in 1:numOfCombinations
 			if found[]
-				continue
+				return
 			end
 
 			sum = partition_sum(arr[i], size, j)
-
 			if sum == half_problem_sum
-				found[] = true
+				atomic_cas!(found, false, true)
 			end
 		end
-        
-
 		result[i] = found[]
+
 	end
 
 	return result

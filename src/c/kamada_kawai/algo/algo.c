@@ -55,10 +55,7 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *te
 
 void algo(KamadaKawai *kk, char *test_id, char *repetitions)
 {
-    // run_algo(kk, sgl_seq, "sgl_seq", test_id, repetitions);
     run_algo(kk, sgl_par, "sgl_par", test_id, repetitions);
-    // run_algo(kk, mlt_seq, "mlt_seq", test_id, repetitions);
-    // run_algo(kk, mlt_par, "mlt_par", test_id, repetitions);
 
     return;
 }
