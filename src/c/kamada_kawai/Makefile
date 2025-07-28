@@ -7,7 +7,6 @@ SOURCES = main.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c ./kamada_kawai.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./algo/algo.c ./algo/sgl_seq.c ./algo/sgl_par.c
-# ./algo/algo.c ./algo/sgl_seq.c ./algo/sgl_par.c ./algo/mlt_seq.c ./algo/mlt_par.c
 
 ALGO = algo
 TESTD = ../../../tests
@@ -20,7 +19,6 @@ CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 
-#KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
 Repetitions ?= $(if $(R),$(R),1)
