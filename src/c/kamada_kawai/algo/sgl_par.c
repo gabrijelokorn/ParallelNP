@@ -5,7 +5,6 @@
 
 void sgl_par(KamadaKawai *kk)
 {
-    omp_set_nested(1);
     int delta_max_index = get_deltas_par(kk);
 
     while (delta_max_index != -1)

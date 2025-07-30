@@ -37,5 +37,7 @@ src/out.log
 
 .vscode
 
+# profiling
 src/go/go.sum
 src/**/*.pprof
+src/**/*.data*
