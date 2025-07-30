@@ -41,6 +41,8 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
+	export OMP_PROC_BIND=true; \
+	export OMP_PLACES=cores; \
 	for thread in $(Threads); do \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \
