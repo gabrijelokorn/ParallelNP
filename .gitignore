@@ -41,3 +41,4 @@ src/out.log
 src/go/go.sum
 src/**/*.pprof
 src/**/*.data*
+src/**/*.data
