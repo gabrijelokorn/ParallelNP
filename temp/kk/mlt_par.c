@@ -26,7 +26,7 @@ void mlt_par(KamadaKawai *kk)
                 kk->coords[i].x += delta_x;
                 kk->coords[i].y += delta_y;
 
-                kk->deltas[i] = get_delta_m(kk, i);
+                kk->deltas[i] = get_delta_m_par(kk, i);
             }
 
             for (int i = 0; i < kk->n; i++)

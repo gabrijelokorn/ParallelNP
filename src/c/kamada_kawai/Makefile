@@ -6,7 +6,9 @@ OUTPUTS = **/*.txt **/*.csv
 SOURCES = main.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c ./kamada_kawai.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
-./algo/algo.c ./algo/sgl_seq.c ./algo/sgl_par.c
+./algo/algo.c \
+./algo/sgl_seq.c \
+./algo/sgl_par.c
 
 ALGO = algo
 TESTD = ../../../tests
@@ -41,8 +43,6 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
-	export OMP_PROC_BIND=true; \
-	export OMP_PLACES=cores; \
 	for thread in $(Threads); do \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \
