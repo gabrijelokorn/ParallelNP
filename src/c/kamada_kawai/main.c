@@ -17,51 +17,51 @@
 
 int main(int argc, char *argv[])
 {
-    char *test_path;
-    char *test_id;
-    char *repetitions;
+    char *test_path = NULL;    // Initialize to NULL
+    char *test_id = NULL;      // Initialize to NULL  
+    char *repetitions = NULL;  // Initialize to NULL
     bool help = false;
-
+    
     int opt;
     while ((opt = getopt(argc, argv, ":t:x:r:")) != -1)
     {
         switch (opt)
         {
-        case 't':
+            case 't':
             test_path = optarg;
             break;
-        case 'x':
+            case 'x':
             test_id = optarg;
             break;
-        case 'r':
+            case 'r':
             repetitions = optarg;
             break;
-        case ':':
-        case '?':
+            case ':':
+            case '?':
             help = true;
             break;
         }
     }
     if (optind < argc)
-        help = true;
-
+    help = true;
+    
     if (help)
-        error_args(argv[0]);
-
+    error_args(argv[0]);
+    
     // Read the input file
     FILE *test_file = openFile(test_path, "r");
     char *buffer = readFile(test_file);
     fclose(test_file);
-
+    
     // json -> KamadaKawai struct
     KamadaKawai *kamadaKawai = json2KamadaKawai(buffer);
-
+    
     // Run the algorithm
     algo(kamadaKawai, test_id, repetitions);
 
     // Free the allocated memory
     free(buffer);
     free(kamadaKawai);
-
+    
     return 0;
 }

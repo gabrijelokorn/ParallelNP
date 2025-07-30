@@ -1,0 +1,165 @@
+
+int get_deltas(KamadaKawai *kk)
+{
+    int delta_index = -1;
+    double max_delta = 0.0;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        double temp = get_delta(kk, i);
+        kk->deltas[i] = temp;
+
+        if (temp > kk->epsilon)
+        {
+            if (temp > max_delta)
+            {
+                max_delta = temp;
+                delta_index = i;
+            }
+        }
+    }
+
+    return delta_index;
+}
+
+
+double get_derivative_xx(KamadaKawai *kk, int index)
+{
+    double sum = 0;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+            continue;
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (double)pow(dist_y, 2)) / (double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)3 / 2)));
+
+        if (isnan(addend))
+            continue;
+
+        sum += addend;
+    }
+
+    return sum;
+}
+
+double get_derivative_yy(KamadaKawai *kk, int index)
+{
+    double sum = 0;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+            continue;
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * (double)pow(dist_x, 2)) / (double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)3 / 2)));
+
+        if (isnan(addend))
+            continue;
+
+        sum += addend;
+    }
+
+    return sum;
+}
+
+double get_derivative_xy(KamadaKawai *kk, int index)
+{
+    double sum = 0;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+            continue;
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * ((kk->l_ij[index][i] * dist_x * dist_y) / (double)pow((double)pow(dist_x, 2) + (double)pow(dist_y, 2), (double)3 / 2));
+
+        if (isnan(addend))
+            continue;
+
+        sum += addend;
+    }
+
+    return sum;
+}
+
+int get_delta_max_index(KamadaKawai *kk)
+{
+    int max_index = -1;
+    double max = -1;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (kk->deltas[i] > max)
+        {
+            max = kk->deltas[i];
+            if (max > kk->epsilon)
+                max_index = i;
+        }
+    }
+
+    return max_index;
+}
+
+
+double init_derivative_x(KamadaKawai *kk, int index)
+{
+    double sum = 0;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+        {
+            kk->addendx[index][i] = 0;
+            continue;
+        }
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+        if (isnan(addend))
+            continue;
+
+        kk->addendx[index][i] = addend;
+        sum += addend;
+    }
+
+    return sum;
+}
+
+double init_derivative_y(KamadaKawai *kk, int index)
+{
+    double sum = 0;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+        {
+            kk->addendy[index][i] = 0;
+            continue;
+        }
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+
+        if (isnan(addend))
+            continue;
+
+        kk->addendy[index][i] = addend;
+        sum += addend;
+    }
+
+    return sum;
+}

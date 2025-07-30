@@ -14,7 +14,7 @@ WD = $(notdir $(CURDIR))
 TESTF = *.json
 
 CC = gcc
-CFLAGS = -g
+CFLAGS = -pg
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library

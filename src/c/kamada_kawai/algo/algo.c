@@ -1,8 +1,12 @@
+#include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
 #include <omp.h>
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "../kamada_kawai.h"
 #include "algo.h"
@@ -12,12 +16,22 @@ void output_algo(KamadaKawai *kk, Coord *original, double avg_time, char *name, 
     // --- WRITE RESULTS TO FILE --- //
     char *algoresult = generateFilename(name, test_id, "csv");
     FILE *algoresult_fp = fopen(algoresult, "w");
+    if (algoresult_fp == NULL)
+    {
+        fprintf(stderr, "Error opening file %s: %s\n", algoresult, strerror(errno));
+        return;
+    }
     writeState(algoresult_fp, original, kk->n);
     writeState(algoresult_fp, kk->coords, kk->n);
     fclose(algoresult_fp);
     // --- WRITE TIME TO FILE --- //
     char *algotime = generateFilename(name, test_id, "txt");
     FILE *algotime_fp = fopen(algotime, "w");
+    if (algotime_fp == NULL)
+    {
+        fprintf(stderr, "Error opening file %s: %s\n", algotime, strerror(errno));
+        return;
+    }
     writeTime(algotime_fp, avg_time);
     fclose(algotime_fp);
 }
@@ -55,6 +69,7 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *te
 
 void algo(KamadaKawai *kk, char *test_id, char *repetitions)
 {
+    // run_algo(kk, sgl_seq, "sgl_seq", test_id, repetitions);
     run_algo(kk, sgl_par, "sgl_par", test_id, repetitions);
 
     return;

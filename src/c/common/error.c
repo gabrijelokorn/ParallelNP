@@ -7,7 +7,7 @@ void error_args(char *name)
 {
     fprintf(stderr, "\n>->->->->\n");
     fprintf(stderr, "[ERROR - Arguments] Try:\n");
-    fprintf(stderr, "%s [-v] -t <test> -x <sequential> -y <parallel>\n", name);
+    fprintf(stderr, "%s [-v] -t <test> -x <num_of_threads> -r <repetitions>\n", name);
     fprintf(stderr, "<-<-<-<-<\n\n");
     exit(1);
 }
