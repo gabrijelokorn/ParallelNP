@@ -21,7 +21,7 @@ func (kk *KamadaKawai) Sgl_seq() {
 			kk.Coords[delta_max_index].X += delta_x
 			kk.Coords[delta_max_index].Y += delta_y
 
-			kk.Deltas[delta_max_index] = kk.get_delta_m(delta_max_index)
+			kk.Deltas[delta_max_index] = kk.get_delta_m_seq(delta_max_index)
 
 			steps--
 			if steps <= 0 {

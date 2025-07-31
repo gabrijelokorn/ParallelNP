@@ -53,7 +53,7 @@ function run_algo(kk::KamadaKawai, f::Function, name::String, test_id::String, r
 end
 
 function algo(kk::KamadaKawai, test_id::String, repetitions::Int)
-    # run_algo(kk, Sgl_seq.sgl_seq, "sgl_seq", test_id, repetitions)
+    run_algo(kk, Sgl_seq.sgl_seq, "sgl_seq", test_id, repetitions)
     run_algo(kk, Sgl_par.sgl_par, "sgl_par", test_id, repetitions)
     
 end # algo

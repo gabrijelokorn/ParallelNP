@@ -77,9 +77,9 @@ pp:
 ### --- Kamada Kawai --- ###
 kk:
 	@echo -e "##########################################\n    |-> Kamada Kawai problem $(WD)"
-	$(MAKE) -C c c_kamada_kawai
+#	$(MAKE) -C c c_kamada_kawai
 #	$(MAKE) -C go go_kamada_kawai
-#	$(MAKE) -C julia julia_kamada_kawai
+	$(MAKE) -C julia julia_kamada_kawai
 	@echo -e "##########################################\n\n"
 ### --- ### --- ### --- ###
 

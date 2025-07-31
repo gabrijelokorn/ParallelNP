@@ -1,7 +1,7 @@
 package algo
 
 func (kk *KamadaKawai) Sgl_par() {
-	var delta_max_index int64 = kk.get_deltas_seq()
+	var delta_max_index int64 = kk.get_deltas_par() // Changed from _seq to _par
 
 	for {
 		if delta_max_index == -1 {
@@ -14,24 +14,23 @@ func (kk *KamadaKawai) Sgl_par() {
 				break
 			}
 
-			d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m := kk.get_derivatives_par(delta_max_index)
+			d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m := kk.get_derivatives_par(delta_max_index) // Changed
 			var delta_y float64 = kk.get_delta_m_y(d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m)
 			var delta_x float64 = kk.get_delta_m_x(d_y_m, d_yy_m, d_xy_m, delta_y)
 			kk.Coords[delta_max_index].X += delta_x
 			kk.Coords[delta_max_index].Y += delta_y
 
-			kk.Deltas[delta_max_index] = kk.get_delta_m(delta_max_index)
+			kk.Deltas[delta_max_index] = kk.get_delta_m_par(delta_max_index) // Changed
 
 			steps--
 			if steps <= 0 {
 				break
 			}
 		}
-		var temp int64 = kk.update_deltas_seq(delta_max_index)
+		var temp int64 = kk.update_deltas_par(delta_max_index) // Changed
 		if temp == delta_max_index {
 			break
 		}
 		delta_max_index = temp
 	}
-
 }
