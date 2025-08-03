@@ -9,7 +9,7 @@
 #include "../../common/parallelNP.h"
 #include "algo.h"
 
-void output_algo(Partitions *p, bool *result, double avg_time, char *name, char *test_id)
+void output_algo(Partitions *p, bool result, double avg_time, char *name, char *test_id)
 {
     // --- WRITE RESULTS TO FILE --- //
     char *algoresult = generateFilename(name, test_id, "json");
@@ -23,25 +23,24 @@ void output_algo(Partitions *p, bool *result, double avg_time, char *name, char 
     fclose(algotime_fp);
 }
 
-bool *run_algo(Partitions *p, void (*func)(Partitions *, bool *), char *name, char *test_id, int repetitions)
+bool *run_algo(Partitions *p, bool (*func)(Partitions *), char *name, char *test_id, int repetitions)
 {
     // --- SETUP --- //
-    bool *result = (bool *)malloc(p->rows * sizeof(bool));
+    bool result;
 
     // --- EXECTUTION --- //
     double avg_time = 0;
     for (int i = 0; i < repetitions; i++)
     {
         double start = omp_get_wtime();
-        func(p, result);
+        result = func(p);
+        #pragma omp taskwait
         double end = omp_get_wtime();
         avg_time += end - start;
     }
     avg_time = avg_time / repetitions;
 
     output_algo(p, result, avg_time, name, test_id); // Write results to file
-
-    free(result);
 }
 
 void algo(Partitions *p, char *test_id, int repetitions)

@@ -47,6 +47,10 @@
     Pkg.add("JSON")
     Pkg.add("Dates")
     ```
+- Namestitev orodja za razhroščevanje:
+    ```c
+    sudo dnf install libtsan
+    ```
 
 ---
 ## ? Neuspešna namestitev programskega jezika Julia ?

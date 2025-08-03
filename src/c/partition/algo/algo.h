@@ -2,6 +2,7 @@
 #define PARTITION_ALGO
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "../partition.h"
@@ -9,7 +10,7 @@
 
 void algo(Partitions *p, char *test_id, int repetitions);
 
-void seq(Partitions *p, bool *result);
-void sgl_stc(Partitions *p, bool *result);
+bool seq(Partitions *p);
+bool sgl_stc(Partitions *p);
 
 #endif

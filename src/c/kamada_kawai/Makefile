@@ -16,10 +16,11 @@ WD = $(notdir $(CURDIR))
 TESTF = *.json
 
 CC = gcc
-CFLAGS = -pg
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
+CFLAGS += -O2
+CFLAGS += -g -fsanitize=thread
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads

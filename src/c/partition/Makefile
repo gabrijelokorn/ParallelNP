@@ -3,7 +3,7 @@ all: clean compile run
 
 TARGET = main.out
 OUTPUTS = **/*.json **/*.txt
-SOURCES = main.c\
+SOURCES = ./main.c\
 ./json2partitions.c ./partitions2json.c ./partition.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./algo/algo.c ./algo/seq.c ./algo/sgl_stc.c
@@ -17,6 +17,8 @@ CC = gcc
 CFLAGS = -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
+CFLAGS += -O2
+CFLAGS += -g -fsanitize=thread
 
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
 export PartitionThreads
@@ -41,8 +43,8 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
+	export OMP_CANCELLATION=true; \
 	for thread in $(Threads); do \
-		export OMP_CANCELLATION=true; \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \
 			mkdir -p $(ALGO)/$$thread; \

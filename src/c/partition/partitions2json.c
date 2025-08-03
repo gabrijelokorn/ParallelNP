@@ -29,15 +29,10 @@ void writeJsonArray(FILE *fp, bool *result, int n)
     writeJsonObject(fp, jobj);
 }
 
-void writePartitions(FILE *fp, bool* result, int n) {
+void writePartitions(FILE *fp, bool result, int n) {
     if (fp == NULL)
     {
         fprintf(stderr, "%s )-: File pointer is null\n", "writePartitions");
-        return;
-    }
-    if (result == NULL)
-    {
-        fprintf(stderr, "%s )-: Result array is null\n", "writePartitions");
         return;
     }
     if (n <= 0)
@@ -46,5 +41,5 @@ void writePartitions(FILE *fp, bool* result, int n) {
         return;
     }
 
-    writeJsonArray(fp, result, n);
+    writeJsonArray(fp, &result, n);
 }

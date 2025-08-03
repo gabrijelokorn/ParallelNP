@@ -2,12 +2,12 @@
 
 #include "algo.h"
 
-void seq(Partitions *p, bool *result)
+bool seq(Partitions *p)
 {
+    bool result = false;
+
     for (int i = 0; i < p->rows; i++)
     {
-        result[i] = false;
-
         int *row = p->arr[i];
         int size = p->cols[i];
 
@@ -24,9 +24,11 @@ void seq(Partitions *p, bool *result)
             int sum = partition_sum(row, size, j);
             if (sum == half_problem_sum)
             {
-                result[i] = true;
+                result = true;
                 break;
             }
         }
     }
+
+    return result;
 }
