@@ -20,7 +20,7 @@ CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -O2
-CFLAGS += -g -fsanitize=thread
+PRECFLAGS = -g -fsanitize=thread
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
@@ -34,7 +34,7 @@ compile: $(TARGET)
 
 $(TARGET):
 	@start=$$(date +%s.%N); \
-	$(CC) -o $(TARGET) $(SOURCES) $(CFLAGS); \
+	$(CC) $(PRECFLAGS) -o $(TARGET) $(SOURCES) $(CFLAGS); \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###
