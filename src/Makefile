@@ -67,8 +67,8 @@ check:
 pp:
 	@echo -e "##########################################\n    |-> Partition problem $(WD)"
 	$(MAKE) -C c c_partition
-#	$(MAKE) -C go go_partition
-#	$(MAKE) -C julia julia_partition
+	$(MAKE) -C go go_partition
+	$(MAKE) -C julia julia_partition
 	@echo -e "##########################################\n\n"
 ### --- ### --- ### --- ###
 

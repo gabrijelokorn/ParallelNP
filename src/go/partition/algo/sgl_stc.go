@@ -38,16 +38,12 @@ func Sgl_stc(arr [][]int) []int32 {
 			go func(start, end int64) {
 				defer wg.Done()
 
-				var local_arr = make([]int, len(arr[i]))
-				copy(local_arr, arr[i])
-
-				const checkInterval = 1000
 				for j := start; j < end; j++ {
-					if j%checkInterval == 0 && atomic.LoadInt32(&found) == 1 {
+					if atomic.LoadInt32(&found) == 1 {
 						return
 					}
 
-					if partition.Partition_sum(local_arr, j) == halfSum {
+					if partition.Partition_sum(arr[i], j) == halfSum {
 						atomic.StoreInt32(&found, 1)
 						return
 					}

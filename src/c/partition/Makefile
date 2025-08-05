@@ -18,7 +18,7 @@ CFLAGS = -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
 CFLAGS += -O2
-CFLAGS += -g -fsanitize=thread
+# CFLAGS += -g -fsanitize=thread
 
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
 export PartitionThreads
