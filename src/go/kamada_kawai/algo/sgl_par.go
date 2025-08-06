@@ -1,7 +1,7 @@
 package algo
 
 func (kk *KamadaKawai) Sgl_par() {
-	var delta_max_index int64 = kk.get_deltas_par() // Changed from _seq to _par
+	var delta_max_index int64 = kk.get_deltas_par()
 
 	for {
 		if delta_max_index == -1 {

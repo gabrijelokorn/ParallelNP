@@ -214,7 +214,7 @@ double get_derivative_x_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-#pragma omp parallel for reduction(+ : sum) schedule(static)
+// #pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
@@ -241,7 +241,7 @@ double get_derivative_y_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-#pragma omp parallel for reduction(+ : sum) schedule(static)
+// #pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
@@ -303,9 +303,9 @@ int update_deltas_par(KamadaKawai *kk, int m)
             continue;
 
         double temp = update_delta_m(kk, m, i);
-        kk->deltas[i] = temp; // Store the value for later use
+        kk->deltas[i] = temp;
 
-        if (temp > max_delta) // Compare instead of overwriting
+        if (temp > max_delta) 
             max_delta = temp;
     }
 

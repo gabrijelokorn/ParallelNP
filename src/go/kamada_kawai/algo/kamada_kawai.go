@@ -2,6 +2,7 @@ package algo
 
 import (
 	"math"
+	"runtime"
 )
 
 // ############# KAMADA KAWAI DATA STRUCTURE ############# //
@@ -417,44 +418,90 @@ func (kk *KamadaKawai) update_deltas_par(m int64) int64 {
 	return delta_index
 }
 func (kk *KamadaKawai) get_derivatives_par(m int64) (float64, float64, float64, float64, float64) {
-	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
+	var workers = runtime.GOMAXPROCS(0)
 
-	for i := 0; i < kk.N; i++ {
-		if i == int(m) {
-			continue
+	var ch_x = make(chan float64, workers)
+	var ch_y = make(chan float64, workers)
+	var ch_xx = make(chan float64, workers)
+	var ch_yy = make(chan float64, workers)
+	var ch_xy = make(chan float64, workers)
+
+	for w := 0; w < workers; w++ {
+		start := w * (kk.N / workers)
+		end := (w + 1) * (kk.N / workers)
+		if w == workers-1 {
+			end = kk.N
 		}
 
-		var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
+		go func(start, end int) {
+			for i := start; i < end; i++ {
+				if i == int(m) {
+					continue
+				}
+				var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
+				var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
 
-		var x2 float64 = math.Pow(dist_x, 2)
-		var y2 float64 = math.Pow(dist_y, 2)
-		var x2_y2 float64 = x2 + y2
-		var x2_y2_1_2 float64 = math.Pow(x2_y2, float64(1)/float64(2))
-		var x2_y2_3_2 float64 = math.Pow(x2_y2, float64(3)/float64(2))
+				var x2 float64 = math.Pow(dist_x, 2)
+				var y2 float64 = math.Pow(dist_y, 2)
+				var x2_y2 float64 = x2 + y2
+				var x2_y2_1_2 float64 = math.Pow(x2_y2, float64(1)/float64(2))
+				var x2_y2_3_2 float64 = math.Pow(x2_y2, float64(3)/float64(2))
 
-		var addx = kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / x2_y2_1_2))
-		var addy = kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / x2_y2_1_2))
-		var addxx = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * y2) / x2_y2_3_2))
-		var addyy = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * x2) / x2_y2_3_2))
-		var addxy = kk.K_ij[m][i] * ((kk.L_ij[m][i] * dist_x * dist_y) / x2_y2_3_2)
-
-		if !math.IsNaN(addx) {
-			d_x_m += addx
-		}
-		if !math.IsNaN(addy) {
-			d_y_m += addy
-		}
-		if !math.IsNaN(addxx) {
-			d_xx_m += addxx
-		}
-		if !math.IsNaN(addyy) {
-			d_yy_m += addyy
-		}
-		if !math.IsNaN(addxy) {
-			d_xy_m += addxy
-		}
-
+				var addx = kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / x2_y2_1_2))
+				var addy = kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / x2_y2_1_2))
+				var addxx = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * y2) / x2_y2_3_2))
+				var addyy = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * x2) / x2_y2_3_2))
+				var addxy = kk.K_ij[m][i] * ((kk.L_ij[m][i] * dist_x * dist_y) / x2_y2_3_2)
+				if !math.IsNaN(addx) {
+					ch_x <- addx
+				} else {
+					ch_x <- 0.0
+				}
+				if !math.IsNaN(addy) {
+					ch_y <- addy
+				} else {
+					ch_y <- 0.0
+				}
+				if !math.IsNaN(addxx) {
+					ch_xx <- addxx
+				} else {
+					ch_xx <- 0.0
+				}
+				if !math.IsNaN(addyy) {
+					ch_yy <- addyy
+				} else {
+					ch_yy <- 0.0
+				}
+				if !math.IsNaN(addxy) {
+					ch_xy <- addxy
+				} else {
+					ch_xy <- 0.0
+				}
+			}
+		}(start, end)
 	}
+
+	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m float64 = 0.0, 0.0, 0.0, 0.0, 0.0
+	for i := 0; i < (kk.N-1)*5; i++ {
+		select {
+		case val := <-ch_x:
+			d_x_m += val
+		case val := <-ch_y:
+			d_y_m += val
+		case val := <-ch_xx:
+			d_xx_m += val
+		case val := <-ch_yy:
+			d_yy_m += val
+		case val := <-ch_xy:
+			d_xy_m += val
+		}
+	}
+
+	close(ch_x)
+	close(ch_y)
+	close(ch_xx)
+	close(ch_yy)
+	close(ch_xy)
+
 	return d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m
 }

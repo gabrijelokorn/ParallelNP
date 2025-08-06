@@ -19,7 +19,7 @@ CC = gcc
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
-CFLAGS += -O2
+CFLAGS += -O3
 PRECFLAGS = -g -fsanitize=thread
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
@@ -34,7 +34,8 @@ compile: $(TARGET)
 
 $(TARGET):
 	@start=$$(date +%s.%N); \
-	$(CC) $(PRECFLAGS) -o $(TARGET) $(SOURCES) $(CFLAGS); \
+	export TSAN_OPTIONS="ignore_noninstrumented_modules=1:ignore_interceptors_accesses=1"; \
+	$(CC) $(PRECFLAGS) $(CFLAGS) -o $(TARGET) $(SOURCES); \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###
@@ -44,6 +45,7 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=TRUE; \
+	export TSAN_OPTIONS="ignore_noninstrumented_modules=1:ignore_interceptors_accesses=1"; \
 	for thread in $(Threads); do \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \
