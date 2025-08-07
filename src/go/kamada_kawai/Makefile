@@ -23,7 +23,7 @@ compile: $(TARGET)
 
 $(TARGET): $(SOURCES)
 	@start=$$(date +%s.%N); \
-	go build -o $(TARGET) $(SOURCES); \
+	go build -race -o $(TARGET) $(SOURCES); \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###

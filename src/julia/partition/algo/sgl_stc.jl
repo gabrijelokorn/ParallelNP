@@ -29,6 +29,7 @@ function sgl_stc(arr::Vector{Vector{Int64}})
 			sum = partition_sum(arr[i], size, j)
 			if sum == half_problem_sum
 				atomic_cas!(found, false, true)
+				return
 			end
 		end
 		result[i] = found[]
