@@ -23,13 +23,13 @@ function sgl_stc(arr::Vector{Vector{Int64}})
 		found = Threads.Atomic{Bool}(false)
 		Threads.@threads :static for j in 1:numOfCombinations
 			if found[]
-				return
+				continue
 			end
 
 			sum = partition_sum(arr[i], size, j)
 			if sum == half_problem_sum
 				atomic_cas!(found, false, true)
-				return
+				continue
 			end
 		end
 		result[i] = found[]

@@ -7,6 +7,7 @@ function partition_sum(arr::Vector{Int64}, size::Int, index::Int64)
     for i in 1:size
         if index & (1 << (i - 1)) != 0
             sum += arr[i]
+            # @inbounds sum += arr[i]
         end
     end
 

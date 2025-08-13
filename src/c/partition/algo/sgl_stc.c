@@ -26,7 +26,7 @@ bool sgl_stc(Partitions *p)
 #pragma omp for schedule(static)
             for (unsigned long long int j = 0; j < numOfCombinations; j++)
             {
-#pragma omp cancellation point for
+#pragma omp cancelation point
 
                 int sum = partition_sum(arr, size, j);
                 if (sum == half_problem_sum)
@@ -38,6 +38,5 @@ bool sgl_stc(Partitions *p)
             }
         }
     }
-
     return found;
 }

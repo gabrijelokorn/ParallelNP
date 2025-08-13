@@ -17,7 +17,7 @@ CC = gcc
 CFLAGS = -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -fopenmp 		# -fopenmp is needed for OpenMP library
-CFLAGS += -O2
+CFLAGS += -O3
 # CFLAGS += -g -fsanitize=thread
 
 PartitionThreads ?= $(if $(P),$(P),$(shell nproc))
@@ -42,8 +42,10 @@ $(TARGET):
 ### --- RUN --- ###
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
-	export OMP_NESTED=TRUE; \
+	export OMP_NESTED=FALSE; \
 	export OMP_CANCELLATION=true; \
+	export OMP_PROC_BIND=close; \
+	export OMP_PLACES=cores; \
 	for thread in $(Threads); do \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \

@@ -4,7 +4,7 @@
 
 bool seq(Partitions *p)
 {
-    bool result = false;
+    bool found = false;
 
     for (int i = 0; i < p->rows; i++)
     {
@@ -24,11 +24,11 @@ bool seq(Partitions *p)
             int sum = partition_sum(row, size, j);
             if (sum == half_problem_sum)
             {
-                result = true;
+                found = true;
                 break;
             }
         }
     }
 
-    return result;
+    return found;
 }

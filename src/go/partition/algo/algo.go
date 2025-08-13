@@ -48,5 +48,6 @@ func run_algo(arr [][]int, algoFunc func([][]int) []int32, name string, test_id 
 }
 
 func Algo(arr [][]int, test_id string, repetitions int) {
-	run_algo(arr, Sgl_stc, "sgl_stc", test_id, repetitions)
+	run_algo(arr, Seq, "seq", test_id, repetitions)
+	// run_algo(arr, Sgl_stc, "sgl_stc", test_id, repetitions)
 }
