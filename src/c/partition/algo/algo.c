@@ -45,8 +45,8 @@ bool *run_algo(Partitions *p, bool (*func)(Partitions *), char *name, char *test
 
 void algo(Partitions *p, char *test_id, int repetitions)
 {
-    run_algo(p, seq, "seq", test_id, repetitions);
-    // run_algo(p, sgl_stc, "sgl_stc", test_id, repetitions);
+    // run_algo(p, seq, "seq", test_id, repetitions);
+    run_algo(p, sgl_stc, "sgl_stc", test_id, repetitions);
 
     return;
 }

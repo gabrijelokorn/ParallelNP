@@ -43,8 +43,8 @@ end
 
 
 function algo(arr::Vector{Vector{Int64}}, test_id::String, repetitions::Int)
-	run_algo(arr, Seq.seq, "seq", test_id, repetitions)
-	# run_algo(arr, Sgl_stc.sgl_stc, "sgl_stc", test_id, repetitions)
+	# run_algo(arr, Seq.seq, "seq", test_id, repetitions)
+	run_algo(arr, Sgl_stc.sgl_stc, "sgl_stc", test_id, repetitions)
 end # algo
 
 end # module

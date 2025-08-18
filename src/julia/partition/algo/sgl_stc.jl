@@ -21,7 +21,7 @@ function sgl_stc(arr::Vector{Vector{Int64}})
 		half_problem_sum = problem_sum ÷ 2
 
 		found = Threads.Atomic{Bool}(false)
-		Threads.@threads :static for j in 1:numOfCombinations
+		@inbounds Threads.@threads :static for j in 1:numOfCombinations
 			if found[]
 				continue
 			end
