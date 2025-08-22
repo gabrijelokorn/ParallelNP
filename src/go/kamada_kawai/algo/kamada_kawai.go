@@ -2,6 +2,8 @@ package algo
 
 import (
 	"math"
+	"runtime"
+	"sync"
 )
 
 // ############# KAMADA KAWAI DATA STRUCTURE ############# //
@@ -417,45 +419,107 @@ func (kk *KamadaKawai) update_deltas_par(m int64) int64 {
 	return delta_index
 }
 
+type partialDerivatives struct {
+	d_x_m  float64
+	d_y_m  float64
+	d_xx_m float64
+	d_yy_m float64
+	d_xy_m float64
+}
+
 func (kk *KamadaKawai) get_derivatives_par(m int64) (float64, float64, float64, float64, float64) {
-	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
-
-	for i := 0; i < kk.N; i++ {
-		if i == int(m) {
-			continue
-		}
-
-		var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
-
-		var x2 float64 = math.Pow(dist_x, 2)
-		var y2 float64 = math.Pow(dist_y, 2)
-		var x2_y2 float64 = x2 + y2
-		var x2_y2_1_2 float64 = math.Pow(x2_y2, float64(1)/float64(2))
-		var x2_y2_3_2 float64 = math.Pow(x2_y2, float64(3)/float64(2))
-
-		var addx = kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / x2_y2_1_2))
-		var addy = kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / x2_y2_1_2))
-		var addxx = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * y2) / x2_y2_3_2))
-		var addyy = kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * x2) / x2_y2_3_2))
-		var addxy = kk.K_ij[m][i] * ((kk.L_ij[m][i] * dist_x * dist_y) / x2_y2_3_2)
-
-		if !math.IsNaN(addx) {
-			d_x_m += addx
-		}
-		if !math.IsNaN(addy) {
-			d_y_m += addy
-		}
-		if !math.IsNaN(addxx) {
-			d_xx_m += addxx
-		}
-		if !math.IsNaN(addyy) {
-			d_yy_m += addyy
-		}
-		if !math.IsNaN(addxy) {
-			d_xy_m += addxy
-		}
-
+	numWorkers := runtime.GOMAXPROCS(0)
+	if kk.N < numWorkers*10 {
+		return kk.get_derivatives_seq(m)
 	}
+
+	chunkSize := kk.N / numWorkers
+	if chunkSize == 0 {
+		chunkSize = 1
+	}
+
+	results := make(chan partialDerivatives, numWorkers)
+	var wg sync.WaitGroup
+
+	// Process chunks
+	for w := 0; w < numWorkers; w++ {
+		start := w * chunkSize
+		end := start + chunkSize
+		if w == numWorkers-1 {
+			end = kk.N // Handle remainder in last worker
+		}
+
+		wg.Add(1)
+		go func(startIdx, endIdx int) {
+			defer wg.Done()
+
+			var local_d_x_m, local_d_y_m, local_d_xx_m, local_d_yy_m, local_d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
+
+			for i := startIdx; i < endIdx; i++ {
+				if i == int(m) {
+					continue
+				}
+
+				// Same calculation as above...
+				var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
+				var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
+
+				var x2 float64 = dist_x * dist_x
+				var y2 float64 = dist_y * dist_y
+				var x2_y2 float64 = x2 + y2
+				var x2_y2_1_2 float64 = math.Sqrt(x2_y2)
+				var x2_y2_3_2 float64 = x2_y2 * x2_y2_1_2
+
+				var k_ij = kk.K_ij[m][i]
+				var l_ij = kk.L_ij[m][i]
+
+				var addx = k_ij * (dist_x - ((l_ij * dist_x) / x2_y2_1_2))
+				var addy = k_ij * (dist_y - ((l_ij * dist_y) / x2_y2_1_2))
+				var addxx = k_ij * (1 - ((l_ij * y2) / x2_y2_3_2))
+				var addyy = k_ij * (1 - ((l_ij * x2) / x2_y2_3_2))
+				var addxy = k_ij * ((l_ij * dist_x * dist_y) / x2_y2_3_2)
+
+				if !math.IsNaN(addx) {
+					local_d_x_m += addx
+				}
+				if !math.IsNaN(addy) {
+					local_d_y_m += addy
+				}
+				if !math.IsNaN(addxx) {
+					local_d_xx_m += addxx
+				}
+				if !math.IsNaN(addyy) {
+					local_d_yy_m += addyy
+				}
+				if !math.IsNaN(addxy) {
+					local_d_xy_m += addxy
+				}
+			}
+
+			results <- partialDerivatives{
+				d_x_m:  local_d_x_m,
+				d_y_m:  local_d_y_m,
+				d_xx_m: local_d_xx_m,
+				d_yy_m: local_d_yy_m,
+				d_xy_m: local_d_xy_m,
+			}
+		}(start, end)
+	}
+
+	// Wait and collect results
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
+	for partial := range results {
+		d_x_m += partial.d_x_m
+		d_y_m += partial.d_y_m
+		d_xx_m += partial.d_xx_m
+		d_yy_m += partial.d_yy_m
+		d_xy_m += partial.d_xy_m
+	}
+
 	return d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m
 }
