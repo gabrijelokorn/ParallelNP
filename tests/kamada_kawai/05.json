@@ -503,8 +503,8 @@
 {"source": 249, "target": 250},
 {"source": 250, "target": 1}
 ],
-"K": 10,
-"epsilon": 0.01,
-"display": 50,
-"limit": 500
+"K": 0.001,
+"epsilon": 0.001,
+"display": 500,
+"limit": 100
 }

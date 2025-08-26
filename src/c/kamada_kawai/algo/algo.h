@@ -11,8 +11,9 @@
 
 void algo(KamadaKawai *kk, char *num, char *repetitions);
 
-void sgl_seq(KamadaKawai *kamadaKawai);
-void sgl_par(KamadaKawai *kamadaKawai);
+void mem_seq(KamadaKawai *kamadaKawai);
+void mem_par(KamadaKawai *kamadaKawai);
+void par(KamadaKawai *kamadaKawai);
 void mlt_seq(KamadaKawai *kamadaKawai);
 void mlt_par(KamadaKawai *kamadaKawai);
 

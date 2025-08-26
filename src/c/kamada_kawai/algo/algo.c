@@ -56,10 +56,10 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *te
         avg_time += end - start;
     }
     avg_time = avg_time / atoi(repetitions);
-
+    
     // --- OUTPUT --- //
     output_algo(kk, original, avg_time, name, test_id); // Write results to file
-
+    
     // --- RESET DATA --- //
     copyCoords(original, kk->coords, kk->n); // Copy the original data back
 
@@ -69,8 +69,9 @@ void run_algo(KamadaKawai *kk, void (*func)(KamadaKawai *), char *name, char *te
 
 void algo(KamadaKawai *kk, char *test_id, char *repetitions)
 {
-    // run_algo(kk, sgl_seq, "sgl_seq", test_id, repetitions);
-    run_algo(kk, sgl_par, "sgl_par", test_id, repetitions);
+    // run_algo(kk, mem_seq, "mem_seq", test_id, repetitions);
+    // run_algo(kk, mem_par, "mem_par", test_id, repetitions);
+    run_algo(kk, par, "par", test_id, repetitions);
 
     return;
 }

@@ -7,8 +7,9 @@ SOURCES = main.c\
 ./json2kamada_kawai.c ./kamada_kawai2csv.c ./kamada_kawai.c\
 ../common/file.c ../common/read.c ../common/error.c ../common/write.c\
 ./algo/algo.c \
-./algo/sgl_seq.c \
-./algo/sgl_par.c
+./algo/mem_seq.c \
+./algo/mem_par.c \
+./algo/par.c
 
 ALGO = algo
 TESTD = ../../../tests
@@ -20,7 +21,7 @@ CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
 CFLAGS += -lm 			# -lm is needed for math library
 CFLAGS += -O3
-PRECFLAGS = -g -fsanitize=thread
+# PRECFLAGS = -g -fsanitize=thread
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
@@ -44,8 +45,9 @@ $(TARGET):
 ### --- RUN --- ###
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
-	export OMP_NESTED=TRUE; \
-	export TSAN_OPTIONS="ignore_noninstrumented_modules=1:ignore_interceptors_accesses=1"; \
+	export OMP_NESTED=FALSE; \
+	export OMP_PROC_BIND=close; \
+	export OMP_PLACES=cores; \
 	for thread in $(Threads); do \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \

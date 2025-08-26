@@ -6,12 +6,10 @@ import (
 	parallelNP "golang/common"
 	algo "golang/kamada_kawai/algo"
 	"io/ioutil"
-
-	"github.com/pkg/profile"
 )
 
 func main() {
-	defer profile.Start(profile.CPUProfile, profile.ProfilePath(".")).Stop()
+	// defer profile.Start(profile.CPUProfile, profile.ProfilePath(".")).Stop()
 
 	// Define flags
 	t := flag.String("t", "test", "Name of the test file")

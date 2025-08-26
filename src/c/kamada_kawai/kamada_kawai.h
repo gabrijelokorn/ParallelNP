@@ -40,23 +40,36 @@ typedef struct KamadaKawai
 
 void copyCoords(Coord *kk_coords, Coord *v_coords, int n);
 
-double get_delta_m_y(double derivaitve_x_m, double derivaitve_y_m, double derivaitve_xx_m, double derivaitve_yy_m, double derivaitve_xy_m);
+double update_delta_m_mem(KamadaKawai *kk, int m, int index);
+
 double get_delta_m_x(double derivaitve_x_m, double derivaitve_y_m, double derivaitve_xx_m, double derivaitve_yy_m, double derivaitve_xy_m, double delta_y);
+double get_delta_m_y(double derivaitve_x_m, double derivaitve_y_m, double derivaitve_xx_m, double derivaitve_yy_m, double derivaitve_xy_m);
 
-double get_delta_m_seq(KamadaKawai *kk, int index);
+double get_delta_m_mem_seq(KamadaKawai *kk, int index);
+double get_delta_m_mem_par(KamadaKawai *kk, int index);
+
+void get_derivatives_mem_seq(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy);
+void get_derivatives_mem_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy);
+
+int get_deltas_mem_seq(KamadaKawai *kk);
+int get_deltas_mem_par(KamadaKawai *kk);
+
+int update_deltas_mem_seq(KamadaKawai *kk, int m);
+int update_deltas_mem_par(KamadaKawai *kk, int m);
+
+double get_derivative_x_mem_seq(KamadaKawai *kk, int index);
+double get_derivative_x_mem_par(KamadaKawai *kk, int index);
+
+double get_derivative_y_mem_seq(KamadaKawai *kk, int index);
+double get_derivative_y_mem_par(KamadaKawai *kk, int index);
+
+
+double update_delta_m(KamadaKawai *kk, int index);
 double get_delta_m_par(KamadaKawai *kk, int index);
-double update_delta_m(KamadaKawai *kk, int m, int index);
-
-void get_derivatives_seq(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy);
 void get_derivatives_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy);
-int get_deltas_seq(KamadaKawai *kk);
 int get_deltas_par(KamadaKawai *kk);
-int update_deltas_seq(KamadaKawai *kk, int m);
 int update_deltas_par(KamadaKawai *kk, int m);
-
-double get_derivative_x_seq(KamadaKawai *kk, int index);
 double get_derivative_x_par(KamadaKawai *kk, int index);
-double get_derivative_y_seq(KamadaKawai *kk, int index);
 double get_derivative_y_par(KamadaKawai *kk, int index);
 
 #endif

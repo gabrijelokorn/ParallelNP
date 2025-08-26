@@ -2,7 +2,6 @@ package algo
 
 import (
 	"math"
-	"runtime"
 	"sync"
 )
 
@@ -183,7 +182,7 @@ func (kk *KamadaKawai) get_addend_y(m int64, index int64) float64 {
 	}
 	return addend
 }
-func (kk *KamadaKawai) update_delta_m(m int64, index int64) float64 {
+func (kk *KamadaKawai) update_delta_m_mem(m int64, index int64) float64 {
 	var tempx float64 = kk.get_addend_x(m, index)
 	var tempy float64 = kk.get_addend_y(m, index)
 
@@ -198,10 +197,27 @@ func (kk *KamadaKawai) update_delta_m(m int64, index int64) float64 {
 
 // ### ### ### ########################## ### ### ### //
 // ### ### ### ########################## ### ### ### //
-// ### ### ### ### SEQUENTIAL VERSION ### ### ### ### //
+// ### ### ### ### NON-MEMORY FUNCTIONS ### ### ### ### //
 // ### ### ### ########################## ### ### ### //
 // ### ### ### ########################## ### ### ### //
-func (kk *KamadaKawai) get_derivative_x_seq(m int64) float64 {
+func (kk *KamadaKawai) update_delta_m(index int64) float64 {
+	var dx float64 = 0.0
+	var dy float64 = 0.0
+
+	for i := 0; i < kk.N; i++ {
+		dx += kk.get_addend_x(int64(i), index)
+		dy += kk.get_addend_y(int64(i), index)
+	}
+
+	return math.Sqrt(math.Pow(dx, 2) + math.Pow(dy, 2))
+}
+
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ### MEMORY SEQUENTIAL VERSION ### ### ### ### //
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
+func (kk *KamadaKawai) get_derivative_x_mem_seq(m int64) float64 {
 
 	var sum float64 = 0.0
 
@@ -224,7 +240,7 @@ func (kk *KamadaKawai) get_derivative_x_seq(m int64) float64 {
 	kk.Dx[m] = sum
 	return sum
 }
-func (kk *KamadaKawai) get_derivative_y_seq(m int64) float64 {
+func (kk *KamadaKawai) get_derivative_y_mem_seq(m int64) float64 {
 	var sum float64 = 0.0
 
 	for i := 0; i < kk.N; i++ {
@@ -246,15 +262,15 @@ func (kk *KamadaKawai) get_derivative_y_seq(m int64) float64 {
 	kk.Dy[m] = sum
 	return sum
 }
-func (kk *KamadaKawai) get_delta_m_seq(m int64) float64 {
-	return math.Sqrt(math.Pow(kk.get_derivative_x_seq(m), 2) + math.Pow(kk.get_derivative_y_seq(m), 2))
+func (kk *KamadaKawai) get_delta_m_mem_seq(m int64) float64 {
+	return math.Sqrt(math.Pow(kk.get_derivative_x_mem_seq(m), 2) + math.Pow(kk.get_derivative_y_mem_seq(m), 2))
 }
-func (kk *KamadaKawai) get_deltas_seq() int64 {
+func (kk *KamadaKawai) get_deltas_mem_seq() int64 {
 	var delta_index int64 = -1
 	var max_delta float64 = 0.0
 
 	for i := 0; i < kk.N; i++ {
-		kk.Deltas[i] = kk.get_delta_m_seq(int64(i))
+		kk.Deltas[i] = kk.get_delta_m_mem_seq(int64(i))
 
 		if kk.Deltas[i] > kk.Epsilon {
 			if kk.Deltas[i] > max_delta {
@@ -266,7 +282,7 @@ func (kk *KamadaKawai) get_deltas_seq() int64 {
 
 	return delta_index
 }
-func (kk *KamadaKawai) update_deltas_seq(m int64) int64 {
+func (kk *KamadaKawai) update_deltas_mem_seq(m int64) int64 {
 	var delta_index int64 = -1
 	var max_delta float64 = 0.0
 
@@ -274,7 +290,7 @@ func (kk *KamadaKawai) update_deltas_seq(m int64) int64 {
 		if m == int64(i) {
 			continue
 		}
-		kk.Deltas[i] = kk.update_delta_m(m, int64(i))
+		kk.Deltas[i] = kk.update_delta_m_mem(m, int64(i))
 
 		if kk.Deltas[i] > max_delta {
 			if kk.Deltas[i] > kk.Epsilon {
@@ -286,7 +302,7 @@ func (kk *KamadaKawai) update_deltas_seq(m int64) int64 {
 
 	return delta_index
 }
-func (kk *KamadaKawai) get_derivatives_seq(m int64) (float64, float64, float64, float64, float64) {
+func (kk *KamadaKawai) get_derivatives_mem_seq(m int64) (float64, float64, float64, float64, float64) {
 	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
 
 	for i := 0; i < kk.N; i++ {
@@ -331,62 +347,248 @@ func (kk *KamadaKawai) get_derivatives_seq(m int64) (float64, float64, float64, 
 
 // ### ### ### ########################## ### ### ### //
 // ### ### ### ########################## ### ### ### //
+// ### ### ### #### MEMORY PARALLEL VERSION #### ### ### ### //
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
+func (kk *KamadaKawai) get_derivative_x_mem_par(m int64) float64 {
+	var sum float64
+	var mu sync.Mutex
+	var wg sync.WaitGroup
+
+	for i := 0; i < kk.N; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			if i == int(m) {
+				kk.Addendx[m][i] = 0.0
+				return
+			}
+
+			dist_x := kk.Coords[m].X - kk.Coords[i].X
+			dist_y := kk.Coords[m].Y - kk.Coords[i].Y
+
+			addend := kk.K_ij[m][i] * (dist_x -
+				((kk.L_ij[m][i] * dist_x) /
+					math.Sqrt(dist_x*dist_x+dist_y*dist_y)))
+
+			if math.IsNaN(addend) {
+				return
+			}
+
+			kk.Addendx[m][i] = addend
+
+			mu.Lock()
+			sum += addend
+			mu.Unlock()
+		}(i)
+	}
+	wg.Wait()
+
+	kk.Dx[m] = sum
+	return sum
+}
+
+func (kk *KamadaKawai) get_derivative_y_mem_par(m int64) float64 {
+	var sum float64
+	var mu sync.Mutex
+	var wg sync.WaitGroup
+
+	for i := 0; i < kk.N; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			if i == int(m) {
+				kk.Addendy[m][i] = 0.0
+				return
+			}
+
+			dist_x := kk.Coords[m].X - kk.Coords[i].X
+			dist_y := kk.Coords[m].Y - kk.Coords[i].Y
+
+			addend := kk.K_ij[m][i] * (dist_y -
+				((kk.L_ij[m][i] * dist_y) /
+					math.Sqrt(dist_x*dist_x+dist_y*dist_y)))
+
+			if math.IsNaN(addend) {
+				return
+			}
+
+			kk.Addendy[m][i] = addend
+
+			mu.Lock()
+			sum += addend
+			mu.Unlock()
+		}(i)
+	}
+	wg.Wait()
+
+	kk.Dy[m] = sum
+	return sum
+}
+
+func (kk *KamadaKawai) get_delta_m_mem_par(m int64) float64 {
+	return math.Sqrt(
+		math.Pow(kk.get_derivative_x_mem_par(m), 2) +
+			math.Pow(kk.get_derivative_y_mem_par(m), 2))
+}
+
+func (kk *KamadaKawai) get_deltas_mem_par() int64 {
+	var wg sync.WaitGroup
+	for i := 0; i < kk.N; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			kk.Deltas[i] = kk.get_delta_m_mem_seq(int64(i))
+		}(i)
+	}
+	wg.Wait()
+
+	var delta_index int64 = -1
+	var max_delta float64 = 0.0
+	for i := 0; i < kk.N; i++ {
+		if kk.Deltas[i] > kk.Epsilon && kk.Deltas[i] > max_delta {
+			max_delta = kk.Deltas[i]
+			delta_index = int64(i)
+		}
+	}
+	return delta_index
+}
+
+func (kk *KamadaKawai) update_deltas_mem_par(m int64) int64 {
+	var wg sync.WaitGroup
+	for i := 0; i < kk.N; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			if m == int64(i) {
+				return
+			}
+			kk.Deltas[i] = kk.update_delta_m_mem(m, int64(i))
+		}(i)
+	}
+	wg.Wait()
+
+	var delta_index int64 = -1
+	var max_delta float64 = 0.0
+	for i := 0; i < kk.N; i++ {
+		if kk.Deltas[i] > kk.Epsilon && kk.Deltas[i] > max_delta {
+			max_delta = kk.Deltas[i]
+			delta_index = int64(i)
+		}
+	}
+	return delta_index
+}
+
+func (kk *KamadaKawai) get_derivatives_mem_par(m int64) (float64, float64, float64, float64, float64) {
+	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m float64
+	var mu sync.Mutex
+	var wg sync.WaitGroup
+
+	for i := 0; i < kk.N; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			if i == int(m) {
+				return
+			}
+
+			dist_x := kk.Coords[m].X - kk.Coords[i].X
+			dist_y := kk.Coords[m].Y - kk.Coords[i].Y
+
+			x2 := dist_x * dist_x
+			y2 := dist_y * dist_y
+			x2_y2 := x2 + y2
+			x2_y2_1_2 := math.Sqrt(x2_y2)
+			x2_y2_3_2 := math.Pow(x2_y2, 1.5)
+
+			addx := kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / x2_y2_1_2))
+			addy := kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / x2_y2_1_2))
+			addxx := kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * y2) / x2_y2_3_2))
+			addyy := kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * x2) / x2_y2_3_2))
+			addxy := kk.K_ij[m][i] * ((kk.L_ij[m][i] * dist_x * dist_y) / x2_y2_3_2)
+
+			mu.Lock()
+			if !math.IsNaN(addx) {
+				d_x_m += addx
+			}
+			if !math.IsNaN(addy) {
+				d_y_m += addy
+			}
+			if !math.IsNaN(addxx) {
+				d_xx_m += addxx
+			}
+			if !math.IsNaN(addyy) {
+				d_yy_m += addyy
+			}
+			if !math.IsNaN(addxy) {
+				d_xy_m += addxy
+			}
+			mu.Unlock()
+		}(i)
+	}
+	wg.Wait()
+	return d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m
+}
+
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
 // ### ### ### #### PARALLEL VERSION #### ### ### ### //
 // ### ### ### ########################## ### ### ### //
 // ### ### ### ########################## ### ### ### //
 func (kk *KamadaKawai) get_derivative_x_par(m int64) float64 {
-	var sum float64 = 0.0
+	var sum float64
 
 	for i := 0; i < kk.N; i++ {
 		if i == int(m) {
-			kk.Addendx[m][i] = 0.0
 			continue
 		}
 
-		var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
+		dist_x := kk.Coords[m].X - kk.Coords[i].X
+		dist_y := kk.Coords[m].Y - kk.Coords[i].Y
 
-		var addend float64 = kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / (math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(1)/float64(2)))))
+		addend := kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / math.Sqrt(dist_x*dist_x+dist_y*dist_y)))
+
 		if math.IsNaN(addend) {
 			continue
 		}
-		kk.Addendx[m][i] = addend
+
 		sum += addend
 	}
-	kk.Dx[m] = sum
 	return sum
 }
+
 func (kk *KamadaKawai) get_derivative_y_par(m int64) float64 {
-	var sum float64 = 0.0
+	var sum float64
 
 	for i := 0; i < kk.N; i++ {
 		if i == int(m) {
-			kk.Addendy[m][i] = 0.0
 			continue
 		}
 
-		var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
-		var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
+		dist_x := kk.Coords[m].X - kk.Coords[i].X
+		dist_y := kk.Coords[m].Y - kk.Coords[i].Y
 
-		var addend float64 = kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / (math.Pow(math.Pow(dist_x, 2)+math.Pow(dist_y, 2), float64(1)/float64(2)))))
+		addend := kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / math.Sqrt(dist_x*dist_x+dist_y*dist_y)))
+
 		if math.IsNaN(addend) {
 			continue
 		}
-		kk.Addendy[m][i] = addend
+
 		sum += addend
 	}
-	kk.Dy[m] = sum
 	return sum
 }
+
 func (kk *KamadaKawai) get_delta_m_par(m int64) float64 {
 	return math.Sqrt(math.Pow(kk.get_derivative_x_par(m), 2) + math.Pow(kk.get_derivative_y_par(m), 2))
 }
+
 func (kk *KamadaKawai) get_deltas_par() int64 {
 	var delta_index int64 = -1
 	var max_delta float64 = 0.0
 
 	for i := 0; i < kk.N; i++ {
-		kk.Deltas[i] = kk.get_delta_m_seq(int64(i))
+		kk.Deltas[i] = kk.get_delta_m_par(int64(i))
 
 		if kk.Deltas[i] > kk.Epsilon {
 			if kk.Deltas[i] > max_delta {
@@ -398,16 +600,25 @@ func (kk *KamadaKawai) get_deltas_par() int64 {
 
 	return delta_index
 }
+
 func (kk *KamadaKawai) update_deltas_par(m int64) int64 {
 	var delta_index int64 = -1
 	var max_delta float64 = 0.0
 
+	var wg sync.WaitGroup
 	for i := 0; i < kk.N; i++ {
-		if m == int64(i) {
-			continue
-		}
-		kk.Deltas[i] = kk.update_delta_m(m, int64(i))
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			if m == int64(i) {
+				return
+			}
+			kk.Deltas[i] = kk.update_delta_m(int64(i))
+		}(i)
+	}
+	wg.Wait()
 
+	for i := 0; i < kk.N; i++ {
 		if kk.Deltas[i] > kk.Epsilon {
 			if kk.Deltas[i] > max_delta {
 				max_delta = kk.Deltas[i]
@@ -415,111 +626,47 @@ func (kk *KamadaKawai) update_deltas_par(m int64) int64 {
 			}
 		}
 	}
-
 	return delta_index
 }
 
-type partialDerivatives struct {
-	d_x_m  float64
-	d_y_m  float64
-	d_xx_m float64
-	d_yy_m float64
-	d_xy_m float64
-}
-
 func (kk *KamadaKawai) get_derivatives_par(m int64) (float64, float64, float64, float64, float64) {
-	numWorkers := runtime.GOMAXPROCS(0)
-	if kk.N < numWorkers*10 {
-		return kk.get_derivatives_seq(m)
-	}
+	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m float64
 
-	chunkSize := kk.N / numWorkers
-	if chunkSize == 0 {
-		chunkSize = 1
-	}
-
-	results := make(chan partialDerivatives, numWorkers)
-	var wg sync.WaitGroup
-
-	// Process chunks
-	for w := 0; w < numWorkers; w++ {
-		start := w * chunkSize
-		end := start + chunkSize
-		if w == numWorkers-1 {
-			end = kk.N // Handle remainder in last worker
+	for i := 0; i < kk.N; i++ {
+		if i == int(m) {
+			continue
 		}
 
-		wg.Add(1)
-		go func(startIdx, endIdx int) {
-			defer wg.Done()
+		dist_x := kk.Coords[m].X - kk.Coords[i].X
+		dist_y := kk.Coords[m].Y - kk.Coords[i].Y
 
-			var local_d_x_m, local_d_y_m, local_d_xx_m, local_d_yy_m, local_d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
+		x2 := dist_x * dist_x
+		y2 := dist_y * dist_y
+		x2_y2 := x2 + y2
+		x2_y2_1_2 := math.Sqrt(x2_y2)
+		x2_y2_3_2 := math.Pow(x2_y2, 1.5)
 
-			for i := startIdx; i < endIdx; i++ {
-				if i == int(m) {
-					continue
-				}
+		addx := kk.K_ij[m][i] * (dist_x - ((kk.L_ij[m][i] * dist_x) / x2_y2_1_2))
+		addy := kk.K_ij[m][i] * (dist_y - ((kk.L_ij[m][i] * dist_y) / x2_y2_1_2))
+		addxx := kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * y2) / x2_y2_3_2))
+		addyy := kk.K_ij[m][i] * (1 - ((kk.L_ij[m][i] * x2) / x2_y2_3_2))
+		addxy := kk.K_ij[m][i] * ((kk.L_ij[m][i] * dist_x * dist_y) / x2_y2_3_2)
 
-				// Same calculation as above...
-				var dist_x float64 = kk.Coords[m].X - kk.Coords[i].X
-				var dist_y float64 = kk.Coords[m].Y - kk.Coords[i].Y
-
-				var x2 float64 = dist_x * dist_x
-				var y2 float64 = dist_y * dist_y
-				var x2_y2 float64 = x2 + y2
-				var x2_y2_1_2 float64 = math.Sqrt(x2_y2)
-				var x2_y2_3_2 float64 = x2_y2 * x2_y2_1_2
-
-				var k_ij = kk.K_ij[m][i]
-				var l_ij = kk.L_ij[m][i]
-
-				var addx = k_ij * (dist_x - ((l_ij * dist_x) / x2_y2_1_2))
-				var addy = k_ij * (dist_y - ((l_ij * dist_y) / x2_y2_1_2))
-				var addxx = k_ij * (1 - ((l_ij * y2) / x2_y2_3_2))
-				var addyy = k_ij * (1 - ((l_ij * x2) / x2_y2_3_2))
-				var addxy = k_ij * ((l_ij * dist_x * dist_y) / x2_y2_3_2)
-
-				if !math.IsNaN(addx) {
-					local_d_x_m += addx
-				}
-				if !math.IsNaN(addy) {
-					local_d_y_m += addy
-				}
-				if !math.IsNaN(addxx) {
-					local_d_xx_m += addxx
-				}
-				if !math.IsNaN(addyy) {
-					local_d_yy_m += addyy
-				}
-				if !math.IsNaN(addxy) {
-					local_d_xy_m += addxy
-				}
-			}
-
-			results <- partialDerivatives{
-				d_x_m:  local_d_x_m,
-				d_y_m:  local_d_y_m,
-				d_xx_m: local_d_xx_m,
-				d_yy_m: local_d_yy_m,
-				d_xy_m: local_d_xy_m,
-			}
-		}(start, end)
+		if !math.IsNaN(addx) {
+			d_x_m += addx
+		}
+		if !math.IsNaN(addy) {
+			d_y_m += addy
+		}
+		if !math.IsNaN(addxx) {
+			d_xx_m += addxx
+		}
+		if !math.IsNaN(addyy) {
+			d_yy_m += addyy
+		}
+		if !math.IsNaN(addxy) {
+			d_xy_m += addxy
+		}
 	}
-
-	// Wait and collect results
-	go func() {
-		wg.Wait()
-		close(results)
-	}()
-
-	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m = 0.0, 0.0, 0.0, 0.0, 0.0
-	for partial := range results {
-		d_x_m += partial.d_x_m
-		d_y_m += partial.d_y_m
-		d_xx_m += partial.d_xx_m
-		d_yy_m += partial.d_yy_m
-		d_xy_m += partial.d_xy_m
-	}
-
 	return d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m
 }

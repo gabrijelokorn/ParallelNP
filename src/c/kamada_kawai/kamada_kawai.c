@@ -51,7 +51,13 @@ double get_addend_y(KamadaKawai *kk, int m, int index)
 
     return addend;
 }
-double update_delta_m(KamadaKawai *kk, int m, int index)
+
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ### MEMORY VERSION ### ### ### ### //
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
+double update_delta_m_mem(KamadaKawai *kk, int m, int index)
 {
     double tempx = get_addend_x(kk, m, index);
     double tempy = get_addend_y(kk, m, index);
@@ -67,10 +73,27 @@ double update_delta_m(KamadaKawai *kk, int m, int index)
 
 // ### ### ### ########################## ### ### ### //
 // ### ### ### ########################## ### ### ### //
+// ### ### ### ### NON-MEMORY VERSION ### ### ### ### //
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
+double update_delta_m(KamadaKawai *kk, int index)
+{
+    double dx = 0, dy = 0;
+
+    for (int i = 0; i < kk->n; i++)
+    {
+        dx += get_addend_x(kk, i, index);
+        dy += get_addend_y(kk, i, index);
+    }
+    return sqrt((double)pow(dx, 2) + (double)pow(dy, 2));
+}
+
+// ### ### ### ########################## ### ### ### //
+// ### ### ### ########################## ### ### ### //
 // ### ### ### ### SEQUENTIAL VERSION ### ### ### ### //
 // ### ### ### ########################## ### ### ### //
 // ### ### ### ########################## ### ### ### //
-double get_derivative_x_seq(KamadaKawai *kk, int index)
+double get_derivative_x_mem_seq(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
@@ -96,7 +119,7 @@ double get_derivative_x_seq(KamadaKawai *kk, int index)
     kk->dx[index] = sum;
     return sum;
 }
-double get_derivative_y_seq(KamadaKawai *kk, int index)
+double get_derivative_y_mem_seq(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
@@ -123,18 +146,18 @@ double get_derivative_y_seq(KamadaKawai *kk, int index)
     kk->dy[index] = sum;
     return sum;
 }
-double get_delta_m_seq(KamadaKawai *kk, int index)
+double get_delta_m_mem_seq(KamadaKawai *kk, int index)
 {
-    return sqrt((double)pow(get_derivative_x_seq(kk, index), 2) + (double)pow(get_derivative_y_seq(kk, index), 2));
+    return sqrt((double)pow(get_derivative_x_mem_seq(kk, index), 2) + (double)pow(get_derivative_y_mem_seq(kk, index), 2));
 }
-int get_deltas_seq(KamadaKawai *kk)
+int get_deltas_mem_seq(KamadaKawai *kk)
 {
     int delta_index = -1;
     double max_delta = 0.0;
 
     for (int i = 0; i < kk->n; i++)
     {
-        kk->deltas[i] = get_delta_m_seq(kk, i);
+        kk->deltas[i] = get_delta_m_mem_seq(kk, i);
 
         if (kk->deltas[i] > kk->epsilon)
         {
@@ -149,7 +172,7 @@ int get_deltas_seq(KamadaKawai *kk)
     return delta_index;
 }
 
-int update_deltas_seq(KamadaKawai *kk, int m)
+int update_deltas_mem_seq(KamadaKawai *kk, int m)
 {
     int delta_index = -1;
     double max_delta = 0.0;
@@ -159,7 +182,7 @@ int update_deltas_seq(KamadaKawai *kk, int m)
         if (m == i)
             continue;
 
-        kk->deltas[i] = update_delta_m(kk, m, i);
+        kk->deltas[i] = update_delta_m_mem(kk, m, i);
 
         if (kk->deltas[i] > kk->epsilon && kk->deltas[i] > max_delta)
         {
@@ -170,7 +193,7 @@ int update_deltas_seq(KamadaKawai *kk, int m)
 
     return delta_index;
 }
-void get_derivatives_seq(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy)
+void get_derivatives_mem_seq(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy)
 {
     for (int i = 0; i < kk->n; i++)
     {
@@ -205,16 +228,16 @@ void get_derivatives_seq(KamadaKawai *kk, int index, double *d_m_x, double *d_m_
     }
 }
 
-// ### ### ### ######################## ### ### ### //
-// ### ### ### ######################## ### ### ### //
-// ### ### ### ### PARALLEL VERSION ### ### ### ### //
-// ### ### ### ######################## ### ### ### //
-// ### ### ### ######################## ### ### ### //
-double get_derivative_x_par(KamadaKawai *kk, int index)
+// ### #### ##### ######################## ##### #### ### //
+// ### #### ##### ######################## ##### #### ### //
+// ### ### ### ### MEMORY PARALLEL VERSION ### ### ### ### //
+// ### #### ##### ######################## ##### #### ### //
+// ### #### ##### ######################## ##### #### ### //
+double get_derivative_x_mem_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-// #pragma omp parallel for reduction(+ : sum) schedule(static)
+#pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
@@ -237,11 +260,11 @@ double get_derivative_x_par(KamadaKawai *kk, int index)
     kk->dx[index] = sum;
     return sum;
 }
-double get_derivative_y_par(KamadaKawai *kk, int index)
+double get_derivative_y_mem_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-// #pragma omp parallel for reduction(+ : sum) schedule(static)
+#pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
@@ -265,6 +288,159 @@ double get_derivative_y_par(KamadaKawai *kk, int index)
     kk->dy[index] = sum;
     return sum;
 }
+double get_delta_m_mem_par(KamadaKawai *kk, int index)
+{
+    return sqrt((double)pow(get_derivative_x_mem_par(kk, index), 2) + (double)pow(get_derivative_y_mem_par(kk, index), 2));
+}
+int get_deltas_mem_par(KamadaKawai *kk)
+{
+    double max_delta = 0.0;
+
+#pragma omp parallel for reduction(max : max_delta)
+    for (int i = 0; i < kk->n; i++)
+    {
+        double temp = get_delta_m_mem_par(kk, i);
+        kk->deltas[i] = temp;
+        if (temp > max_delta)
+            max_delta = temp;
+    }
+
+    if (max_delta <= kk->epsilon)
+        return -1;
+
+    for (int i = 0; i < kk->n; i++)
+        if (max_delta == kk->deltas[i])
+            return i;
+
+    return -1;
+}
+int update_deltas_mem_par(KamadaKawai *kk, int m)
+{
+    int delta_index = -1;
+    double max_delta = 0.0;
+
+#pragma omp parallel for default(none) shared(kk, m, delta_index) reduction(max : max_delta)
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (m == i)
+            continue;
+
+        double temp = update_delta_m_mem(kk, m, i);
+        kk->deltas[i] = temp;
+
+        if (temp > max_delta)
+            max_delta = temp;
+    }
+
+    if (max_delta <= kk->epsilon)
+        return -1;
+
+    for (int i = 0; i < kk->n; i++)
+        if (max_delta == kk->deltas[i])
+            return i;
+
+    return -1;
+}
+void get_derivatives_mem_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy)
+{
+    double local_d_x = 0, local_d_y = 0, local_d_xx = 0, local_d_yy = 0, local_d_xy = 0;
+
+#pragma omp parallel for reduction(+ : local_d_x, local_d_y, local_d_xx, local_d_yy, local_d_xy) schedule(static)
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+            continue;
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+        double x2 = dist_x * dist_x;
+        double y2 = dist_y * dist_y;
+        double x2_y2 = x2 + y2;
+
+        if (x2_y2 < 1e-12)
+            continue; // prevent NaNs early
+
+        double inv_len = 1.0 / sqrt(x2_y2);
+        double x2_y2_3_2 = x2_y2 * sqrt(x2_y2); // sqrt(x2 + y2)^3
+
+        double lij = kk->l_ij[index][i];
+        double kij = kk->k_ij[index][i];
+
+        double addend_x = kij * (dist_x - ((lij * dist_x) / (1.0 / inv_len)));
+        double addend_y = kij * (dist_y - ((lij * dist_y) / (1.0 / inv_len)));
+        double addend_xx = kij * (1 - ((lij * y2) / x2_y2_3_2));
+        double addend_yy = kij * (1 - ((lij * x2) / x2_y2_3_2));
+        double addend_xy = kij * ((lij * dist_x * dist_y) / x2_y2_3_2);
+
+        local_d_x += isnan(addend_x) ? 0.0 : addend_x;
+        local_d_y += isnan(addend_y) ? 0.0 : addend_y;
+        local_d_xx += isnan(addend_xx) ? 0.0 : addend_xx;
+        local_d_yy += isnan(addend_yy) ? 0.0 : addend_yy;
+        local_d_xy += isnan(addend_xy) ? 0.0 : addend_xy;
+    }
+
+    *d_m_x = local_d_x;
+    *d_m_y = local_d_y;
+    *d_m_xx = local_d_xx;
+    *d_m_yy = local_d_yy;
+    *d_m_xy = local_d_xy;
+}
+
+// ### ### ### ######################## ### ### ### //
+// ### ### ### ######################## ### ### ### //
+// ### ### ### ### PARALLEL VERSION ### ### ### ### //
+// ### ### ### ######################## ### ### ### //
+// ### ### ### ######################## ### ### ### //
+double get_derivative_x_par(KamadaKawai *kk, int index)
+{
+    double sum = 0;
+
+    // #pragma omp parallel for reduction(+ : sum) schedule(static)
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+        {
+            continue;
+        }
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+        if (isnan(addend))
+            continue;
+
+        sum += addend;
+    }
+
+    return sum;
+}
+double get_derivative_y_par(KamadaKawai *kk, int index)
+{
+    double sum = 0;
+
+    // #pragma omp parallel for reduction(+ : sum) schedule(static)
+    for (int i = 0; i < kk->n; i++)
+    {
+        if (i == index)
+        {
+            kk->addendy[index][i] = 0;
+            continue;
+        }
+
+        double dist_x = kk->coords[index].x - kk->coords[i].x;
+        double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+
+        if (isnan(addend))
+            continue;
+
+        sum += addend;
+    }
+
+    return sum;
+}
 double get_delta_m_par(KamadaKawai *kk, int index)
 {
     return sqrt((double)pow(get_derivative_x_par(kk, index), 2) + (double)pow(get_derivative_y_par(kk, index), 2));
@@ -273,7 +449,7 @@ int get_deltas_par(KamadaKawai *kk)
 {
     double max_delta = 0.0;
 
-#pragma omp parallel for reduction(max : max_delta)
+    // #pragma omp parallel for reduction(max : max_delta)
     for (int i = 0; i < kk->n; i++)
     {
         double temp = get_delta_m_par(kk, i);
@@ -293,19 +469,18 @@ int get_deltas_par(KamadaKawai *kk)
 }
 int update_deltas_par(KamadaKawai *kk, int m)
 {
-    int delta_index = -1;
     double max_delta = 0.0;
 
-#pragma omp parallel for default(none) shared(kk, m, delta_index) reduction(max : max_delta)
+#pragma omp parallel for schedule(guided) default(none) shared(kk, m) reduction(max : max_delta)
     for (int i = 0; i < kk->n; i++)
     {
         if (m == i)
             continue;
 
-        double temp = update_delta_m(kk, m, i);
+        double temp = update_delta_m(kk, i);
         kk->deltas[i] = temp;
 
-        if (temp > max_delta) 
+        if (temp > max_delta)
             max_delta = temp;
     }
 
@@ -322,7 +497,7 @@ void get_derivatives_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_
 {
     double local_d_x = 0, local_d_y = 0, local_d_xx = 0, local_d_yy = 0, local_d_xy = 0;
 
-#pragma omp parallel for reduction(+ : local_d_x, local_d_y, local_d_xx, local_d_yy, local_d_xy) schedule(static)
+    // #pragma omp parallel for reduction(+ : local_d_x, local_d_y, local_d_xx, local_d_yy, local_d_xy) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
