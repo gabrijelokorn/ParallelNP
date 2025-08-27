@@ -33,7 +33,7 @@ double get_addend_x(KamadaKawai *kk, int m, int index)
     double dist_x = kk->coords[index].x - kk->coords[m].x;
     double dist_y = kk->coords[index].y - kk->coords[m].y;
 
-    double addend = kk->k_ij[index][m] * (dist_x - ((kk->l_ij[index][m] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+    double addend = kk->k_ij[index][m] * (dist_x - ((kk->l_ij[index][m] * dist_x) / (double)sqrt((double)dist_x * dist_x + (double)dist_y * dist_y)));
     if (isnan(addend))
         return 0;
 
@@ -44,7 +44,7 @@ double get_addend_y(KamadaKawai *kk, int m, int index)
     double dist_x = kk->coords[index].x - kk->coords[m].x;
     double dist_y = kk->coords[index].y - kk->coords[m].y;
 
-    double addend = kk->k_ij[index][m] * (dist_y - ((kk->l_ij[index][m] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+    double addend = kk->k_ij[index][m] * (dist_y - ((kk->l_ij[index][m] * dist_y) / (double)sqrt((double)dist_x * dist_x + (double)dist_y * dist_y)));
 
     if (isnan(addend))
         return 0;

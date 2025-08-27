@@ -138,7 +138,7 @@ function get_addend_x(kk::KamadaKawai, m::Int, index::Int)
 	dist_x = kk.coords[index].x - kk.coords[m].x
 	dist_y = kk.coords[index].y - kk.coords[m].y
 
-	addend = kk.k_ij[index, m] * (dist_x - kk.l_ij[index, m] * dist_x / sqrt(dist_x^2 + dist_y^2))
+	addend = kk.k_ij[index, m] * (dist_x - kk.l_ij[index, m] * dist_x / sqrt(dist_x * dist_x + dist_y * dist_y))
 
 	if isnan(addend)
 		return 0
@@ -150,7 +150,7 @@ function get_addend_y(kk::KamadaKawai, m::Int, index::Int)
 	dist_x = kk.coords[index].x - kk.coords[m].x
 	dist_y = kk.coords[index].y - kk.coords[m].y
 
-	addend = kk.k_ij[index, m] * (dist_y - kk.l_ij[index, m] * dist_y / sqrt(dist_x^2 + dist_y^2))
+	addend = kk.k_ij[index, m] * (dist_y - kk.l_ij[index, m] * dist_y / sqrt(dist_x * dist_x + dist_y * dist_y))
 
 	if isnan(addend)
 		return 0
@@ -170,7 +170,7 @@ function update_delta_m_mem!(kk::KamadaKawai, m::Int, index::Int)
 	kk.addendx[index][m] = tempx
 	kk.addendy[index][m] = tempy
 
-	return sqrt(kk.dx[index]^2 + kk.dy[index]^2)
+	return sqrt(kk.dx[index] * kk.dx[index] + kk.dy[index] * kk.dy[index])
 end
 # // ### ### ### ########################## ### ### ### //
 # // ### ### ### ########################## ### ### ### //
@@ -187,7 +187,7 @@ function update_delta_m!(kk::KamadaKawai, index::Int)
 		dy += get_addend_y(kk, i, index)
 	end
 
-	return sqrt(dx^2 + dy^2)
+	return sqrt(dx * dx + dy * dy)
 end
 
 # // ### ### ### ########################## ### ### ### //
@@ -210,7 +210,7 @@ function get_derivative_x_mem_seq!(kk::KamadaKawai, index::Int)
 		dist_x = kk.coords[index].x - kk.coords[i].x
 		dist_y = kk.coords[index].y - kk.coords[i].y
 
-		addend = kk.k_ij[index, i] * (dist_x - (kk.l_ij[index, i] * dist_x / sqrt(dist_x^2 + dist_y^2)))
+		addend = kk.k_ij[index, i] * (dist_x - (kk.l_ij[index, i] * dist_x / sqrt(dist_x * dist_x + dist_y * dist_y)))
 
 		if !isnan(addend)
 			kk.addendx[index][i] = addend
@@ -231,7 +231,7 @@ function get_derivative_y_mem_seq!(kk::KamadaKawai, index::Int)
 		dist_x = kk.coords[index].x - kk.coords[i].x
 		dist_y = kk.coords[index].y - kk.coords[i].y
 
-		addend = kk.k_ij[index, i] * (dist_y - (kk.l_ij[index, i] * dist_y / sqrt(dist_x^2 + dist_y^2)))
+		addend = kk.k_ij[index, i] * (dist_y - (kk.l_ij[index, i] * dist_y / sqrt(dist_x * dist_x + dist_y * dist_y)))
 		if !isnan(addend)
 			kk.addendy[index][i] = addend
 			sum += addend
@@ -242,7 +242,9 @@ function get_derivative_y_mem_seq!(kk::KamadaKawai, index::Int)
 	return sum
 end
 function get_delta_m_mem_seq!(kk::KamadaKawai, index::Int)
-	return sqrt(get_derivative_x_mem_seq!(kk, index)^2 + get_derivative_y_mem_seq!(kk, index)^2)
+	dx = get_derivative_x_mem_seq!(kk, index)
+	dy = get_derivative_y_mem_seq!(kk, index)
+	return sqrt(dx * dx + dy * dy)
 end
 function get_deltas_mem_seq!(kk::KamadaKawai)
 	delta_index = -1
@@ -291,11 +293,11 @@ function get_derivatives_mem_seq!(kk::KamadaKawai, index::Int)
 		dist_x = kk.coords[index].x - kk.coords[i].x
 		dist_y = kk.coords[index].y - kk.coords[i].y
 
-		x2 = dist_x^2
-		y2 = dist_y^2
+		x2 = dist_x * dist_x
+		y2 = dist_y * dist_y
 		x2_y2 = x2 + y2
 		x2_y2_1_2 = sqrt(x2_y2)
-		x2_y2_3_2 = x2_y2^(1.5)
+		x2_y2_3_2 = x2_y2 * sqrt(x2_y2)
 
 		addx  = kk.k_ij[index, i] * (dist_x - ((kk.l_ij[index, i] * dist_x) / x2_y2_1_2));
 		addy  = kk.k_ij[index, i] * (dist_y - ((kk.l_ij[index, i] * dist_y) / x2_y2_1_2));
@@ -334,158 +336,174 @@ export get_derivatives_mem_par!
 export get_derivative_x_mem_par!, get_derivative_y_mem_par!
 export get_delta_m_mem_par!
 function get_derivative_x_mem_par!(kk::KamadaKawai, index::Int)
-    nt = nthreads()
-    local_sums = zeros(Float64, nt)
+	nt = nthreads()
+	local_sums = zeros(Float64, nt)
 
-    @threads for i in 1:kk.n
-        if i == index
-            kk.addendx[index][i] = 0.0
-            continue
-        end
+	@threads for i in 1:kk.n
+		if i == index
+			kk.addendx[index][i] = 0.0
+			continue
+		end
 
-        dist_x = kk.coords[index].x - kk.coords[i].x
-        dist_y = kk.coords[index].y - kk.coords[i].y
+		dist_x = kk.coords[index].x - kk.coords[i].x
+		dist_y = kk.coords[index].y - kk.coords[i].y
 
-        addend = kk.k_ij[index, i] * (dist_x - (kk.l_ij[index, i] * dist_x / sqrt(dist_x^2 + dist_y^2)))
+		addend = kk.k_ij[index, i] * (dist_x - (kk.l_ij[index, i] * dist_x / sqrt(dist_x * dist_x + dist_y * dist_y)))
 
-        if !isnan(addend)
-            kk.addendx[index][i] = addend
-            local_sums[threadid()] += addend
-        end
-    end
+		if !isnan(addend)
+			kk.addendx[index][i] = addend
+			local_sums[threadid()] += addend
+		end
+	end
 
-    sumval = sum(local_sums)
-    kk.dx[index] = sumval
-    return sumval
+	sumval = sum(local_sums)
+	kk.dx[index] = sumval
+	return sumval
 end
 
 function get_derivative_y_mem_par!(kk::KamadaKawai, index::Int)
-    nt = nthreads()
-    local_sums = zeros(Float64, nt)
+	nt = nthreads()
+	local_sums = zeros(Float64, nt)
 
-    @threads for i in 1:kk.n
-        if i == index
-            kk.addendy[index][i] = 0.0
-            continue
-        end
+	@threads for i in 1:kk.n
+		if i == index
+			kk.addendy[index][i] = 0.0
+			continue
+		end
 
-        dist_x = kk.coords[index].x - kk.coords[i].x
-        dist_y = kk.coords[index].y - kk.coords[i].y
+		dist_x = kk.coords[index].x - kk.coords[i].x
+		dist_y = kk.coords[index].y - kk.coords[i].y
 
-        addend = kk.k_ij[index, i] * (dist_y - (kk.l_ij[index, i] * dist_y / sqrt(dist_x^2 + dist_y^2)))
+		addend = kk.k_ij[index, i] * (dist_y - (kk.l_ij[index, i] * dist_y / sqrt(dist_x * dist_x + dist_y * dist_y)))
 
-        if !isnan(addend)
-            kk.addendy[index][i] = addend
-            local_sums[threadid()] += addend
-        end
-    end
+		if !isnan(addend)
+			kk.addendy[index][i] = addend
+			local_sums[threadid()] += addend
+		end
+	end
 
-    sumval = sum(local_sums)
-    kk.dy[index] = sumval
-    return sumval
+	sumval = sum(local_sums)
+	kk.dy[index] = sumval
+	return sumval
 end
 
 function get_delta_m_mem_par!(kk::KamadaKawai, index::Int)
-    return sqrt(get_derivative_x_mem_par!(kk, index)^2 +
-                get_derivative_y_mem_par!(kk, index)^2)
+	dx = get_derivative_x_mem_par!(kk, index)
+	dy = get_derivative_y_mem_par!(kk, index)
+	return sqrt(dx * dx + dy * dy)
 end
 
 function get_deltas_mem_par!(kk::KamadaKawai)
-    nt = nthreads()
-    local_max = fill(-Inf, nt)
-    local_idx = fill(-1, nt)
+	nt = nthreads()
+	local_max = fill(-Inf, nt)
+	local_idx = fill(-1, nt)
 
-    @threads for i in 1:kk.n
-        delta = get_delta_m_mem_par!(kk, i)  # NOTE: original sequential delta_m!
-        kk.deltas[i] = delta
+	@threads for i in 1:kk.n
+		delta = get_delta_m_mem_par!(kk, i)  # NOTE: original sequential delta_m!
+		kk.deltas[i] = delta
 
-        tid = threadid()
-        if delta > kk.epsilon && delta > local_max[tid]
-            local_max[tid] = delta
-            local_idx[tid] = i
-        end
-    end
+		tid = threadid()
+		if delta > kk.epsilon && delta > local_max[tid]
+			local_max[tid] = delta
+			local_idx[tid] = i
+		end
+	end
 
-    max_delta = 0.0
-    delta_index = -1
-    for t in 1:nt
-        if local_max[t] > max_delta
-            max_delta = local_max[t]
-            delta_index = local_idx[t]
-        end
-    end
-    return delta_index
+	max_delta = 0.0
+	delta_index = -1
+	for t in 1:nt
+		if local_max[t] > max_delta
+			max_delta = local_max[t]
+			delta_index = local_idx[t]
+		end
+	end
+	return delta_index
 end
 
 function update_deltas_mem_par!(kk::KamadaKawai, m::Int)
-    nt = nthreads()
-    local_max = fill(-Inf, nt)
-    local_idx = fill(-1, nt)
+	nt = nthreads()
+	local_max = fill(-Inf, nt)
+	local_idx = fill(-1, nt)
 
-    @threads for i in 1:kk.n
-        if i == m
-            continue
-        end
+	@threads for i in 1:kk.n
+		if i == m
+			continue
+		end
 
-        delta = update_delta_m_mem!(kk, m, i)
-        kk.deltas[i] = delta
+		delta = update_delta_m_mem!(kk, m, i)
+		kk.deltas[i] = delta
 
-        tid = threadid()
-        if delta > kk.epsilon && delta > local_max[tid]
-            local_max[tid] = delta
-            local_idx[tid] = i
-        end
-    end
+		tid = threadid()
+		if delta > kk.epsilon && delta > local_max[tid]
+			local_max[tid] = delta
+			local_idx[tid] = i
+		end
+	end
 
-    max_delta = 0.0
-    delta_index = -1
-    for t in 1:nt
-        if local_max[t] > max_delta
-            max_delta = local_max[t]
-            delta_index = local_idx[t]
-        end
-    end
-    return delta_index
+	max_delta = 0.0
+	delta_index = -1
+	for t in 1:nt
+		if local_max[t] > max_delta
+			max_delta = local_max[t]
+			delta_index = local_idx[t]
+		end
+	end
+	return delta_index
 end
 
 function get_derivatives_mem_par!(kk::KamadaKawai, index::Int)
-    nt = nthreads()
-    local_x  = zeros(Float64, nt)
-    local_y  = zeros(Float64, nt)
-    local_xx = zeros(Float64, nt)
-    local_yy = zeros(Float64, nt)
-    local_xy = zeros(Float64, nt)
+	nt       = nthreads()
+	local_x  = zeros(Float64, nt)
+	local_y  = zeros(Float64, nt)
+	local_xx = zeros(Float64, nt)
+	local_yy = zeros(Float64, nt)
+	local_xy = zeros(Float64, nt)
 
-    @threads for i in 1:kk.n
-        if i == index
-            continue
-        end
+	@threads for i in 1:kk.n
+		if i == index
+			continue
+		end
 
-        dist_x = kk.coords[index].x - kk.coords[i].x
-        dist_y = kk.coords[index].y - kk.coords[i].y
+		dist_x = kk.coords[index].x - kk.coords[i].x
+		dist_y = kk.coords[index].y - kk.coords[i].y
 
-        x2 = dist_x^2
-        y2 = dist_y^2
-        x2_y2 = x2 + y2
-        x2_y2_1_2 = sqrt(x2_y2)
-        x2_y2_3_2 = x2_y2^(1.5)
+		x2 = dist_x * dist_x
+		y2 = dist_y * dist_y
+		x2_y2 = x2 + y2
+		x2_y2_1_2 = sqrt(x2_y2)
+		x2_y2_3_2 = x2_y2 * sqrt(x2_y2)
 
-        addx  = kk.k_ij[index, i] * (dist_x - ((kk.l_ij[index, i] * dist_x) / x2_y2_1_2))
-        addy  = kk.k_ij[index, i] * (dist_y - ((kk.l_ij[index, i] * dist_y) / x2_y2_1_2))
-        addxx = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * y2) / x2_y2_3_2))
-        addyy = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * x2) / x2_y2_3_2))
-        addxy = kk.k_ij[index, i] * ((kk.l_ij[index, i] * dist_x * dist_y) / x2_y2_3_2)
+		addx  = kk.k_ij[index, i] * (dist_x - ((kk.l_ij[index, i] * dist_x) / x2_y2_1_2))
+		addy  = kk.k_ij[index, i] * (dist_y - ((kk.l_ij[index, i] * dist_y) / x2_y2_1_2))
+		addxx = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * y2) / x2_y2_3_2))
+		addyy = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * x2) / x2_y2_3_2))
+		addxy = kk.k_ij[index, i] * ((kk.l_ij[index, i] * dist_x * dist_y) / x2_y2_3_2)
 
-        tid = threadid()
+		tid = threadid()
 
-        if !isnan(addx);  local_x[tid]  += addx;  end
-        if !isnan(addy);  local_y[tid]  += addy;  end
-        if !isnan(addxx); local_xx[tid] += addxx; end
-        if !isnan(addyy); local_yy[tid] += addyy; end
-        if !isnan(addxy); local_xy[tid] += addxy; end
-    end
+		if !isnan(addx)
+			;
+			local_x[tid] += addx;
+		end
+		if !isnan(addy)
+			;
+			local_y[tid] += addy;
+		end
+		if !isnan(addxx)
+			;
+			local_xx[tid] += addxx;
+		end
+		if !isnan(addyy)
+			;
+			local_yy[tid] += addyy;
+		end
+		if !isnan(addxy)
+			;
+			local_xy[tid] += addxy;
+		end
+	end
 
-    return sum(local_x), sum(local_y), sum(local_xx), sum(local_yy), sum(local_xy)
+	return sum(local_x), sum(local_y), sum(local_xx), sum(local_yy), sum(local_xy)
 end
 
 # // ### ### ### ########################## ### ### ### //
@@ -499,165 +517,131 @@ export get_derivatives_par!
 export get_derivative_x_par!, get_derivative_y_par!
 export get_delta_m_par!
 function get_derivative_x_par!(kk::KamadaKawai, index::Int)
-    nt = nthreads()
-    local_sums = zeros(Float64, nt)
+	sum = 0.0
 
-    @threads for i in 1:kk.n
-        if i != index
-            dist_x = kk.coords[index].x - kk.coords[i].x
-            dist_y = kk.coords[index].y - kk.coords[i].y
+	for i in 1:kk.n
+		if i != index
+			dist_x = kk.coords[index].x - kk.coords[i].x
+			dist_y = kk.coords[index].y - kk.coords[i].y
 
-            dist2 = dist_x^2 + dist_y^2
-            dist_len = sqrt(dist2)
+			addend = kk.k_ij[index, i] * (dist_x - ((kk.l_ij[index, i] * dist_x) / sqrt(dist_x*dist_x + dist_y*dist_y)))
 
-            addend = kk.k_ij[index, i] * (dist_x - (kk.l_ij[index, i] * dist_x / dist_len))
+			if !isnan(addend)
+				sum += addend
+			end
+		end
+	end
 
-            if !isnan(addend)
-                local_sums[threadid()] += addend
-            end
-        end
-    end
-
-    return sum(local_sums)
+	return sum
 end
 
 
 function get_derivative_y_par!(kk::KamadaKawai, index::Int)
-    nt = nthreads()
-    local_sums = zeros(Float64, nt)
+	sum = 0.0
 
-    @threads for i in 1:kk.n
-        if i != index
-            dist_x = kk.coords[index].x - kk.coords[i].x
-            dist_y = kk.coords[index].y - kk.coords[i].y
+	for i in 1:kk.n
+		if i != index
+			dist_x = kk.coords[index].x - kk.coords[i].x
+			dist_y = kk.coords[index].y - kk.coords[i].y
 
-            dist2 = dist_x^2 + dist_y^2
-            dist_len = sqrt(dist2)
+			addend = kk.k_ij[index, i] * (dist_y - ((kk.l_ij[index, i] * dist_y) / sqrt(dist_x*dist_x + dist_y*dist_y)))
 
-            addend = kk.k_ij[index, i] * (dist_y - (kk.l_ij[index, i] * dist_y / dist_len))
+			if !isnan(addend)
+				sum += addend
+			end
+		end
+	end
 
-            if !isnan(addend)
-                local_sums[threadid()] += addend
-            end
-        end
-    end
-
-    return sum(local_sums)
+	return sum
 end
 
 
 function get_delta_m_par!(kk::KamadaKawai, index::Int)
-    dx = get_derivative_x_par!(kk, index)
-    dy = get_derivative_y_par!(kk, index)
-    return sqrt(dx^2 + dy^2)
+	dx = get_derivative_x_par!(kk, index)
+	dy = get_derivative_y_par!(kk, index)
+	return sqrt(dx * dx + dy * dy)
 end
 
 
 function get_deltas_par!(kk::KamadaKawai)
-    nt = nthreads()
-    local_max = fill(-Inf, nt)
-    local_idx = fill(-1, nt)
+	delta_index = -1
+	max_delta = 0.0
 
-    @threads for i in 1:kk.n
-        delta = get_delta_m_par!(kk, i)
-        kk.deltas[i] = delta
+	for i in 1:kk.n
+		kk.deltas[i] = get_delta_m_par!(kk, i)
 
-        tid = threadid()
-        if delta > kk.epsilon && delta > local_max[tid]
-            local_max[tid] = delta
-            local_idx[tid] = i
-        end
-    end
+		if kk.deltas[i] > kk.epsilon
+			if kk.deltas[i] > max_delta
+				max_delta = kk.deltas[i]
+				delta_index = i
+			end
+		end
+	end
 
-    # reduce thread-local maxima
-    max_delta = 0.0
-    delta_index = -1
-    for t in 1:nt
-        if local_max[t] > max_delta
-            max_delta = local_max[t]
-            delta_index = local_idx[t]
-        end
-    end
-
-    return delta_index
+	return delta_index
 end
+function update_deltas_par!(kk::KamadaKawai)
+	max_delta = 0.0
+	delta_index = -1
 
+	Threads.@threads :static for i in 1:kk.n
+			kk.deltas[i] = update_delta_m!(kk, i)
+	end
 
-function update_deltas_par!(kk::KamadaKawai, m::Int)
-    nt = nthreads()
-    local_max = fill(-Inf, nt)
-    local_idx = fill(-1, nt)
+	for i in 1:kk.n
+		if kk.deltas[i] > kk.epsilon
+			if kk.deltas[i] > max_delta
+				max_delta = kk.deltas[i]
+				delta_index = i
+			end
+		end
+	end
 
-    @threads for i in 1:kk.n
-        if i != m
-            delta = update_delta_m!(kk, i)
-            kk.deltas[i] = delta
-
-            tid = threadid()
-            if delta > kk.epsilon && delta > local_max[tid]
-                local_max[tid] = delta
-                local_idx[tid] = i
-            end
-        end
-    end
-
-    # reduce thread-local maxima
-    max_delta = 0.0
-    delta_index = -1
-    for t in 1:nt
-        if local_max[t] > max_delta
-            max_delta = local_max[t]
-            delta_index = local_idx[t]
-        end
-    end
-
-    return delta_index
+	return delta_index
 end
-
-
 function get_derivatives_par!(kk::KamadaKawai, index::Int)
-    nt = nthreads()
+	d_x_m  = 0.0
+	d_y_m  = 0.0
+	d_xx_m = 0.0
+	d_yy_m = 0.0
+	d_xy_m = 0.0
 
-    local_x  = zeros(Float64, nt)
-    local_y  = zeros(Float64, nt)
-    local_xx = zeros(Float64, nt)
-    local_yy = zeros(Float64, nt)
-    local_xy = zeros(Float64, nt)
+	for i in 1:kk.n
+		if i != index
+			dist_x = kk.coords[index].x - kk.coords[i].x
+			dist_y = kk.coords[index].y - kk.coords[i].y
 
-    @threads for i in 1:kk.n
-        if i != index
-            dist_x = kk.coords[index].x - kk.coords[i].x
-            dist_y = kk.coords[index].y - kk.coords[i].y
+			x2 = dist_x * dist_x
+			y2 = dist_y * dist_y
+			x2_y2 = x2 + y2
+			x2_y2_1_2 = sqrt(x2_y2)
+			x2_y2_3_2 = x2_y2 * sqrt(x2_y2)
 
-            x2 = dist_x^2
-            y2 = dist_y^2
-            r2 = x2 + y2
-            r   = sqrt(r2)
-            r3  = r2^(1.5)
+			addx  = kk.k_ij[index, i] * (dist_x - ((kk.l_ij[index, i] * dist_x) / x2_y2_1_2));
+			addy  = kk.k_ij[index, i] * (dist_y - ((kk.l_ij[index, i] * dist_y) / x2_y2_1_2));
+			addxx = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * y2) / x2_y2_3_2));
+			addyy = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * x2) / x2_y2_3_2));
+			addxy = kk.k_ij[index, i] * ((kk.l_ij[index, i] * dist_x * dist_y) / x2_y2_3_2);
 
-            addx  = kk.k_ij[index, i] * (dist_x - (kk.l_ij[index, i] * dist_x / r))
-            addy  = kk.k_ij[index, i] * (dist_y - (kk.l_ij[index, i] * dist_y / r))
-            addxx = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * y2) / r3))
-            addyy = kk.k_ij[index, i] * (1 - ((kk.l_ij[index, i] * x2) / r3))
-            addxy = kk.k_ij[index, i] * ((kk.l_ij[index, i] * dist_x * dist_y) / r3)
+			if !isnan(addx)
+				d_x_m += addx
+			end
+			if !isnan(addy)
+				d_y_m += addy
+			end
+			if !isnan(addxx)
+				d_xx_m += addxx
+			end
+			if !isnan(addyy)
+				d_yy_m += addyy
+			end
+			if !isnan(addxy)
+				d_xy_m += addxy
+			end
+		end
+	end
 
-            tid = threadid()
-
-            if !isnan(addx);  local_x[tid]  += addx;  end
-            if !isnan(addy);  local_y[tid]  += addy;  end
-            if !isnan(addxx); local_xx[tid] += addxx; end
-            if !isnan(addyy); local_yy[tid] += addyy; end
-            if !isnan(addxy); local_xy[tid] += addxy; end
-        end
-    end
-
-    d_m_x  = sum(local_x)
-    d_m_y  = sum(local_y)
-    d_m_xx = sum(local_xx)
-    d_m_yy = sum(local_yy)
-    d_m_xy = sum(local_xy)
-
-    return d_m_x, d_m_y, d_m_xx, d_m_yy, d_m_xy
+	return d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m
 end
 
 end

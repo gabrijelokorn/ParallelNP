@@ -25,7 +25,7 @@ void par(KamadaKawai *kk)
                 break;
         }
 
-        int temp = update_deltas_par(kk, delta_max_index);
+        int temp = update_deltas_par(kk);
         if (temp == delta_max_index)
             break;
         delta_max_index = temp;

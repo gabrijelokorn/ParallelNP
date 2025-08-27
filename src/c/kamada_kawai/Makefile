@@ -19,9 +19,9 @@ TESTF = *.json
 CC = gcc
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
-CFLAGS += -lm 			# -lm is needed for math library
-CFLAGS += -O3
-# PRECFLAGS = -g -fsanitize=thread
+CFLAGS += -lm			# -lm is needed for math library
+PRECFLAGS = -O3 -march=native -funroll-loops
+PRECFLAGS += -g
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads

@@ -68,7 +68,7 @@ double update_delta_m(KamadaKawai *kk, int index);
 double get_delta_m_par(KamadaKawai *kk, int index);
 void get_derivatives_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_y, double *d_m_xx, double *d_m_yy, double *d_m_xy);
 int get_deltas_par(KamadaKawai *kk);
-int update_deltas_par(KamadaKawai *kk, int m);
+int update_deltas_par(KamadaKawai *kk);
 double get_derivative_x_par(KamadaKawai *kk, int index);
 double get_derivative_y_par(KamadaKawai *kk, int index);
 

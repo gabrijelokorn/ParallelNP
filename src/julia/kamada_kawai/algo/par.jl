@@ -26,7 +26,7 @@ function par(kk::KamadaKawai)
 			end
 		end # while
 
-		temp = update_deltas_par!(kk, delta_max_index);
+		temp = update_deltas_par!(kk);
 
 		if temp == delta_max_index
 			break;

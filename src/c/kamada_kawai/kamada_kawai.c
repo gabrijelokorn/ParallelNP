@@ -33,7 +33,7 @@ double get_addend_x(KamadaKawai *kk, int m, int index)
     double dist_x = kk->coords[index].x - kk->coords[m].x;
     double dist_y = kk->coords[index].y - kk->coords[m].y;
 
-    double addend = kk->k_ij[index][m] * (dist_x - ((kk->l_ij[index][m] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+    double addend = kk->k_ij[index][m] * (dist_x - ((kk->l_ij[index][m] * dist_x) / sqrt(dist_x * dist_x + dist_y * dist_y)));
     if (isnan(addend))
         return 0;
 
@@ -44,7 +44,7 @@ double get_addend_y(KamadaKawai *kk, int m, int index)
     double dist_x = kk->coords[index].x - kk->coords[m].x;
     double dist_y = kk->coords[index].y - kk->coords[m].y;
 
-    double addend = kk->k_ij[index][m] * (dist_y - ((kk->l_ij[index][m] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+    double addend = kk->k_ij[index][m] * (dist_y - ((kk->l_ij[index][m] * dist_y) / sqrt(dist_x * dist_x + dist_y * dist_y)));
 
     if (isnan(addend))
         return 0;
@@ -68,7 +68,7 @@ double update_delta_m_mem(KamadaKawai *kk, int m, int index)
     kk->addendx[index][m] = tempx;
     kk->addendy[index][m] = tempy;
 
-    return sqrt((double)pow(kk->dx[index], 2) + (double)pow(kk->dy[index], 2));
+    return sqrt(kk->dx[index] * kk->dx[index] + kk->dy[index] * kk->dy[index]);
 }
 
 // ### ### ### ########################## ### ### ### //
@@ -85,7 +85,7 @@ double update_delta_m(KamadaKawai *kk, int index)
         dx += get_addend_x(kk, i, index);
         dy += get_addend_y(kk, i, index);
     }
-    return sqrt((double)pow(dx, 2) + (double)pow(dy, 2));
+    return sqrt(dx * dx + dy * dy);
 }
 
 // ### ### ### ########################## ### ### ### //
@@ -108,7 +108,7 @@ double get_derivative_x_mem_seq(KamadaKawai *kk, int index)
         double dist_x = kk->coords[index].x - kk->coords[i].x;
         double dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / sqrt(dist_x * dist_x + dist_y * dist_y)));
         if (isnan(addend))
             continue;
 
@@ -134,7 +134,7 @@ double get_derivative_y_mem_seq(KamadaKawai *kk, int index)
         double dist_x = kk->coords[index].x - kk->coords[i].x;
         double dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / sqrt(dist_x * dist_x + dist_y * dist_y)));
 
         if (isnan(addend))
             continue;
@@ -148,7 +148,9 @@ double get_derivative_y_mem_seq(KamadaKawai *kk, int index)
 }
 double get_delta_m_mem_seq(KamadaKawai *kk, int index)
 {
-    return sqrt((double)pow(get_derivative_x_mem_seq(kk, index), 2) + (double)pow(get_derivative_y_mem_seq(kk, index), 2));
+    double dx = get_derivative_x_mem_seq(kk, index);
+    double dy = get_derivative_y_mem_seq(kk, index);
+    return sqrt(dx * dx + dy * dy);
 }
 int get_deltas_mem_seq(KamadaKawai *kk)
 {
@@ -203,11 +205,11 @@ void get_derivatives_mem_seq(KamadaKawai *kk, int index, double *d_m_x, double *
         double dist_x = kk->coords[index].x - kk->coords[i].x;
         double dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        double x2 = (double)pow(dist_x, 2);
-        double y2 = (double)pow(dist_y, 2);
+        double x2 = dist_x * dist_x;
+        double y2 = dist_y * dist_y;
         double x2_y2 = x2 + y2;
-        double x2_y2_1_2 = (double)sqrt(x2_y2);
-        double x2_y2_3_2 = (double)pow(x2_y2, (double)3 / 2);
+        double x2_y2_1_2 = sqrt(x2_y2);
+        double x2_y2_3_2 = x2_y2 * sqrt(x2_y2);
 
         double addx = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / x2_y2_1_2));
         double addy = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / x2_y2_1_2));
@@ -249,7 +251,7 @@ double get_derivative_x_mem_par(KamadaKawai *kk, int index)
         double dist_x = kk->coords[index].x - kk->coords[i].x;
         double dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / sqrt(dist_x * dist_x + dist_y * dist_y)));
         if (isnan(addend))
             continue;
 
@@ -276,7 +278,7 @@ double get_derivative_y_mem_par(KamadaKawai *kk, int index)
         double dist_x = kk->coords[index].x - kk->coords[i].x;
         double dist_y = kk->coords[index].y - kk->coords[i].y;
 
-        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
+        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / sqrt(dist_x * dist_x + dist_y * dist_y)));
 
         if (isnan(addend))
             continue;
@@ -290,7 +292,9 @@ double get_derivative_y_mem_par(KamadaKawai *kk, int index)
 }
 double get_delta_m_mem_par(KamadaKawai *kk, int index)
 {
-    return sqrt((double)pow(get_derivative_x_mem_par(kk, index), 2) + (double)pow(get_derivative_y_mem_par(kk, index), 2));
+    double dx = get_derivative_x_mem_par(kk, index);
+    double dy = get_derivative_y_mem_par(kk, index);
+    return sqrt(dx * dx + dy * dy);
 }
 int get_deltas_mem_par(KamadaKawai *kk)
 {
@@ -395,22 +399,20 @@ double get_derivative_x_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-    // #pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
-        if (i == index)
+        if (i != index)
         {
-            continue;
+            double dist_x = kk->coords[index].x - kk->coords[i].x;
+            double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+            double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / sqrt(dist_x * dist_x + dist_y * dist_y)));
+            
+            if (isnan(addend))
+                continue;
+
+            sum += addend;
         }
-
-        double dist_x = kk->coords[index].x - kk->coords[i].x;
-        double dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
-        if (isnan(addend))
-            continue;
-
-        sum += addend;
     }
 
     return sum;
@@ -419,37 +421,33 @@ double get_derivative_y_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-    // #pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
-        if (i == index)
+        if (i != index)
         {
-            kk->addendy[index][i] = 0;
-            continue;
+            double dist_x = kk->coords[index].x - kk->coords[i].x;
+            double dist_y = kk->coords[index].y - kk->coords[i].y;
+
+            double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / sqrt(dist_x * dist_x + dist_y * dist_y)));
+
+            if (isnan(addend))
+                continue;
+
+            sum += addend;
         }
-
-        double dist_x = kk->coords[index].x - kk->coords[i].x;
-        double dist_y = kk->coords[index].y - kk->coords[i].y;
-
-        double addend = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / (double)sqrt((double)pow(dist_x, 2) + (double)pow(dist_y, 2))));
-
-        if (isnan(addend))
-            continue;
-
-        sum += addend;
     }
-
     return sum;
 }
 double get_delta_m_par(KamadaKawai *kk, int index)
 {
-    return sqrt((double)pow(get_derivative_x_par(kk, index), 2) + (double)pow(get_derivative_y_par(kk, index), 2));
+    double dx = get_derivative_x_par(kk, index);
+    double dy = get_derivative_y_par(kk, index);
+    return sqrt(dx * dx + dy * dy);
 }
 int get_deltas_par(KamadaKawai *kk)
 {
     double max_delta = 0.0;
 
-    // #pragma omp parallel for reduction(max : max_delta)
     for (int i = 0; i < kk->n; i++)
     {
         double temp = get_delta_m_par(kk, i);
@@ -467,16 +465,13 @@ int get_deltas_par(KamadaKawai *kk)
 
     return -1;
 }
-int update_deltas_par(KamadaKawai *kk, int m)
+int update_deltas_par(KamadaKawai *kk)
 {
     double max_delta = 0.0;
 
-#pragma omp parallel for schedule(guided) default(none) shared(kk, m) reduction(max : max_delta)
+#pragma omp parallel for schedule(static) default(none) shared(kk) reduction(max : max_delta)
     for (int i = 0; i < kk->n; i++)
     {
-        if (m == i)
-            continue;
-
         double temp = update_delta_m(kk, i);
         kk->deltas[i] = temp;
 
@@ -497,7 +492,6 @@ void get_derivatives_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_
 {
     double local_d_x = 0, local_d_y = 0, local_d_xx = 0, local_d_yy = 0, local_d_xy = 0;
 
-    // #pragma omp parallel for reduction(+ : local_d_x, local_d_y, local_d_xx, local_d_yy, local_d_xy) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
@@ -505,30 +499,29 @@ void get_derivatives_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_
 
         double dist_x = kk->coords[index].x - kk->coords[i].x;
         double dist_y = kk->coords[index].y - kk->coords[i].y;
+
         double x2 = dist_x * dist_x;
         double y2 = dist_y * dist_y;
         double x2_y2 = x2 + y2;
+        double x2_y2_1_2 = sqrt(x2_y2);
+        double x2_y2_3_2 = x2_y2 * sqrt(x2_y2);
 
-        if (x2_y2 < 1e-12)
-            continue; // prevent NaNs early
+        double addend_x = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / x2_y2_1_2));
+        double addend_y = kk->k_ij[index][i] * (dist_y - ((kk->l_ij[index][i] * dist_y) / x2_y2_1_2));
+        double addend_xx = kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * y2) / x2_y2_3_2));
+        double addend_yy = kk->k_ij[index][i] * (1 - ((kk->l_ij[index][i] * x2) / x2_y2_3_2));
+        double addend_xy = kk->k_ij[index][i] * ((kk->l_ij[index][i] * dist_x * dist_y) / x2_y2_3_2);
 
-        double inv_len = 1.0 / sqrt(x2_y2);
-        double x2_y2_3_2 = x2_y2 * sqrt(x2_y2); // sqrt(x2 + y2)^3
-
-        double lij = kk->l_ij[index][i];
-        double kij = kk->k_ij[index][i];
-
-        double addend_x = kij * (dist_x - ((lij * dist_x) / (1.0 / inv_len)));
-        double addend_y = kij * (dist_y - ((lij * dist_y) / (1.0 / inv_len)));
-        double addend_xx = kij * (1 - ((lij * y2) / x2_y2_3_2));
-        double addend_yy = kij * (1 - ((lij * x2) / x2_y2_3_2));
-        double addend_xy = kij * ((lij * dist_x * dist_y) / x2_y2_3_2);
-
-        local_d_x += isnan(addend_x) ? 0.0 : addend_x;
-        local_d_y += isnan(addend_y) ? 0.0 : addend_y;
-        local_d_xx += isnan(addend_xx) ? 0.0 : addend_xx;
-        local_d_yy += isnan(addend_yy) ? 0.0 : addend_yy;
-        local_d_xy += isnan(addend_xy) ? 0.0 : addend_xy;
+        if (!isnan(addend_x))
+            local_d_x += addend_x;
+        if (!isnan(addend_y))
+            local_d_y += addend_y;
+        if (!isnan(addend_xx))
+            local_d_xx += addend_xx;
+        if (!isnan(addend_yy))
+            local_d_yy += addend_yy;
+        if (!isnan(addend_xy))
+            local_d_xy += addend_xy;
     }
 
     *d_m_x = local_d_x;
@@ -536,4 +529,6 @@ void get_derivatives_par(KamadaKawai *kk, int index, double *d_m_x, double *d_m_
     *d_m_xx = local_d_xx;
     *d_m_yy = local_d_yy;
     *d_m_xy = local_d_xy;
+
+    return;
 }
