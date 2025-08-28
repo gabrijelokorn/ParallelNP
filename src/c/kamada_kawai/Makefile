@@ -18,10 +18,9 @@ TESTF = *.json
 
 CC = gcc
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
-CFLAGS += -ljson-c 		# -ljson-c is needed for json-c library
-CFLAGS += -lm			# -lm is needed for math library
-PRECFLAGS = -O3 -march=native -funroll-loops
-# PRECFLAGS += -g
+LDLIBS = -lm -ljson-c
+PRECFLAGS = -O3 -march=native -funroll-loops -fomit-frame-pointer -flto
+PRECFLAGS += -g
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads
@@ -36,7 +35,7 @@ compile: $(TARGET)
 $(TARGET):
 	@start=$$(date +%s.%N); \
 	export TSAN_OPTIONS="ignore_noninstrumented_modules=1:ignore_interceptors_accesses=1"; \
-	$(CC) $(PRECFLAGS) $(CFLAGS) -o $(TARGET) $(SOURCES); \
+	$(CC) $(PRECFLAGS) $(CFLAGS) -o $(TARGET) $(SOURCES) $(LDLIBS); \
 	end=$$(date +%s.%N); \
 	echo -e "          |\n          |-> $(WD)         $$(echo "$$end - $$start" | bc) seconds"
 ### --- ------ --- ###
