@@ -239,7 +239,6 @@ double get_derivative_x_mem_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-#pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
@@ -266,7 +265,6 @@ double get_derivative_y_mem_par(KamadaKawai *kk, int index)
 {
     double sum = 0;
 
-#pragma omp parallel for reduction(+ : sum) schedule(static)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
@@ -300,7 +298,6 @@ int get_deltas_mem_par(KamadaKawai *kk)
 {
     double max_delta = 0.0;
 
-#pragma omp parallel for reduction(max : max_delta)
     for (int i = 0; i < kk->n; i++)
     {
         double temp = get_delta_m_mem_par(kk, i);

@@ -604,6 +604,7 @@ func (kk *KamadaKawai) get_deltas_par() int64 {
 
 	return delta_index
 }
+
 func (kk *KamadaKawai) update_deltas_par() int64 {
 	var deltaIndex int64 = -1
 	var maxDelta float64 = 0.0
@@ -636,6 +637,7 @@ func (kk *KamadaKawai) update_deltas_par() int64 {
 	}
 	return deltaIndex
 }
+
 func (kk *KamadaKawai) get_derivatives_par(m int64) (float64, float64, float64, float64, float64) {
 	var d_x_m, d_y_m, d_xx_m, d_yy_m, d_xy_m float64
 

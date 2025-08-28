@@ -35,21 +35,13 @@ function run_algo(kk::KamadaKawai, f::Function, name::String, test_id::String, r
     # --- SETUP --- #
     original = set_original_coords(kk)
     
-    # Create optimized version of your function
-    optimized_f = if name == "optimized"
-        kk -> @fastmath @inbounds f(kk)
-    else
-        f
-    end
-    
     # Warmup
     get_original_coords(kk, original)
-    optimized_f(kk)
-    
+        
     # Benchmark
     bench = @benchmark begin
         get_original_coords($kk, $original)
-        $optimized_f($kk)
+        $f($kk)
     end samples=repetitions evals=1
     avg_time = median(bench).time / 1e9
     
