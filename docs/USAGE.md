@@ -2,6 +2,19 @@
 ## Makefile
 Programje lahko prevedemo, zaganjamo in testiramo z uporabo Makefile datoteke v `src` direktoriju z ukazom `make`.
 
+Zagon problema razdelitve z 1, 2, 4 nitmi (iz direktorija `src`):
+```
+clear && make -s clean && make -s pp R=1 THREADS="1 2 4" check 
+```
+Zagon risanja neusmerjenih grafov z 1, 2, 4 nitmi (iz direktorija `src`):
+```
+clear && make -s clean && make -s kk R=1 THREADS="1 2 4" check 
+```
+Risanje grafov (iz direktorija `src`):
+```
+make kamada_kawai
+```
+
 Zaganjanje `make`
 ```make
 make
