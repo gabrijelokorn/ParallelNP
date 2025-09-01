@@ -25,10 +25,25 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 ![Look into docs directory for examples](./docs/kk1.gif)\
 ![Look into docs directory for examples](./docs/kk2.gif)
 
-## Vprašanja
-- zakaj se julia program s 8 taski kljub SOČANOSTI izvaja le tako dolgo kot 1 task
+## Komentarji
+- 2.1.1 ustrezne klavzule?
+- 2.2 Go ima učinkovit ...
+- 2.3 Julia odstavek
+- 4.1.3 Tu sem prikazal kako narediti vzporedno, medtem ko sem v 2.3 prikazal kako narediti sočasno nit
 
-## TODO pred oddajo
-- probej vsaj en openMP support tool 
-- Kako je fer merit čas izvajanja v Julii (z ali brez compilation time / precompiled s paketom / neki warmupi / garbace collector ... )
-- branje found spremenljivke sem naredil *thread-unsafe*, je to vredu?
+## Popravki
+- popravil sem definicijo partition problema - namesto množice uporabljam večkratno množico (ta ima lahko več enakih elementov)
+- spremenil sem sklanjanje jezikov - Pisal sem Juliji, C-ju, Goju
+- popravil sem page break na kodi
+- nadomestil sem vse parallel z vzporedno. sočasno še vedno uporabljam, kjer je treba
+- dodal sem pike na konec opisov
+- poskrbel sem, da ima vsaka slika in koda reference
+- nadomistil besedo atomarno z atomično
+- openmp namesto omp
+
+## Vprašanja
+- Kako sklanjati besedo makro v juliji?
+- Kako naj uporabljam besedo Task v opisu Julije? Naj bo (kasneje oprailo? / z veliko Task?)
+- Kako naj pišem "for zanke" - v texttt ali ne?
+- Ali naj pišem atomično ali atomarno
+- Ali je ok, če je izsek kode zarad tega ker je na naslednji strani v naslednjem podpoglavju?

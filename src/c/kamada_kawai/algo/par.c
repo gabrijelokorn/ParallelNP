@@ -1,5 +1,7 @@
 #include <stdbool.h>
 #include <omp.h>
+#include <math.h>
+#include <stdio.h>
 
 #include "../kamada_kawai.h"
 

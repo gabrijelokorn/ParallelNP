@@ -404,7 +404,7 @@ double get_derivative_x_par(KamadaKawai *kk, int index)
             double dist_y = kk->coords[index].y - kk->coords[i].y;
 
             double addend = kk->k_ij[index][i] * (dist_x - ((kk->l_ij[index][i] * dist_x) / sqrt(dist_x * dist_x + dist_y * dist_y)));
-            
+
             if (isnan(addend))
                 continue;
 
@@ -443,30 +443,41 @@ double get_delta_m_par(KamadaKawai *kk, int index)
 }
 int get_deltas_par(KamadaKawai *kk)
 {
+    int delta_index = -1;
     double max_delta = 0.0;
 
     for (int i = 0; i < kk->n; i++)
     {
-        double temp = get_delta_m_par(kk, i);
-        kk->deltas[i] = temp;
-        if (temp > max_delta)
-            max_delta = temp;
+        kk->deltas[i] = get_delta_m_par(kk, i);
+        if (kk->deltas[i] > kk->epsilon)
+            if (kk->deltas[i] > max_delta)
+            {
+                max_delta = kk->deltas[i];
+                delta_index = i;
+            }
     }
 
-    if (max_delta <= kk->epsilon)
-        return -1;
-
-    for (int i = 0; i < kk->n; i++)
-        if (max_delta == kk->deltas[i])
-            return i;
-
-    return -1;
+    return delta_index;
 }
 int update_deltas_par(KamadaKawai *kk)
 {
-    double max_delta = 0.0;
+    // int delta_index = -1;
+    // for (int i = 0; i < kk->n; i++)
+    // {
+    //     kk->deltas[i] = update_delta_m(kk, i);
 
-#pragma omp parallel for schedule(static) default(none) shared(kk) reduction(max : max_delta)
+    //     if (kk->deltas[i] > kk->epsilon)
+    //         if (kk->deltas[i] > max_delta)
+    //         {
+    //             max_delta = kk->deltas[i];
+    //             delta_index = i;
+    //         }
+    // }
+    // return delta_index;
+    // double max_delta = 0.0;
+
+    double max_delta = 0.0;
+    #pragma omp parallel for schedule(static) default(none) shared(kk) reduction(max : max_delta)
     for (int i = 0; i < kk->n; i++)
     {
         double temp = update_delta_m(kk, i);
