@@ -9,11 +9,8 @@ void par(KamadaKawai *kk)
 {
     int delta_max_index = get_deltas_par(kk); // no convinent speedup
 
-    int i = 0;
     while (delta_max_index != -1)
     {
-        i++;
-        
         double steps = kk->limit;
         while (kk->deltas[delta_max_index] > kk->epsilon)
         {
@@ -39,7 +36,6 @@ void par(KamadaKawai *kk)
         }
         delta_max_index = temp;
     }
-    printf("Par finished in %d iterations\n", i);
 
     return;
 }
