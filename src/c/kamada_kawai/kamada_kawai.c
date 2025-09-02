@@ -477,7 +477,7 @@ int update_deltas_par(KamadaKawai *kk)
     // double max_delta = 0.0;
 
     double max_delta = 0.0;
-    #pragma omp parallel for schedule(static) default(none) shared(kk) reduction(max : max_delta)
+#pragma omp parallel for schedule(static) default(none) shared(kk) reduction(max : max_delta)
     for (int i = 0; i < kk->n; i++)
     {
         double temp = update_delta_m(kk, i);

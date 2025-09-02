@@ -2221,7 +2221,7 @@
 {"source": 273, "target": 307}
      ],
     "K": 10,
-    "epsilon": 0.01,
-    "display": 50,
+    "epsilon": 0.001,
+    "display": 100,
     "limit": 500
 }

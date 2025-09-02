@@ -27,6 +27,7 @@ func (kk *KamadaKawai) Par() {
 				break
 			}
 		}
+
 		var temp int64 = kk.update_deltas_par()
 		if temp == delta_max_index {
 			break

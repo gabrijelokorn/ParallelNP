@@ -32,24 +32,27 @@ function output_algo(kk::KamadaKawai, original::Vector{Coord}, elapsed, name::St
 end
 
 function run_algo(kk::KamadaKawai, f::Function, name::String, test_id::String, repetitions::Int)
-    # --- SETUP --- #
-    original = set_original_coords(kk)
-    
-    # Warmup
-    get_original_coords(kk, original)
-        
-    # Benchmark
-    bench = @benchmark begin
-        get_original_coords($kk, $original)
-        $f($kk)
-    end samples=repetitions evals=1
-    avg_time = median(bench).time / 1e9
-    
-    # --- OUTPUT --- #
-    output_algo(kk, original, avg_time, name, test_id)
-    
-    # --- RESET DATA --- #
-    get_original_coords(kk, original)
+	# --- SETUP --- #
+	original = set_original_coords(kk)
+
+	# Warmup
+	get_original_coords(kk, original)
+
+	# f(kk)
+	# Benchmark
+	# bench = @benchmark begin
+	#     get_original_coords($kk, $original)
+	#     $f($kk)
+	# end samples=repetitions evals=1
+	# avg_time = median(bench).time / 1e9
+	bench = @benchmark $f($kk) setup=(get_original_coords($kk, $original)) samples=repetitions evals=1
+	avg_time = median(bench).time / 1e9
+
+	# --- OUTPUT --- #
+	output_algo(kk, original, avg_time, name, test_id)
+
+	# --- RESET DATA --- #
+	get_original_coords(kk, original)
 end
 
 function algo(kk::KamadaKawai, test_id::String, repetitions::Int)

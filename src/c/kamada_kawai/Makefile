@@ -19,7 +19,7 @@ TESTF = *.json
 CC = gcc
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 LDLIBS = -lm -ljson-c
-PRECFLAGS = -O3 #-march=native -funroll-loops -fomit-frame-pointer -flto
+PRECFLAGS = -O3 -funroll-loops -fomit-frame-pointer -flto
 # PRECFLAGS += -g
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))

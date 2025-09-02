@@ -527,8 +527,8 @@ end
 
 
 function get_delta_m_par!(kk::KamadaKawai, index::Int)
-	dx = @inbounds get_derivative_x_par!(kk, index)
-	dy = @inbounds get_derivative_y_par!(kk, index)
+	dx = get_derivative_x_par!(kk, index)
+	dy = get_derivative_y_par!(kk, index)
 	return sqrt(dx * dx + dy * dy)
 end
 
@@ -538,7 +538,7 @@ function get_deltas_par!(kk::KamadaKawai)
 	max_delta = 0.0
 
 	for i in 1:kk.n
-		kk.deltas[i] = @inbounds get_delta_m_par!(kk, i)
+		kk.deltas[i] = get_delta_m_par!(kk, i)
 
 		if kk.deltas[i] > kk.epsilon
 			if kk.deltas[i] > max_delta
@@ -555,7 +555,7 @@ function update_deltas_par!(kk::KamadaKawai)
 	max_delta = 0.0
 
 	Threads.@threads :static for i in 1:kk.n
-		kk.deltas[i] = @inbounds update_delta_m!(kk, i)
+		@inbounds kk.deltas[i] = update_delta_m!(kk, i)
 	end
 
 	for i in 1:kk.n
