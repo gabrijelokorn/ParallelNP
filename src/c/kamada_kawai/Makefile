@@ -19,7 +19,7 @@ TESTF = *.json
 CC = gcc
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 LDLIBS = -lm -ljson-c
-PRECFLAGS = -O3 -funroll-loops -fomit-frame-pointer -flto
+PRECFLAGS = -O3
 # PRECFLAGS += -g
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
@@ -45,8 +45,6 @@ $(TARGET):
 run: $(TARGET)
 	@start=$$(date +%s.%N); \
 	export OMP_NESTED=FALSE; \
-	export OMP_PROC_BIND=close; \
-	export OMP_PLACES=cores; \
 	for thread in $(Threads); do \
 		export OMP_NUM_THREADS=$$thread; \
 		for case in $(TESTD)/$(WD)/$(TESTF); do \
