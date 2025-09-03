@@ -72,6 +72,5 @@ void algo(KamadaKawai *kk, char *test_id, char *repetitions)
     // run_algo(kk, mem_seq, "mem_seq", test_id, repetitions);
     // run_algo(kk, mem_par, "mem_par", test_id, repetitions);
     run_algo(kk, par, "par", test_id, repetitions);
-
     return;
 }

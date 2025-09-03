@@ -10004,7 +10004,7 @@
 {"source": 5000, "target": 1}
 ],
 "K": 0.1,
-"epsilon": 0.1,
+"epsilon": 0.001,
 "display": 500,
 "limit": 100
 }

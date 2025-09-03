@@ -32,18 +32,8 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 - 4.1.3 Tu sem prikazal kako narediti vzporedno, medtem ko sem v 2.3 prikazal kako narediti sočasno nit
 
 ## Popravki
-- popravil sem definicijo partition problema - namesto množice uporabljam večkratno množico (ta ima lahko več enakih elementov)
-- spremenil sem sklanjanje jezikov - Pisal sem Juliji, C-ju, Goju
-- popravil sem page break na kodi
-- nadomestil sem vse parallel z vzporedno. sočasno še vedno uporabljam, kjer je treba
-- dodal sem pike na konec opisov
-- poskrbel sem, da ima vsaka slika in koda reference
-- nadomistil besedo atomarno z atomično
-- openmp namesto omp
+- posodobil sem tabelo za kk udp
 
 ## Vprašanja
-- Kako sklanjati besedo makro v juliji?
-- Kako naj uporabljam besedo Task v opisu Julije? Naj bo (kasneje oprailo? / z veliko Task?)
-- Kako naj pišem "for zanke" - v texttt ali ne?
-- Ali naj pišem atomično ali atomarno
-- Ali je ok, če je izsek kode zarad tega ker je na naslednji strani v naslednjem podpoglavju?
+- a je opravičeno / pravično, da Julijo prevajam?
+
