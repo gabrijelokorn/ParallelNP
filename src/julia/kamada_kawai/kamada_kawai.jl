@@ -268,10 +268,6 @@ function update_deltas_mem_seq!(kk::KamadaKawai, m::Int)
 	max_delta = 0.0
 
 	for i in 1:kk.n
-		if m == i
-			continue
-		end
-
 		kk.deltas[i] = update_delta_m_mem!(kk, m, i)
 
 		if kk.deltas[i] > kk.epsilon && kk.deltas[i] > max_delta
@@ -408,10 +404,6 @@ function update_deltas_mem_par!(kk::KamadaKawai, m::Int)
 	local_idx = fill(-1, nt)
 
 	@threads for i in 1:kk.n
-		if i == m
-			continue
-		end
-
 		delta = update_delta_m_mem!(kk, m, i)
 		kk.deltas[i] = delta
 
@@ -504,8 +496,6 @@ function get_derivative_x_par!(kk::KamadaKawai, index::Int)
 
 	return sum
 end
-
-
 function get_derivative_y_par!(kk::KamadaKawai, index::Int)
 	sum = 0.0
 
@@ -524,15 +514,11 @@ function get_derivative_y_par!(kk::KamadaKawai, index::Int)
 
 	return sum
 end
-
-
 function get_delta_m_par!(kk::KamadaKawai, index::Int)
 	dx = get_derivative_x_par!(kk, index)
 	dy = get_derivative_y_par!(kk, index)
 	return sqrt(dx * dx + dy * dy)
 end
-
-
 function get_deltas_par!(kk::KamadaKawai)
 	delta_index = -1
 	max_delta = 0.0

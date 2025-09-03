@@ -57,8 +57,8 @@ end
 
 function algo(kk::KamadaKawai, test_id::String, repetitions::Int)
 	# run_algo(kk, Mem_seq.mem_seq, "mem_seq", test_id, repetitions)
-	# run_algo(kk, Mem_par.mem_par, "mem_par", test_id, repetitions)
-	run_algo(kk, Par.par, "par", test_id, repetitions)
+	run_algo(kk, Mem_par.mem_par, "mem_par", test_id, repetitions)
+	# run_algo(kk, Par.par, "par", test_id, repetitions)
 
 end # algo
 

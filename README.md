@@ -32,8 +32,12 @@ Za Kamada-Kawai algoritem se generirajo tudi `avi` datoteke, ki prikazujejo prem
 - 4.1.3 Tu sem prikazal kako narediti vzporedno, medtem ko sem v 2.3 prikazal kako narediti sočasno nit
 
 ## Popravki
-- posodobil sem tabelo za kk udp
+- Razlog za izbiro jezikov
+- Pregled področja
+
 
 ## Vprašanja
 - a je opravičeno / pravično, da Julijo prevajam?
 
+## TODO
+- Julija -> Julia

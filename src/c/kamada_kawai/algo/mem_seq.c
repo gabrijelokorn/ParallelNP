@@ -22,7 +22,7 @@ void mem_seq(KamadaKawai *kk)
 
             kk->deltas[delta_max_index] = get_delta_m_mem_seq(kk, delta_max_index);
 
-            if (steps-- <= 0)
+            if (--steps <= 0)
                 break;
         }
 
