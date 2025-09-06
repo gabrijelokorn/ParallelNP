@@ -38,15 +38,24 @@ function run_algo(kk::KamadaKawai, f::Function, name::String, test_id::String, r
 	# Warmup
 	get_original_coords(kk, original)
 
+    # --- BENCHMARK --- #
 	# f(kk)
-	# Benchmark
 	# bench = @benchmark begin
 	#     get_original_coords($kk, $original)
 	#     $f($kk)
 	# end samples=repetitions evals=1
 	# avg_time = median(bench).time / 1e9
-	bench = @benchmark $f($kk) setup=(get_original_coords($kk, $original)) samples=repetitions evals=1
-	avg_time = median(bench).time / 1e9
+	
+	# bench = @benchmark $f($kk) setup=(get_original_coords($kk, $original)) samples=repetitions evals=1
+	# avg_time = median(bench).time / 1e9
+	
+	times = Float64[]
+    for i in 1:repetitions
+		get_original_coords(kk, original)
+        t = @elapsed result = f(kk)
+        push!(times, t)
+    end
+    avg_time = median(times)
 
 	# --- OUTPUT --- #
 	output_algo(kk, original, avg_time, name, test_id)

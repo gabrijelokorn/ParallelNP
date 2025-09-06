@@ -29,14 +29,19 @@ function run_algo(arr::Vector{Vector{Int64}}, f::Function, name::String, test_id
     result = Vector{Bool}(undef, length(arr))
 
     # --- BENCHMARK --- #
-	GC.gc() # Force garbage collection to ensure memory is cleaned up before output
-	bench = @benchmark $f($arr) samples=repetitions evals=1
+	# GC.gc() # Force garbage collection to ensure memory is cleaned up before output
+	# bench = @benchmark $f($arr) samples=repetitions evals=1
+    # # Get median execution time in seconds
 
-    # Get median execution time in seconds
-    avg_time = median(bench).time / 1e9
+	times = Float64[]
+    for i in 1:repetitions
+        t = @elapsed result = f(arr)
+        push!(times, t)
+    end
+    avg_time = median(times)
 
     # Run once to get the actual result to save
-    result = f(arr)
+    # result = f(arr)
 
     output_algo(result, avg_time, name, test_id)
 end

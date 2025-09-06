@@ -20,7 +20,7 @@ CC = gcc
 CFLAGS += -fopenmp		# -fopenmp is needed for OpenMP library
 LDLIBS = -lm -ljson-c
 PRECFLAGS = -O3
-# PRECFLAGS += -g
+PRECFLAGS += -g
 
 KamadaKawaiThreads ?= $(if $(K),$(K),$(shell expr $(shell nproc) / 2))
 export KamadaKawaiThreads

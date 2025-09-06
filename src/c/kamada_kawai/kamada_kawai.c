@@ -341,7 +341,6 @@ void get_derivatives_mem_par(KamadaKawai *kk, int index, double *d_m_x, double *
 {
     double local_d_x = 0.0L, local_d_y = 0.0L, local_d_xx = 0.0L, local_d_yy = 0.0L, local_d_xy = 0.0L;
 
-#pragma omp parallel for reduction(+ : local_d_x, local_d_y, local_d_xx, local_d_yy, local_d_xy)
     for (int i = 0; i < kk->n; i++)
     {
         if (i == index)
